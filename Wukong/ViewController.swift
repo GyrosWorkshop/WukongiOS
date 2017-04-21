@@ -26,7 +26,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, SFSa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
         webView.frame = view.bounds
         webView.load(URLRequest(url: appURL))
