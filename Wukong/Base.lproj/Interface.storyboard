@@ -20,13 +20,45 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oFI-2J-7uv">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Wv5-yI-9P3">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yJm-5p-qQ5">
+                                            <rect key="frame" x="0.0" y="19.5" width="375" height="0.5"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.29999999999999999" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="0.5" id="iHN-fa-oQM"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="yJm-5p-qQ5" secondAttribute="bottom" id="B60-W9-8cR"/>
+                                        <constraint firstItem="yJm-5p-qQ5" firstAttribute="leading" secondItem="Wv5-yI-9P3" secondAttribute="leading" id="DXO-gO-zOD"/>
+                                        <constraint firstAttribute="trailing" secondItem="yJm-5p-qQ5" secondAttribute="trailing" id="t92-dV-4xz"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="5uv-aR-9WA"/>
+                                </constraints>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="oFI-2J-7uv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Q1A-bx-uen"/>
+                            <constraint firstItem="oFI-2J-7uv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="csF-mh-FrT"/>
+                            <constraint firstAttribute="trailing" secondItem="oFI-2J-7uv" secondAttribute="trailing" id="mev-l5-r10"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="meV-rq-93c"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1033" y="250"/>
+            <point key="canvasLocation" x="1148" y="249.62518740629687"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="uab-Er-rVC">
