@@ -10,13 +10,13 @@ import UIKit
 import WebKit
 import SafariServices
 
-class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, SFSafariViewControllerDelegate {
+class ViewController: UIViewController {
 
-    private let appURL = URL(string: "https://wukongmusic.us/test")!
+    let appURL = URL(string: "https://wukongmusic.us/test")!
 
-    private lazy var webView: WKWebView = {
+    lazy var webView: WKWebView = {
         let configuration = WKWebViewConfiguration()
-        configuration.mediaTypesRequiringUserActionForPlayback = []
+        self.addHandlers(configuration.userContentController)
         let view = WKWebView(frame: CGRect.zero, configuration: configuration)
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: UIApplication.shared.statusBarFrame.size.height, left: 0, bottom: 0, right: 0)
@@ -35,6 +35,27 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, SFSa
         webView.frame = view.bounds
         webView.load(URLRequest(url: appURL))
     }
+
+}
+
+extension ViewController: WKScriptMessageHandler {
+
+    func addHandlers(_ userContentController: WKUserContentController) {
+        userContentController.add(self, name: "Init")
+    }
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        switch message.name {
+        case "Init":
+            break
+        default:
+            break
+        }
+    }
+
+}
+
+extension ViewController: WKNavigationDelegate, WKUIDelegate, SFSafariViewControllerDelegate {
 
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         if let url = navigationAction.request.url {
