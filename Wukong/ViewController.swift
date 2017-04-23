@@ -8,77 +8,17 @@
 
 import UIKit
 import WebKit
-import AVFoundation
-import MediaPlayer
 import SafariServices
-
-class AudioPlayer: NSObject {
-
-    var player: AVAudioPlayer?
-    weak var delegate: AVAudioPlayerDelegate?
-
-    init(avDelegate: AVAudioPlayerDelegate) {
-        delegate = avDelegate
-        super.init()
-    }
-
-    func play(_ data: Data, time: Date) {
-        player = try? AVAudioPlayer(data: data)
-        guard let player = player else { return }
-        player.delegate = delegate
-        player.prepareToPlay()
-        player.play(atTime: -time.timeIntervalSinceNow)
-    }
-
-}
-
-class DataLoader: NSObject {
-
-    let session: URLSession
-    var callbacks: [URL: (_ data: Data?) -> Void] = [:]
-
-    init(directory: String) {
-        let configuration = URLSessionConfiguration.default
-        configuration.requestCachePolicy = .returnCacheDataElseLoad
-        configuration.httpShouldSetCookies = false
-        configuration.httpCookieAcceptPolicy = .never
-        configuration.httpCookieStorage = nil
-        configuration.urlCredentialStorage = nil
-        configuration.urlCache = URLCache(memoryCapacity: 100 * 1024 * 1024, diskCapacity: Int.max, diskPath: directory)
-        session = URLSession(configuration: configuration)
-        super.init()
-    }
-
-    func load(_ url: URL, callback: ((_ data: Data?) -> Void)?) {
-        if let callback = callback {
-            callbacks[url] = callback
-        }
-        session.getAllTasks { (tasks) in
-            guard !tasks.contains(where: { $0.originalRequest?.url == url }) else { return }
-            self.session.dataTask(with: url, completionHandler: { (data, response, error) in
-                self.callbacks[url]?(data)
-                self.callbacks.removeValue(forKey: url)
-            }).resume()
-        }
-    }
-
-}
 
 class ViewController: UIViewController {
 
-    let appURL = URL(string: "https://wukongmusic.us")!
-    var audioPlayer: AudioPlayer!
-    var dataLoader: DataLoader!
-    var webView: WKWebView!
+    fileprivate let appURL = URL(string: "https://wukongmusic.us")!
+    fileprivate let audioPlayer = AudioPlayer()
+    fileprivate let dataLoader = DataLoader()
+    fileprivate var webView: WKWebView!
+    fileprivate var emitMessages: ([String]) -> Void = { _ in }
 
-    var messageEmitters: String?
     override var prefersStatusBarHidden: Bool { return false }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        audioPlayer = AudioPlayer(avDelegate: self)
-        dataLoader = DataLoader(directory: "Wukong")
-    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -108,77 +48,93 @@ extension ViewController: WKScriptMessageHandler {
         userContentController.add(self, name: "update")
     }
 
-    func emitMessage(_ message: String) {
-        guard let emitters = messageEmitters else { return }
-        webView.evaluateJavaScript("\(emitters).\(message)", completionHandler: nil)
-    }
-
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let body = message.body as? [String: Any] else { return }
         switch message.name {
         case "mount":
-            messageEmitters = body["messageEmitters"] as? String
-            break
+            guard let emitters = body["messageEmitters"] as? String else { return }
+            emitMessages = { [unowned self] (messages) in
+                let script = messages.map({"\(emitters).\($0)"}).joined(separator: "\n")
+                self.webView.evaluateJavaScript(script, completionHandler: nil)
+            }
+            audioPlayer.start()
         case "unmount":
-            messageEmitters = nil
-            break
+            emitMessages = { _ in }
+            audioPlayer.stop()
         case "update":
-            guard let newData = body["newData"] as? [String: Any],
-                let oldData = body["oldData"] as? [String: Any] else { return }
+            guard let newData = body["newData"] as? [String: Any], let oldData = body["oldData"] as? [String: Any] else { return }
             let reload = newData["reload"] as? Bool ?? false
             let id = newData["id"] as? String ?? ""
             let time = newData["time"] as? TimeInterval ?? 0
             let oldId = oldData["id"] as? String ?? ""
             let oldTime = oldData["time"] as? TimeInterval ?? 0
             if reload || id != oldId || abs(time - oldTime) > 10 {
-                if let file = newData["playingFile"] as? String,
-                    let url = URL(string: file, relativeTo: appURL) {
-                    dataLoader.load(url, callback: { (data) in
+                if let file = newData["playingFile"] as? String, let url = URL(string: file, relativeTo: appURL) {
+                    dataLoader.load(url: url) { [weak self] (data) in
+                        guard let wself = self else { return }
                         guard let data = data else { return }
-                        self.audioPlayer.play(data, time: Date(timeIntervalSince1970: time))
-                        let infoCenter = MPNowPlayingInfoCenter.default()
-                        var info: [String: Any] = [
-                            MPMediaItemPropertyTitle: newData["title"] as? String ?? "",
-                            MPMediaItemPropertyAlbumTitle: newData["album"] as? String ?? "",
-                            MPMediaItemPropertyArtist: newData["artist"] as? String ?? ""
-                        ]
-                        infoCenter.nowPlayingInfo = info
-                        if let file = newData["playingArtwork"] as? String,
-                            let url = URL(string: file, relativeTo: self.appURL) {
-                            self.dataLoader.load(url, callback: { (data) in
-                                guard let data = data,
-                                    let image = UIImage(data: data) else { return }
-                                info[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { _ in image })
-                                infoCenter.nowPlayingInfo = info
-                            })
+                        var running = false
+                        var elapsed = 0.0
+                        var duration = 0.0
+                        wself.audioPlayer.play(data: data, time: Date(timeIntervalSince1970: time)) { [weak self] (player) in
+                            guard let wself = self else { return }
+                            var newRunning = false
+                            var newElapsed = 0.0
+                            var newDuration = 0.0
+                            if let player = player {
+                                newRunning = player.isPlaying
+                                newElapsed = player.currentTime
+                                newDuration = player.duration
+                            } else {
+                                newRunning = false
+                                newElapsed = 0
+                                newDuration = 0
+                            }
+                            var messages: [String] = []
+                            if running != newRunning {
+                                messages.append("running(\(newRunning))")
+                            }
+                            if elapsed != newElapsed {
+                                messages.append("elapsed(\(newElapsed))")
+                            }
+                            if duration != newDuration {
+                                messages.append("duration(\(newDuration))")
+                            }
+                            if running && !newRunning && duration - elapsed < 1 {
+                                messages.append("ended()")
+                            }
+                            running = newRunning
+                            elapsed = newElapsed
+                            duration = newDuration
+                            if messages.count > 0 {
+                                wself.emitMessages(messages)
+                            }
                         }
-                    })
+                        let title = newData["title"] as? String
+                        let album = newData["album"] as? String
+                        let artist = newData["artist"] as? String
+                        wself.audioPlayer.update(title: title, album: album, artist: artist, artwork: nil)
+                        if let file = newData["playingArtwork"] as? String, let url = URL(string: file, relativeTo: wself.appURL) {
+                            wself.dataLoader.load(url: url) { [weak self] (data) in
+                                guard let wself = self else { return }
+                                guard let data = data else { return }
+                                wself.audioPlayer.update(title: title, album: album, artist: artist, artwork: UIImage(data: data))
+                            }
+                        }
+                    }
                     if reload {
-                        emitMessage("reloaded()")
+                        emitMessages(["reloaded()"])
                     }
                 }
             }
-            if let file = newData["preloadFile"] as? String,
-                let url = URL(string: file, relativeTo: appURL) {
-                dataLoader.load(url, callback: nil)
+            if let file = newData["preloadFile"] as? String, let url = URL(string: file, relativeTo: appURL) {
+                dataLoader.load(url: url)
             }
-            if let file = newData["preloadArtwork"] as? String,
-                let url = URL(string: file, relativeTo: appURL) {
-                dataLoader.load(url, callback: nil)
+            if let file = newData["preloadArtwork"] as? String, let url = URL(string: file, relativeTo: appURL) {
+                dataLoader.load(url: url)
             }
-            break
         default:
             break
-        }
-    }
-
-}
-
-extension ViewController: AVAudioPlayerDelegate {
-
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        if flag {
-            emitMessage("ended()")
         }
     }
 
