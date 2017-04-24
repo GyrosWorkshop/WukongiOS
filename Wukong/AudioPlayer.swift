@@ -17,7 +17,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         try? session.setCategory(AVAudioSessionCategoryPlayback)
         return session
     }()
-    private var handlers: [Any] = []
+    private var commands: [Any] = []
     private var player: AVAudioPlayer?
     private var info: [String: Any] = [:]
     private var timer: Timer?
@@ -42,9 +42,9 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         try? session.setActive(false)
     }
 
-    func play(data: Data, time: Date, _ handler: ((_ player: AVAudioPlayer?) -> Void)? = nil) {
+    func play(data: Data, time: Date, _ eventCallback: ((_ player: AVAudioPlayer?) -> Void)? = nil) {
         player = try? AVAudioPlayer(data: data)
-        callback = handler
+        callback = eventCallback
         guard let player = player else { return }
         player.delegate = self
         player.currentTime = -time.timeIntervalSinceNow;
@@ -95,7 +95,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         center.likeCommand.isEnabled = false
         center.dislikeCommand.isEnabled = false
         center.bookmarkCommand.isEnabled = false
-        handlers.append(contentsOf: [
+        commands.append(contentsOf: [
             center.pauseCommand.addTarget { [unowned self] _ in
                 guard let player = self.player else { return .noActionableNowPlayingItem }
                 player.pause()
@@ -115,7 +115,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         let center = MPRemoteCommandCenter.shared()
         center.playCommand.removeTarget(nil)
         center.pauseCommand.removeTarget(nil)
-        handlers.removeAll()
+        commands.removeAll()
     }
 
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {

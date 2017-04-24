@@ -16,7 +16,12 @@ class ViewController: UIViewController {
     fileprivate let audioPlayer = AudioPlayer()
     fileprivate let dataLoader = DataLoader()
     fileprivate var webView: WKWebView!
-    fileprivate var emitMessages: ([String]) -> Void = { _ in }
+    fileprivate var defaults = UserDefaults.standard
+
+    fileprivate enum Key: String {
+        case emitters
+        case location
+    }
 
     override var prefersStatusBarHidden: Bool { return false }
 
@@ -29,23 +34,62 @@ class ViewController: UIViewController {
         webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: UIApplication.shared.statusBarFrame.size.height, left: 0, bottom: 0, right: 0)
         webView.navigationDelegate = self
         webView.uiDelegate = self
+        addObservers()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.insertSubview(webView, at: 0)
         webView.frame = view.bounds
-        webView.load(URLRequest(url: appURL.appendingPathComponent("/test")))
+        loadState()
+    }
+
+}
+
+extension ViewController {
+
+    fileprivate func loadState() {
+        let location = defaults.string(forKey: Key.location.rawValue) ?? "/"
+        webView.load(URLRequest(url: appURL.appendingPathComponent(location)))
+    }
+
+    fileprivate func saveState() {
+        if let url = webView.url {
+            defaults.set(url.path, forKey: Key.location.rawValue)
+        }
+    }
+
+}
+
+extension ViewController {
+
+    fileprivate func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name.UIApplicationWillResignActive, object: nil)
+    }
+
+    func handleNotification(_ notification: Notification) {
+        switch notification.name {
+        case Notification.Name.UIApplicationWillResignActive:
+            saveState()
+        default:
+            break
+        }
     }
 
 }
 
 extension ViewController: WKScriptMessageHandler {
 
-    func addHandlers(_ userContentController: WKUserContentController) {
+    fileprivate func addHandlers(_ userContentController: WKUserContentController) {
         userContentController.add(self, name: "mount")
         userContentController.add(self, name: "unmount")
         userContentController.add(self, name: "update")
+    }
+
+    fileprivate func emitMessages(_ messages: [String]) {
+        guard let emitters = defaults.string(forKey: Key.emitters.rawValue) else { return }
+        let script = messages.map({"\(emitters).\($0)"}).joined(separator: "\n")
+        webView.evaluateJavaScript(script)
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -53,13 +97,10 @@ extension ViewController: WKScriptMessageHandler {
         switch message.name {
         case "mount":
             guard let emitters = body["messageEmitters"] as? String else { return }
-            emitMessages = { [unowned self] (messages) in
-                let script = messages.map({"\(emitters).\($0)"}).joined(separator: "\n")
-                self.webView.evaluateJavaScript(script, completionHandler: nil)
-            }
+            defaults.set(emitters, forKey: Key.emitters.rawValue)
             audioPlayer.start()
         case "unmount":
-            emitMessages = { _ in }
+            defaults.removeObject(forKey: Key.emitters.rawValue)
             audioPlayer.stop()
         case "update":
             guard let newData = body["newData"] as? [String: Any], let oldData = body["oldData"] as? [String: Any] else { return }
@@ -70,7 +111,7 @@ extension ViewController: WKScriptMessageHandler {
             let oldTime = oldData["time"] as? TimeInterval ?? 0
             if reload || id != oldId || abs(time - oldTime) > 10 {
                 if let file = newData["playingFile"] as? String, let url = URL(string: file, relativeTo: appURL) {
-                    dataLoader.load(url: url) { [weak self] (data) in
+                    dataLoader.load(key: "\(id).\(url.pathExtension)", url: url) { [weak self] (data) in
                         guard let wself = self else { return }
                         guard let data = data else { return }
                         var running = false
@@ -115,7 +156,7 @@ extension ViewController: WKScriptMessageHandler {
                         let artist = newData["artist"] as? String
                         wself.audioPlayer.update(title: title, album: album, artist: artist, artwork: nil)
                         if let file = newData["playingArtwork"] as? String, let url = URL(string: file, relativeTo: wself.appURL) {
-                            wself.dataLoader.load(url: url) { [weak self] (data) in
+                            wself.dataLoader.load(key: "\(id).\(url.pathExtension)", url: url) { [weak self] (data) in
                                 guard let wself = self else { return }
                                 guard let data = data else { return }
                                 wself.audioPlayer.update(title: title, album: album, artist: artist, artwork: UIImage(data: data))
@@ -128,10 +169,10 @@ extension ViewController: WKScriptMessageHandler {
                 }
             }
             if let file = newData["preloadFile"] as? String, let url = URL(string: file, relativeTo: appURL) {
-                dataLoader.load(url: url)
+                dataLoader.load(key: "\(id).\(url.pathExtension)", url: url)
             }
             if let file = newData["preloadArtwork"] as? String, let url = URL(string: file, relativeTo: appURL) {
-                dataLoader.load(url: url)
+                dataLoader.load(key: "\(id).\(url.pathExtension)", url: url)
             }
         default:
             break
@@ -149,6 +190,10 @@ extension ViewController: WKNavigationDelegate, WKUIDelegate, SFSafariViewContro
             present(safariController, animated: true, completion: nil)
         }
         return nil
+    }
+
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        loadState()
     }
 
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
