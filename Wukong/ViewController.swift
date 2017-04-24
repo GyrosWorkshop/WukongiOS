@@ -86,10 +86,71 @@ extension ViewController: WKScriptMessageHandler {
         userContentController.add(self, name: "update")
     }
 
-    fileprivate func emitMessages(_ messages: [String]) {
+    private func emitMessages(_ messages: [String]) {
         guard let emitters = defaults.string(forKey: Key.emitters.rawValue) else { return }
         let script = messages.map({"\(emitters).\($0)"}).joined(separator: "\n")
         webView.evaluateJavaScript(script)
+    }
+
+    private func playFile(id: String, time: TimeInterval, file: Any?, title: Any?, album: Any?, artist: Any?, artwork: Any?) {
+        guard let file = file as? String, let url = URL(string: file, relativeTo: appURL) else { return }
+        dataLoader.load(key: "\(id).\(url.pathExtension)", url: url) { [weak self] (data) in
+            guard let wself = self else { return }
+            guard let data = data else { return }
+            var running = false
+            var elapsed = 0.0
+            var duration = 0.0
+            wself.audioPlayer.play(data: data, time: Date(timeIntervalSince1970: time)) { [weak self] (player) in
+                guard let wself = self else { return }
+                var newRunning = false
+                var newElapsed = 0.0
+                var newDuration = 0.0
+                if let player = player {
+                    newRunning = player.isPlaying
+                    newElapsed = player.currentTime
+                    newDuration = player.duration
+                } else {
+                    newRunning = false
+                    newElapsed = 0
+                    newDuration = 0
+                }
+                var messages: [String] = []
+                if running != newRunning {
+                    messages.append("running(\(newRunning))")
+                }
+                if elapsed != newElapsed {
+                    messages.append("elapsed(\(newElapsed))")
+                }
+                if duration != newDuration {
+                    messages.append("duration(\(newDuration))")
+                }
+                if running && !newRunning && duration - elapsed < 1 {
+                    messages.append("ended()")
+                }
+                running = newRunning
+                elapsed = newElapsed
+                duration = newDuration
+                if messages.count > 0 {
+                    wself.emitMessages(messages)
+                }
+            }
+            let title = title as? String
+            let album = album as? String
+            let artist = artist as? String
+            wself.audioPlayer.update(title: title, album: album, artist: artist, artwork: nil)
+            if let file = artwork as? String, let url = URL(string: file, relativeTo: wself.appURL) {
+                wself.dataLoader.load(key: "\(id).\(url.pathExtension)", url: url) { [weak self] (data) in
+                    guard let wself = self else { return }
+                    guard let data = data else { return }
+                    wself.audioPlayer.update(title: title, album: album, artist: artist, artwork: UIImage(data: data))
+                }
+            }
+        }
+    }
+
+    private func preloadFile(id: String, file: Any?) {
+        guard let file = file as? String, let url = URL(string: file, relativeTo: appURL) else { return }
+        dataLoader.load(key: "\(id).\(url.pathExtension)", url: url)
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -104,75 +165,20 @@ extension ViewController: WKScriptMessageHandler {
             audioPlayer.stop()
         case "update":
             guard let newData = body["newData"] as? [String: Any], let oldData = body["oldData"] as? [String: Any] else { return }
-            let reload = newData["reload"] as? Bool ?? false
-            let id = newData["id"] as? String ?? ""
-            let time = newData["time"] as? TimeInterval ?? 0
-            let oldId = oldData["id"] as? String ?? ""
-            let oldTime = oldData["time"] as? TimeInterval ?? 0
-            if reload || id != oldId || abs(time - oldTime) > 10 {
-                if let file = newData["playingFile"] as? String, let url = URL(string: file, relativeTo: appURL) {
-                    dataLoader.load(key: "\(id).\(url.pathExtension)", url: url) { [weak self] (data) in
-                        guard let wself = self else { return }
-                        guard let data = data else { return }
-                        var running = false
-                        var elapsed = 0.0
-                        var duration = 0.0
-                        wself.audioPlayer.play(data: data, time: Date(timeIntervalSince1970: time)) { [weak self] (player) in
-                            guard let wself = self else { return }
-                            var newRunning = false
-                            var newElapsed = 0.0
-                            var newDuration = 0.0
-                            if let player = player {
-                                newRunning = player.isPlaying
-                                newElapsed = player.currentTime
-                                newDuration = player.duration
-                            } else {
-                                newRunning = false
-                                newElapsed = 0
-                                newDuration = 0
-                            }
-                            var messages: [String] = []
-                            if running != newRunning {
-                                messages.append("running(\(newRunning))")
-                            }
-                            if elapsed != newElapsed {
-                                messages.append("elapsed(\(newElapsed))")
-                            }
-                            if duration != newDuration {
-                                messages.append("duration(\(newDuration))")
-                            }
-                            if running && !newRunning && duration - elapsed < 1 {
-                                messages.append("ended()")
-                            }
-                            running = newRunning
-                            elapsed = newElapsed
-                            duration = newDuration
-                            if messages.count > 0 {
-                                wself.emitMessages(messages)
-                            }
-                        }
-                        let title = newData["title"] as? String
-                        let album = newData["album"] as? String
-                        let artist = newData["artist"] as? String
-                        wself.audioPlayer.update(title: title, album: album, artist: artist, artwork: nil)
-                        if let file = newData["playingArtwork"] as? String, let url = URL(string: file, relativeTo: wself.appURL) {
-                            wself.dataLoader.load(key: "\(id).\(url.pathExtension)", url: url) { [weak self] (data) in
-                                guard let wself = self else { return }
-                                guard let data = data else { return }
-                                wself.audioPlayer.update(title: title, album: album, artist: artist, artwork: UIImage(data: data))
-                            }
-                        }
-                    }
-                    if reload {
-                        emitMessages(["reloaded()"])
-                    }
+            if let id = newData["id"] as? String, let time = newData["time"] as? TimeInterval {
+                let reload = newData["reload"] as? Bool ?? false
+                let oldId = oldData["id"] as? String ?? ""
+                let oldTime = oldData["time"] as? TimeInterval ?? 0
+                if reload || id != oldId || abs(time - oldTime) > 10 {
+                    playFile(id: id, time: time, file: newData["file"], title: newData["title"], album: newData["album"], artist: newData["artist"], artwork: newData["artwork"])
+                }
+                if reload {
+                    emitMessages(["reloaded()"])
                 }
             }
-            if let file = newData["preloadFile"] as? String, let url = URL(string: file, relativeTo: appURL) {
-                dataLoader.load(key: "\(id).\(url.pathExtension)", url: url)
-            }
-            if let file = newData["preloadArtwork"] as? String, let url = URL(string: file, relativeTo: appURL) {
-                dataLoader.load(key: "\(id).\(url.pathExtension)", url: url)
+            if let id = newData["preloadId"] as? String {
+                preloadFile(id: id, file: newData["preloadFile"])
+                preloadFile(id: id, file: newData["preloadArtwork"])
             }
         default:
             break
