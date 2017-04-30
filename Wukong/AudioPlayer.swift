@@ -27,12 +27,14 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         try? session.setActive(true)
         UIApplication.shared.beginReceivingRemoteControlEvents()
         registerControlEvents()
-        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(callout), userInfo: nil, repeats: true)
+        if UIApplication.shared.applicationState == .active {
+            scheduleTimer()
+        }
+        addObservers()
     }
 
     func stop() {
-        timer?.invalidate()
-        timer = nil
+        invalidateTimer()
         player?.stop()
         player = nil
         info.removeAll()
@@ -118,8 +120,35 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         commands.removeAll()
     }
 
+    private func scheduleTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(callout), userInfo: nil, repeats: true)
+        timer?.tolerance = 0.5;
+    }
+
+    private func invalidateTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    private func addObservers() {
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
+        center.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name.UIApplicationDidEnterBackground, object: nil)
+    }
+
+    func handleNotification(_ notification: Notification) {
+        switch notification.name {
+        case Notification.Name.UIApplicationWillEnterForeground:
+            scheduleTimer()
+        case Notification.Name.UIApplicationDidEnterBackground:
+            invalidateTimer()
+        default:
+            break
+        }
+    }
+
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        timer?.fire()
+        callout()
     }
 
 }
