@@ -10,12 +10,14 @@ import UIKit
 import WebKit
 import SafariServices
 
-class ViewController: UIViewController {
+class ViewController: UICollectionViewController {
 
-    fileprivate let appURL = URL(string: "https://wukongmusic.us")!
-    fileprivate let audioPlayer = AudioPlayer()
-    fileprivate let dataLoader = DataLoader()
-    fileprivate var defaults = UserDefaults.standard
+    fileprivate struct Constant {
+        static let rootURL = URL(string: "https://wukongmusic.us")!
+    }
+
+    fileprivate let client = WukongClient.sharedInstance
+    fileprivate let defaults = UserDefaults.standard
 
     override var prefersStatusBarHidden: Bool { return false }
 
@@ -25,6 +27,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        client.start()
     }
 
 }

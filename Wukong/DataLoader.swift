@@ -39,12 +39,12 @@ class DataLoader: NSObject {
         session.getAllTasks { [weak self] (tasks) in
             guard let wself = self else { return }
             guard !tasks.contains(where: { $0.originalRequest?.url == url }) else { return }
-            let task = wself.session.dataTask(with: url) { (data, response, error) in
+            wself.session.dataTask(with: url) { [weak self] (data, response, error) in
+                guard let wself = self else { return }
                 wself.callbacks[key]?(data)
                 wself.callbacks.removeValue(forKey: key)
                 try? data?.write(to: file)
-            }
-            task.resume()
+            }.resume()
         }
     }
     

@@ -25,11 +25,11 @@
             </objects>
             <point key="canvasLocation" x="-425" y="929"/>
         </scene>
-        <!--Collection View Controller-->
+        <!--View Controller-->
         <scene sceneID="Lgb-QG-6HB">
             <objects>
-                <collectionViewController id="mcb-ei-rIE" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="ma1-sQ-S7h">
+                <collectionViewController id="mcb-ei-rIE" customClass="ViewController" customModule="Wukong" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="ma1-sQ-S7h">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
