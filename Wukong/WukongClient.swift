@@ -27,29 +27,49 @@ class WukongClient: NSObject {
     var delegate: WukongDelegate?
 
     private func entry() {
-//        "App": [
-//        "url": { () in },
-//        "webview": { (url) in },
-//        "reload": { () in }
-//        ],
-//        "Network": [
-//        "url": { (scheme, endpoint) in }
-//        "http": { (method, endpoint, data) in }
-//        "websocket": { (endpoint, handler) in }
-//        "hook": { (callback) in }
-//        ],
-//        "Database": [
-//        "get": { (key) in },
-//        "set": { (key, value) in },
-//        "remove": { (key) in }
-//        ]
-        context.globalObject.setValue(JSValue(object: [
+        context.globalObject.setValue([
+            "App": [
+                "url": { () in
+                    return ""
+                } as @convention(block) () -> String,
+                "webview": { (url) in
 
-        ], in: context), forProperty: "platform")
+                } as @convention(block) (String) -> Void,
+                "reload": { () in
 
+                } as @convention(block) () -> Void
+            ],
+            "Network": [
+                "url": { (scheme, endpoint) in
+                    return ""
+                } as @convention(block) (String, String) -> String,
+                "http": { (method, endpoint, data) in
+                    return ""
+                } as @convention(block) (String, String, [String: Any]) -> Any,
+                "websocket": { (endpoint, handler) in
+
+                } as @convention(block) (String, Any) -> Void,
+                "hook": { (callback) in
+
+                } as @convention(block) (Any) -> Void
+            ],
+            "Database": [
+                "get": { (key) in
+                    return "133"
+                } as @convention(block) (String) -> String,
+                "set": { (key, value) in
+
+                } as @convention(block) (String, String) -> Void,
+                "remove": { (key) in
+                    
+                } as @convention(block) (String) -> Void
+            ]
+        ], forProperty: "Platform")
         print(context.globalObject.forProperty("JSON").invokeMethod("stringify", withArguments: [
-            context.globalObject.forProperty("platform"), JSValue(nullIn: context), JSValue(int32: 2, in: context)
+            context.globalObject.forProperty("Platform"),
+            JSValue(nullIn: context), JSValue(int32: 2, in: context)
         ]))
+        print(context.evaluateScript("Platform.Database.get(\"\")").toString())
     }
 
     func start() {
