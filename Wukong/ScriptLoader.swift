@@ -12,8 +12,8 @@ class ScriptLoader: NSObject {
 
     private struct Constant {
         static let packageIdentifier = "wukong-client"
-        static let versionKey = "me.qusic.wukong.version"
-        static let scriptKey = "me.qusic.wukong.script"
+        static let versionKey = "wukong-client.version"
+        static let scriptKey = "wukong-client.script"
     }
 
     private let session = URLSession(configuration: URLSessionConfiguration.ephemeral)

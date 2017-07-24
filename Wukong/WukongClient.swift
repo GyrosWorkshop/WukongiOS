@@ -26,51 +26,54 @@ class WukongClient: NSObject {
 
     weak var delegate: WukongDelegate?
 
-    private var platform: [String: [String: AnyObject]] { return [
-        "App": [
-            "url": unsafeBitCast({ () in
-                return ""
-            } as @convention(block) () -> String, to: AnyObject.self),
-            "webview": unsafeBitCast({ (url) in
+    private var platform: [String: [String: AnyObject]] {
+        let defaults = UserDefaults(suiteName: "wukong-client")!
+        return [
+            "App": [
+                "url": unsafeBitCast({ () in
+                    return ""
+                } as @convention(block) () -> String, to: AnyObject.self),
+                "webview": unsafeBitCast({ (url) in
 
-            } as @convention(block) (String) -> Void, to: AnyObject.self),
-            "reload": unsafeBitCast({ () in
+                } as @convention(block) (String) -> Void, to: AnyObject.self),
+                "reload": unsafeBitCast({ () in
 
-            } as @convention(block) () -> Void, to: AnyObject.self)
-        ],
-        "Network": [
-            "url": unsafeBitCast({ (scheme, endpoint) in
-                return ""
-            } as @convention(block) (String, String) -> String, to: AnyObject.self),
-            "http": unsafeBitCast({ (method, endpoint, data) in
-                return ""
-            } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
-            "websocket": unsafeBitCast({ (endpoint, handler) in
+                } as @convention(block) () -> Void, to: AnyObject.self)
+            ],
+            "Network": [
+                "url": unsafeBitCast({ (scheme, endpoint) in
+                    return ""
+                } as @convention(block) (String, String) -> String, to: AnyObject.self),
+                "http": unsafeBitCast({ (method, endpoint, data) in
+                    return ""
+                } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
+                "websocket": unsafeBitCast({ (endpoint, handler) in
 
-            } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
-            "hook": unsafeBitCast({ (callback) in
+                } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
+                "hook": unsafeBitCast({ (callback) in
 
-            } as @convention(block) (Any) -> Void, to: AnyObject.self)
-        ],
-        "Database": [
-            "get": unsafeBitCast({ [unowned self] (key) in
-                guard key.isString else { return nil }
-                return self.defaults.string(forKey: key.toString())
-            } as @convention(block) (JSValue) -> String?, to: AnyObject.self),
-            "set": unsafeBitCast({ [unowned self] (key, value) in
-                guard key.isString else { return }
-                self.defaults.set(value.toString(), forKey: key.toString())
-            } as @convention(block) (JSValue, JSValue) -> Void, to: AnyObject.self),
-            "remove": unsafeBitCast({ [unowned self] (key) in
-                guard key.isString else { return }
-                self.defaults.removeObject(forKey: key.toString())
-            } as @convention(block) (JSValue) -> Void, to: AnyObject.self)
+                } as @convention(block) (Any) -> Void, to: AnyObject.self)
+            ],
+            "Database": [
+                "get": unsafeBitCast({ (key) in
+                    guard key.isString else { return nil }
+                    return defaults.string(forKey: key.toString())
+                } as @convention(block) (JSValue) -> String?, to: AnyObject.self),
+                "set": unsafeBitCast({ (key, value) in
+                    guard key.isString else { return }
+                    defaults.set(value.toString(), forKey: key.toString())
+                } as @convention(block) (JSValue, JSValue) -> Void, to: AnyObject.self),
+                "remove": unsafeBitCast({ (key) in
+                    guard key.isString else { return }
+                    defaults.removeObject(forKey: key.toString())
+                } as @convention(block) (JSValue) -> Void, to: AnyObject.self)
+            ]
         ]
-    ]}
+    }
 
     private func entry() {
         context.globalObject.setValue(platform, forProperty: "Platform")
-        print(context.evaluateScript("Platform.Database.get(\"me.qusic.wukong.version\")").toString())
+        print(context.evaluateScript("Platform.Database.set('test', 'hello world'); Platform.Database.get('wukong')").toString())
     }
 
     func run() {
