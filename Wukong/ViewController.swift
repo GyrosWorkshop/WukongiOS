@@ -27,7 +27,22 @@ class ViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        client.start()
+        client.delegate = self
+        client.run()
+    }
+
+}
+
+extension ViewController: WukongDelegate {
+
+    func wukongDidLoadScript() {
+    }
+
+    func wukongDidFailLoadScript() {
+    }
+
+    func wukongDidThrowException(_ exception: String) {
+        print(exception)
     }
 
 }

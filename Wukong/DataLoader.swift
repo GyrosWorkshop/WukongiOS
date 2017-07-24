@@ -47,5 +47,5 @@ class DataLoader: NSObject {
             }.resume()
         }
     }
-    
+
 }
