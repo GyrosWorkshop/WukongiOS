@@ -29,40 +29,40 @@ class WukongClient: NSObject {
     private func entry() {
         context.globalObject.setValue([
             "App": [
-                "url": { () in
+                "url": unsafeBitCast({ () in
                     return ""
-                } as @convention(block) () -> String,
-                "webview": { (url) in
+                } as @convention(block) () -> String, to: AnyObject.self),
+                "webview": unsafeBitCast({ (url) in
 
-                } as @convention(block) (String) -> Void,
-                "reload": { () in
+                } as @convention(block) (String) -> Void, to: AnyObject.self),
+                "reload": unsafeBitCast({ () in
 
-                } as @convention(block) () -> Void
+                } as @convention(block) () -> Void, to: AnyObject.self)
             ],
             "Network": [
-                "url": { (scheme, endpoint) in
+                "url": unsafeBitCast({ (scheme, endpoint) in
                     return ""
-                } as @convention(block) (String, String) -> String,
-                "http": { (method, endpoint, data) in
+                } as @convention(block) (String, String) -> String, to: AnyObject.self),
+                "http": unsafeBitCast({ (method, endpoint, data) in
                     return ""
-                } as @convention(block) (String, String, [String: Any]) -> Any,
-                "websocket": { (endpoint, handler) in
+                } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
+                "websocket": unsafeBitCast({ (endpoint, handler) in
 
-                } as @convention(block) (String, Any) -> Void,
-                "hook": { (callback) in
+                } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
+                "hook": unsafeBitCast({ (callback) in
 
-                } as @convention(block) (Any) -> Void
+                } as @convention(block) (Any) -> Void, to: AnyObject.self)
             ],
             "Database": [
-                "get": { (key) in
-                    return "133"
-                } as @convention(block) (String) -> String,
-                "set": { (key, value) in
+                "get": unsafeBitCast({ (key) in
+                    return "123"
+                } as @convention(block) (String) -> String, to: AnyObject.self),
+                "set": unsafeBitCast({ (key, value) in
 
-                } as @convention(block) (String, String) -> Void,
-                "remove": { (key) in
+                } as @convention(block) (String, String) -> Void, to: AnyObject.self),
+                "remove": unsafeBitCast({ (key) in
                     
-                } as @convention(block) (String) -> Void
+                } as @convention(block) (String) -> Void, to: AnyObject.self)
             ]
         ], forProperty: "Platform")
         print(context.globalObject.forProperty("JSON").invokeMethod("stringify", withArguments: [
@@ -79,6 +79,9 @@ class WukongClient: NSObject {
                 return
             }
             self.delegate?.wukongDidLoadScript()
+            self.context.exceptionHandler = { (context, exception) in
+                print(exception?.toString() ?? "")
+            }
             self.context.evaluateScript(script)
             self.entry()
         }
