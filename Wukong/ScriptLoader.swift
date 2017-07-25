@@ -11,16 +11,19 @@ import UIKit
 class ScriptLoader: NSObject {
 
     private struct Constant {
-        static let packageIdentifier = "wukong-client"
+        static let packageName = "wukong-client"
         static let versionKey = "wukong-client.version"
         static let scriptKey = "wukong-client.script"
+        static let registryURL = "https://registry.npmjs.org"
+        static let dataURL = "https://unpkg.com"
+        static let dataPath = "build/wukong.js"
     }
 
     private let session = URLSession(configuration: URLSessionConfiguration.ephemeral)
     private let defaults = UserDefaults.standard
 
     private func loadVersion(_ callback: ((_ version: String?) -> Void)? = nil) {
-        session.dataTask(with: URL(string: "https://registry.npmjs.org/\(Constant.packageIdentifier)")!) { (data, response, error) in
+        session.dataTask(with: URL(string: "\(Constant.registryURL)/\(Constant.packageName)")!) { (data, response, error) in
             var version: String? = nil
             defer { callback?(version) }
             guard let data = data else { return }
@@ -32,7 +35,7 @@ class ScriptLoader: NSObject {
     }
 
     private func loadScript(version: String, _ callback: ((_ script: String?) -> Void)? = nil) {
-        session.dataTask(with: URL(string: "https://unpkg.com/\(Constant.packageIdentifier)@\(version)/build/wukong.js")!) { (data, response, error) in
+        session.dataTask(with: URL(string: "\(Constant.dataURL)/\(Constant.packageName)@\(version)/\(Constant.dataPath)")!) { (data, response, error) in
             var script: String? = nil
             defer { callback?(script) }
             guard let data = data else { return }

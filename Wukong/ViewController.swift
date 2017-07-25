@@ -45,4 +45,7 @@ extension ViewController: WukongDelegate {
         print(exception)
     }
 
+    func wukongRequestOpenURL(_ url: String) {
+    }
+
 }
