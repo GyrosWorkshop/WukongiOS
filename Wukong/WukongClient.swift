@@ -42,59 +42,6 @@ class WukongClient: NSObject {
     static let sharedInstance = WukongClient()
     weak var delegate: WukongDelegate?
 
-    private func entry() {
-        context.globalObject.setValue({
-            let defaults = UserDefaults(suiteName: Constant.identifier)!
-            return [
-                "App": [
-                    "url": unsafeBitCast({ () in
-                        return "wukong://"
-                    } as @convention(block) () -> String, to: AnyObject.self),
-                    "webview": unsafeBitCast({ (url) in
-
-                    } as @convention(block) (String) -> Void, to: AnyObject.self),
-                    "reload": unsafeBitCast({ () in
-
-                    } as @convention(block) () -> Void, to: AnyObject.self)
-                ],
-                "Network": [
-                    "url": unsafeBitCast({ (scheme, endpoint) in
-                        return ""
-                    } as @convention(block) (String, String) -> String, to: AnyObject.self),
-                    "http": unsafeBitCast({ (method, endpoint, data) in
-                        return ""
-                    } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
-                    "websocket": unsafeBitCast({ (endpoint, handler) in
-
-                    } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
-                    "hook": unsafeBitCast({ (callback) in
-
-                    } as @convention(block) (Any) -> Void, to: AnyObject.self)
-                ],
-                "Database": [
-                    "get": unsafeBitCast({ (key) in
-                        guard key.isString else { return nil }
-                        return defaults.string(forKey: key.toString())
-                    } as @convention(block) (JSValue) -> String?, to: AnyObject.self),
-                    "set": unsafeBitCast({ (key, value) in
-                        guard key.isString else { return }
-                        defaults.set(value.toString(), forKey: key.toString())
-                    } as @convention(block) (JSValue, JSValue) -> Void, to: AnyObject.self),
-                    "remove": unsafeBitCast({ (key) in
-                        guard key.isString else { return }
-                        defaults.removeObject(forKey: key.toString())
-                    } as @convention(block) (JSValue) -> Void, to: AnyObject.self)
-                ]
-            ]
-        }(), forProperty: Constant.platformKey)
-        context.globalObject.setValue({
-            return client.call(withArguments: [platform])
-        }(), forProperty: Constant.storeKey)
-
-        // TODO
-        print(context.evaluateScript(Constant.storeKey))
-    }
-
     func run() {
         scriptLoader.load { [unowned self] (script) in
             guard let script = script else {
@@ -110,6 +57,74 @@ class WukongClient: NSObject {
             self.context.evaluateScript(script)
             self.entry()
         }
+    }
+
+    private func entry() {
+        context.globalObject.setValue({
+            let defaults = UserDefaults(suiteName: Constant.identifier)!
+            return [
+                "App": [ // TODO
+                    "url": unsafeBitCast({ () in
+                        return "wukong://"
+                    } as @convention(block) () -> String, to: AnyObject.self),
+                    "webview": unsafeBitCast({ (url) in
+
+                    } as @convention(block) (String) -> Void, to: AnyObject.self),
+                    "reload": unsafeBitCast({ () in
+
+                    } as @convention(block) () -> Void, to: AnyObject.self)
+                ],
+                "Network": [ // TODO
+                    "url": unsafeBitCast({ (scheme, endpoint) in
+                        return ""
+                    } as @convention(block) (String, String) -> String, to: AnyObject.self),
+                    "http": unsafeBitCast({ (method, endpoint, data) in
+                        return ""
+                    } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
+                    "websocket": unsafeBitCast({ (endpoint, handler) in
+
+                    } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
+                    "hook": unsafeBitCast({ (callback) in
+
+                    } as @convention(block) (Any) -> Void, to: AnyObject.self)
+                ],
+                "Database": [
+                    "get": unsafeBitCast({ (key) in
+                        return defaults.string(forKey: key)
+                    } as @convention(block) (String) -> String?, to: AnyObject.self),
+                    "set": unsafeBitCast({ (key, value) in
+                        defaults.set(value, forKey: key)
+                    } as @convention(block) (String, String) -> Void, to: AnyObject.self),
+                    "remove": unsafeBitCast({ (key) in
+                        defaults.removeObject(forKey: key)
+                    } as @convention(block) (String) -> Void, to: AnyObject.self)
+                ]
+            ]
+        }(), forProperty: Constant.platformKey)
+        context.globalObject.setValue({
+            return client.call(withArguments: [platform])
+        }(), forProperty: Constant.storeKey)
+    }
+
+    func getState<T>(_ property: [String]) -> T? {
+        guard let state = store.invokeMethod("getState", withArguments: []) else { return nil }
+        let object = property.reduce(state) { $0.forProperty($1) }
+        return object.toObject() as? T
+    }
+
+    func querySelector<T>(_ name: String) -> T? {
+        guard let state = store.invokeMethod("getState", withArguments: []) else { return nil }
+        guard let object = selector.invokeMethod(name, withArguments: [state]) else { return nil }
+        return object.toObject() as? T
+    }
+
+    func dispatchAction(_ name: [String], _ data: [Any]) {
+        let object = name.reduce(action) { $0.forProperty($1) }
+        _ = object.invokeMethod("create", withArguments: data)
+    }
+
+    func subscribeChange() {
+        // TODO
     }
 
 }
