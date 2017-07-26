@@ -18,26 +18,17 @@ protocol WukongDelegate: class {
 
 class WukongClient: NSObject {
 
-    private struct Constant {
-        static let identifier = "wukong-client"
-        static let clientKey = "Wukong"
-        static let actionKey = "Action"
-        static let selectorKey = "Selector"
-        static let platformKey = "Platform"
-        static let storeKey = "Store"
-    }
-
     private let context = JSContext()!
     private let scriptLoader = ScriptLoader()
     private let dataLoader = DataLoader()
     private let audioPlayer = AudioPlayer()
 
-    private var client: JSValue { return context.globalObject.forProperty(Constant.clientKey).forProperty("default") }
-    private var action: JSValue { return context.globalObject.forProperty(Constant.clientKey).forProperty(Constant.actionKey) }
-    private var selector: JSValue { return context.globalObject.forProperty(Constant.clientKey).forProperty(Constant.selectorKey) }
+    private var client: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.main) }
+    private var action: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.action) }
+    private var selector: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.selector) }
 
-    private var platform: JSValue { return context.globalObject.forProperty(Constant.platformKey) }
-    private var store: JSValue { return context.globalObject.forProperty(Constant.storeKey) }
+    private var platform: JSValue { return context.globalObject.forProperty(Constant.Script.platform) }
+    private var store: JSValue { return context.globalObject.forProperty(Constant.Script.store) }
 
     static let sharedInstance = WukongClient()
     weak var delegate: WukongDelegate?
@@ -60,50 +51,48 @@ class WukongClient: NSObject {
     }
 
     private func entry() {
-        context.globalObject.setValue({
-            let defaults = UserDefaults(suiteName: Constant.identifier)!
-            return [
-                "App": [ // TODO
-                    "url": unsafeBitCast({ () in
-                        return "wukong://"
-                    } as @convention(block) () -> String, to: AnyObject.self),
-                    "webview": unsafeBitCast({ (url) in
+        context.globalObject.setValue([
+            "App": [
+                "url": unsafeBitCast({ [unowned self] () in
+                    let channel = self.getState(["channel", "name"]) ?? ""
+                    return "wukong://\(channel)"
+                } as @convention(block) () -> String, to: AnyObject.self),
+                "webview": unsafeBitCast({ [unowned self] (url) in
+                    self.delegate?.wukongRequestOpenURL(url)
+                } as @convention(block) (String) -> Void, to: AnyObject.self),
+                "reload": unsafeBitCast({ () in
+                    // do nothing
+                } as @convention(block) () -> Void, to: AnyObject.self)
+            ],
+            "Network": [ // TODO
+                "url": unsafeBitCast({ (scheme, endpoint) in
+                    return "\(scheme)s://\(Constant.URL.api)\(endpoint)"
+                } as @convention(block) (String, String) -> String, to: AnyObject.self),
+                "http": unsafeBitCast({ (method, endpoint, data) in
+                    return ""
+                } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
+                "websocket": unsafeBitCast({ (endpoint, handler) in
 
-                    } as @convention(block) (String) -> Void, to: AnyObject.self),
-                    "reload": unsafeBitCast({ () in
+                } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
+                "hook": unsafeBitCast({ (callback) in
 
-                    } as @convention(block) () -> Void, to: AnyObject.self)
-                ],
-                "Network": [ // TODO
-                    "url": unsafeBitCast({ (scheme, endpoint) in
-                        return ""
-                    } as @convention(block) (String, String) -> String, to: AnyObject.self),
-                    "http": unsafeBitCast({ (method, endpoint, data) in
-                        return ""
-                    } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
-                    "websocket": unsafeBitCast({ (endpoint, handler) in
-
-                    } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
-                    "hook": unsafeBitCast({ (callback) in
-
-                    } as @convention(block) (Any) -> Void, to: AnyObject.self)
-                ],
-                "Database": [
-                    "get": unsafeBitCast({ (key) in
-                        return defaults.string(forKey: key)
-                    } as @convention(block) (String) -> String?, to: AnyObject.self),
-                    "set": unsafeBitCast({ (key, value) in
-                        defaults.set(value, forKey: key)
-                    } as @convention(block) (String, String) -> Void, to: AnyObject.self),
-                    "remove": unsafeBitCast({ (key) in
-                        defaults.removeObject(forKey: key)
-                    } as @convention(block) (String) -> Void, to: AnyObject.self)
-                ]
+                } as @convention(block) (Any) -> Void, to: AnyObject.self)
+            ],
+            "Database": [
+                "get": unsafeBitCast({ (key) in
+                    return UserDefaults.clientDefaults.string(forKey: key)
+                } as @convention(block) (String) -> String?, to: AnyObject.self),
+                "set": unsafeBitCast({ (key, value) in
+                    UserDefaults.clientDefaults.set(value, forKey: key)
+                } as @convention(block) (String, String) -> Void, to: AnyObject.self),
+                "remove": unsafeBitCast({ (key) in
+                    UserDefaults.clientDefaults.removeObject(forKey: key)
+                } as @convention(block) (String) -> Void, to: AnyObject.self)
             ]
-        }(), forProperty: Constant.platformKey)
-        context.globalObject.setValue({
-            return client.call(withArguments: [platform])
-        }(), forProperty: Constant.storeKey)
+        ], forProperty: Constant.Script.platform)
+        context.globalObject.setValue((
+            client.call(withArguments: [platform])
+        ), forProperty: Constant.Script.store)
     }
 
     func getState<T>(_ property: [String]) -> T? {

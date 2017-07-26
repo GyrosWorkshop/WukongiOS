@@ -13,6 +13,7 @@
 		FE41303B1EA8E5CD0070F690 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE41303A1EA8E5CD0070F690 /* Assets.xcassets */; };
 		FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB21EAC89360090833C /* AudioPlayer.swift */; };
 		FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB41EAC895A0090833C /* DataLoader.swift */; };
+		FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */; };
 		FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAD1F233B7A001C052B /* WukongClient.swift */; };
 		FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */; };
 /* End PBXBuildFile section */
@@ -26,6 +27,7 @@
 		FE41303F1EA8E5CD0070F690 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Wukong/Info.plist; sourceTree = "<group>"; };
 		FE7A7EB21EAC89360090833C /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		FE7A7EB41EAC895A0090833C /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
+		FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstant.swift; sourceTree = "<group>"; };
 		FECAEAAD1F233B7A001C052B /* WukongClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WukongClient.swift; sourceTree = "<group>"; };
 		FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -61,6 +63,7 @@
 		FE4130321EA8E5CD0070F690 /* Wukong */ = {
 			isa = PBXGroup;
 			children = (
+				FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */,
 				FE4130331EA8E5CD0070F690 /* AppDelegate.swift */,
 				FE4130351EA8E5CD0070F690 /* ViewController.swift */,
 				FECAEAAD1F233B7A001C052B /* WukongClient.swift */,
@@ -160,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */,
+				FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */,
 				FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */,
 				FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */,
 				FE4130361EA8E5CD0070F690 /* ViewController.swift in Sources */,

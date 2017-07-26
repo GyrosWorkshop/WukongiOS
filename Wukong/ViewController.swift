@@ -12,12 +12,7 @@ import SafariServices
 
 class ViewController: UICollectionViewController {
 
-    fileprivate struct Constant {
-        static let rootURL = URL(string: "https://wukongmusic.us")!
-    }
-
     fileprivate let client = WukongClient.sharedInstance
-    fileprivate let defaults = UserDefaults.standard
 
     override var prefersStatusBarHidden: Bool { return false }
 
