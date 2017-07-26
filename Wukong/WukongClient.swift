@@ -52,7 +52,8 @@ class WukongClient: NSObject {
 
     private func entry() {
         context.globalObject.setValue({
-            var networkHook: () -> Void = {}
+            let apiURL: (String, String) -> String = { (scheme, endpoint) in "\(scheme)s://\(Constant.URL.api)\(endpoint)" }
+            var networkHook = JSValue(undefinedIn: context)!
             return [
                 "App": [
                     "url": unsafeBitCast({ [unowned self] () in
@@ -68,17 +69,20 @@ class WukongClient: NSObject {
                 ],
                 "Network": [ // TODO
                     "url": unsafeBitCast({ (scheme, endpoint) in
-                        return "\(scheme)s://\(Constant.URL.api)\(endpoint)"
+                        return apiURL(scheme, endpoint)
                     } as @convention(block) (String, String) -> String, to: AnyObject.self),
-                    "http": unsafeBitCast({ (method, endpoint, data) in
+                    "http": unsafeBitCast({ [unowned self] (method, endpoint, data) in
+                        // TODO
+                        // guard let url = URL(string: apiURL("http", endpoint)) else { return promise }
+                        // URLSession.apiSession.dataTask(with: url) { (data, response, error) in }
                         return ""
                     } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
                     "websocket": unsafeBitCast({ (endpoint, handler) in
 
                     } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
                     "hook": unsafeBitCast({ (callback) in
-
-                    } as @convention(block) (Any) -> Void, to: AnyObject.self)
+                        networkHook = callback
+                    } as @convention(block) (JSValue) -> Void, to: AnyObject.self)
                 ],
                 "Database": [
                     "get": unsafeBitCast({ (key) in
@@ -96,6 +100,11 @@ class WukongClient: NSObject {
         context.globalObject.setValue({
             return client.call(withArguments: [platform])
         }(), forProperty: Constant.Script.store)
+    }
+
+    func promise(_ executor: ((JSValue, JSValue) -> Void)? = nil) -> JSValue {
+        //TODO
+        return context.globalObject.forProperty("Promise")
     }
 
     func getState<T>(_ property: [Constant.State]) -> T? {
