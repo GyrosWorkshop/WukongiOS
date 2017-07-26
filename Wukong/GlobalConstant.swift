@@ -38,6 +38,120 @@ struct Constant {
         static let bundle = "build/wukong.js"
     }
 
+    enum State: String {
+        case user
+        case profile
+        case auth
+        case preferences
+
+        case channel
+        case name
+        case members
+
+        case song
+        case playlist
+        case playing
+        case preload
+
+        case player
+        case running
+        case elapsed
+        case duration
+        case ended
+        case downvote
+        case volume
+        case reload
+
+        case search
+        case keyword
+        case results
+
+        case misc
+        case notification
+
+        case id
+        case nickname
+        case avatar
+
+        // case id
+        case siteId
+        case songId
+        case title
+        case album
+        case artist
+        case artwork
+        case length
+        case bitrate
+        case link
+        case mvLink
+        case files
+        case mvFile
+        case lyrics
+
+        case urls
+        case format
+        case quality
+        case level
+        case description
+
+        case time
+        case text
+
+        case listenOnly
+        case connection
+        case audioQuality
+        case sync
+        case cookie
+    }
+
+    enum Action: String {
+        case User
+        case profile
+        case auth
+        case preferences
+
+        case Channel
+        case name
+        case members
+
+        case Song
+        case add
+        case remove
+        case move
+        case assign
+        case shuffle
+        case sync
+        case play
+        case preload
+
+        case Player
+        case running
+        case elapsed
+        case duration
+        case ended
+        case downvote
+        case volume
+        case reload
+        case reset
+        
+        case Search
+        case keyword
+        case results
+        
+        case Misc
+        case notification
+    }
+    
+    enum Selector: String {
+        case playingArtwork
+        case preloadArtwork
+        case playingFile
+        case preloadFile
+        case playerIndex
+        case currentSongs
+        case currentLyrics
+    }
+
 }
 
 extension UserDefaults {

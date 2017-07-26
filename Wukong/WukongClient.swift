@@ -51,64 +51,67 @@ class WukongClient: NSObject {
     }
 
     private func entry() {
-        context.globalObject.setValue([
-            "App": [
-                "url": unsafeBitCast({ [unowned self] () in
-                    let channel = self.getState(["channel", "name"]) ?? ""
-                    return "wukong://\(channel)"
-                } as @convention(block) () -> String, to: AnyObject.self),
-                "webview": unsafeBitCast({ [unowned self] (url) in
-                    self.delegate?.wukongRequestOpenURL(url)
-                } as @convention(block) (String) -> Void, to: AnyObject.self),
-                "reload": unsafeBitCast({ () in
-                    // do nothing
-                } as @convention(block) () -> Void, to: AnyObject.self)
-            ],
-            "Network": [ // TODO
-                "url": unsafeBitCast({ (scheme, endpoint) in
-                    return "\(scheme)s://\(Constant.URL.api)\(endpoint)"
-                } as @convention(block) (String, String) -> String, to: AnyObject.self),
-                "http": unsafeBitCast({ (method, endpoint, data) in
-                    return ""
-                } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
-                "websocket": unsafeBitCast({ (endpoint, handler) in
+        context.globalObject.setValue({
+            var networkHook: () -> Void = {}
+            return [
+                "App": [
+                    "url": unsafeBitCast({ [unowned self] () in
+                        let channel = self.getState([.channel, .name]) ?? ""
+                        return "wukong://\(channel)"
+                    } as @convention(block) () -> String, to: AnyObject.self),
+                    "webview": unsafeBitCast({ [unowned self] (url) in
+                        self.delegate?.wukongRequestOpenURL(url)
+                    } as @convention(block) (String) -> Void, to: AnyObject.self),
+                    "reload": unsafeBitCast({ () in
+                        // do nothing
+                    } as @convention(block) () -> Void, to: AnyObject.self)
+                ],
+                "Network": [ // TODO
+                    "url": unsafeBitCast({ (scheme, endpoint) in
+                        return "\(scheme)s://\(Constant.URL.api)\(endpoint)"
+                    } as @convention(block) (String, String) -> String, to: AnyObject.self),
+                    "http": unsafeBitCast({ (method, endpoint, data) in
+                        return ""
+                    } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
+                    "websocket": unsafeBitCast({ (endpoint, handler) in
 
-                } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
-                "hook": unsafeBitCast({ (callback) in
+                    } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
+                    "hook": unsafeBitCast({ (callback) in
 
-                } as @convention(block) (Any) -> Void, to: AnyObject.self)
-            ],
-            "Database": [
-                "get": unsafeBitCast({ (key) in
-                    return UserDefaults.clientDefaults.string(forKey: key)
-                } as @convention(block) (String) -> String?, to: AnyObject.self),
-                "set": unsafeBitCast({ (key, value) in
-                    UserDefaults.clientDefaults.set(value, forKey: key)
-                } as @convention(block) (String, String) -> Void, to: AnyObject.self),
-                "remove": unsafeBitCast({ (key) in
-                    UserDefaults.clientDefaults.removeObject(forKey: key)
-                } as @convention(block) (String) -> Void, to: AnyObject.self)
+                    } as @convention(block) (Any) -> Void, to: AnyObject.self)
+                ],
+                "Database": [
+                    "get": unsafeBitCast({ (key) in
+                        return UserDefaults.clientDefaults.string(forKey: key)
+                    } as @convention(block) (String) -> String?, to: AnyObject.self),
+                    "set": unsafeBitCast({ (key, value) in
+                        UserDefaults.clientDefaults.set(value, forKey: key)
+                    } as @convention(block) (String, String) -> Void, to: AnyObject.self),
+                    "remove": unsafeBitCast({ (key) in
+                        UserDefaults.clientDefaults.removeObject(forKey: key)
+                    } as @convention(block) (String) -> Void, to: AnyObject.self)
+                ]
             ]
-        ], forProperty: Constant.Script.platform)
-        context.globalObject.setValue((
-            client.call(withArguments: [platform])
-        ), forProperty: Constant.Script.store)
+        }(), forProperty: Constant.Script.platform)
+        context.globalObject.setValue({
+            return client.call(withArguments: [platform])
+        }(), forProperty: Constant.Script.store)
     }
 
-    func getState<T>(_ property: [String]) -> T? {
+    func getState<T>(_ property: [Constant.State]) -> T? {
         guard let state = store.invokeMethod("getState", withArguments: []) else { return nil }
-        let object = property.reduce(state) { $0.forProperty($1) }
+        let object = property.reduce(state) { $0.forProperty($1.rawValue) }
         return object.toObject() as? T
     }
 
-    func querySelector<T>(_ name: String) -> T? {
+    func querySelector<T>(_ name: Constant.Selector) -> T? {
         guard let state = store.invokeMethod("getState", withArguments: []) else { return nil }
-        guard let object = selector.invokeMethod(name, withArguments: [state]) else { return nil }
+        guard let object = selector.invokeMethod(name.rawValue, withArguments: [state]) else { return nil }
         return object.toObject() as? T
     }
 
-    func dispatchAction(_ name: [String], _ data: [Any]) {
-        let object = name.reduce(action) { $0.forProperty($1) }
+    func dispatchAction(_ name: [Constant.Action], _ data: [Any]) {
+        let object = name.reduce(action) { $0.forProperty($1.rawValue) }
         _ = object.invokeMethod("create", withArguments: data)
     }
 
