@@ -102,9 +102,17 @@ class WukongClient: NSObject {
         }(), forProperty: Constant.Script.store)
     }
 
-    func promise(_ executor: ((JSValue, JSValue) -> Void)? = nil) -> JSValue {
-        //TODO
-        return context.globalObject.forProperty("Promise")
+    func promise(_ executor: (((JSValue?) -> Void, (JSValue?) -> Void) -> Void)? = nil) -> JSValue {
+        return context.globalObject.forProperty("Promise").construct(withArguments: [unsafeBitCast({ (resolve, reject) in
+            if let executor = executor {
+                executor(
+                    { resolve.call(withArguments: [$0].flatMap({$0})) },
+                    { reject.call(withArguments: [$0].flatMap({$0})) }
+                )
+            } else {
+                resolve.call(withArguments: [])
+            }
+        } as @convention(block) (JSValue, JSValue) -> Void, to: AnyObject.self)])
     }
 
     func getState<T>(_ property: [Constant.State]) -> T? {
