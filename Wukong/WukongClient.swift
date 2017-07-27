@@ -52,8 +52,26 @@ class WukongClient: NSObject {
 
     private func entry() {
         context.globalObject.setValue({
+            func jsPromise(_ executor: ((@escaping (JSValue?) -> Void, @escaping (JSValue?) -> Void) -> Void)? = nil) -> JSValue {
+                return context.globalObject.forProperty("Promise").construct(withArguments: [unsafeBitCast({ (resolve, reject) in
+                    if let executor = executor {
+                        executor(
+                            { resolve.call(withArguments: [$0].flatMap({$0})) },
+                            { reject.call(withArguments: [$0].flatMap({$0})) }
+                        )
+                    } else {
+                        resolve.call(withArguments: [])
+                    }
+                } as @convention(block) (JSValue, JSValue) -> Void, to: AnyObject.self)])
+            }
+
+            func jsError(_ message: String? = nil) -> JSValue {
+                return context.globalObject.forProperty("Error").construct(withArguments: [message].flatMap({$0}))
+            }
+
             let apiURL: (String, String) -> String = { (scheme, endpoint) in "\(scheme)s://\(Constant.URL.api)\(endpoint)" }
             var networkHook = JSValue(undefinedIn: context)!
+
             return [
                 "App": [
                     "url": unsafeBitCast({ [unowned self] () in
@@ -67,18 +85,39 @@ class WukongClient: NSObject {
                         // do nothing
                     } as @convention(block) () -> Void, to: AnyObject.self)
                 ],
-                "Network": [ // TODO
+                "Network": [
                     "url": unsafeBitCast({ (scheme, endpoint) in
                         return apiURL(scheme, endpoint)
                     } as @convention(block) (String, String) -> String, to: AnyObject.self),
-                    "http": unsafeBitCast({ [unowned self] (method, endpoint, data) in
-                        // TODO
-                        // guard let url = URL(string: apiURL("http", endpoint)) else { return promise }
-                        // URLSession.apiSession.dataTask(with: url) { (data, response, error) in }
-                        return ""
+                    "http": unsafeBitCast({ (method, endpoint, body) in
+                        guard let url = URL(string: apiURL("http", endpoint)) else { return jsPromise() }
+                        var request = URLRequest(url: url)
+                        request.httpMethod = method
+                        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+                        return jsPromise { (resolve, reject) in
+                            URLSession.apiSession.dataTask(with: request) { (data, response, error) in
+                                guard error == nil else {
+                                    reject(jsError(error?.localizedDescription))
+                                    return
+                                }
+                                guard let response = response as? HTTPURLResponse else {
+                                    reject(jsError("No response"))
+                                    return
+                                }
+                                // TODO
+                                let status = response.statusCode
+                                let object: Any? = {
+                                    if let data = data {
+                                        return try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                                    } else {
+                                        return nil
+                                    }
+                                }()
+                            }
+                        }
                     } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
                     "websocket": unsafeBitCast({ (endpoint, handler) in
-
+                        // TODO
                     } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
                     "hook": unsafeBitCast({ (callback) in
                         networkHook = callback
@@ -100,19 +139,6 @@ class WukongClient: NSObject {
         context.globalObject.setValue({
             return client.call(withArguments: [platform])
         }(), forProperty: Constant.Script.store)
-    }
-
-    func promise(_ executor: (((JSValue?) -> Void, (JSValue?) -> Void) -> Void)? = nil) -> JSValue {
-        return context.globalObject.forProperty("Promise").construct(withArguments: [unsafeBitCast({ (resolve, reject) in
-            if let executor = executor {
-                executor(
-                    { resolve.call(withArguments: [$0].flatMap({$0})) },
-                    { reject.call(withArguments: [$0].flatMap({$0})) }
-                )
-            } else {
-                resolve.call(withArguments: [])
-            }
-        } as @convention(block) (JSValue, JSValue) -> Void, to: AnyObject.self)])
     }
 
     func getState<T>(_ property: [Constant.State]) -> T? {
