@@ -72,30 +72,33 @@ class WukongClient: NSObject {
                     "url": unsafeBitCast({ (scheme, endpoint) in
                         return apiURL(scheme, endpoint)
                     } as @convention(block) (String, String) -> String, to: AnyObject.self),
-                    "http": unsafeBitCast({ (method, endpoint, body) in
-                        guard let url = URL(string: apiURL("http", endpoint)) else { return jsPromise() }
+                    "http": unsafeBitCast({ [unowned self] (method, endpoint, body) in
+                        guard let url = URL(string: apiURL("http", endpoint)) else { return self.jsPromise() }
                         var request = URLRequest(url: url)
                         request.httpMethod = method
                         request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
-                        return jsPromise { (resolve, reject) in
-                            URLSession.apiSession.dataTask(with: request) { (data, response, error) in
+                        return self.jsPromise { (resolve, reject) in
+                            URLSession.apiSession.dataTask(with: request) { [unowned self] (data, response, error) in
                                 guard error == nil else {
-                                    reject(jsError(error?.localizedDescription))
+                                    reject(self.jsError(error?.localizedDescription))
                                     return
                                 }
                                 guard let response = response as? HTTPURLResponse else {
-                                    reject(jsError("No response"))
+                                    reject(self.jsError("No response"))
                                     return
                                 }
-                                // TODO
                                 let status = response.statusCode
-                                let object: Any? = {
-                                    if let data = data {
-                                        return try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                                    } else {
-                                        return nil
+                                let error = 200 ... 299 ~= status ? NSNull() : HTTPURLResponse.localizedString(forStatusCode: status) as Any
+                                networkHook.call(withArguments: [method, endpoint, status, error])
+                                var object: Any = ""
+                                if let data = data {
+                                    if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
+                                        object = json
+                                    } else if let string = String(data: data, encoding: .utf8) {
+                                        object = string
                                     }
-                                }()
+                                }
+                                resolve(JSValue(object: object, in: self.context))
                             }
                         }
                     } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
