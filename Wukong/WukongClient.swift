@@ -52,23 +52,6 @@ class WukongClient: NSObject {
 
     private func entry() {
         context.globalObject.setValue({
-            func jsPromise(_ executor: ((@escaping (JSValue?) -> Void, @escaping (JSValue?) -> Void) -> Void)? = nil) -> JSValue {
-                return context.globalObject.forProperty("Promise").construct(withArguments: [unsafeBitCast({ (resolve, reject) in
-                    if let executor = executor {
-                        executor(
-                            { resolve.call(withArguments: [$0].flatMap({$0})) },
-                            { reject.call(withArguments: [$0].flatMap({$0})) }
-                        )
-                    } else {
-                        resolve.call(withArguments: [])
-                    }
-                } as @convention(block) (JSValue, JSValue) -> Void, to: AnyObject.self)])
-            }
-
-            func jsError(_ message: String? = nil) -> JSValue {
-                return context.globalObject.forProperty("Error").construct(withArguments: [message].flatMap({$0}))
-            }
-
             let apiURL: (String, String) -> String = { (scheme, endpoint) in "\(scheme)s://\(Constant.URL.api)\(endpoint)" }
             var networkHook = JSValue(undefinedIn: context)!
 
@@ -139,6 +122,23 @@ class WukongClient: NSObject {
         context.globalObject.setValue({
             return client.call(withArguments: [platform])
         }(), forProperty: Constant.Script.store)
+    }
+
+    private func jsPromise(_ executor: ((@escaping (JSValue?) -> Void, @escaping (JSValue?) -> Void) -> Void)? = nil) -> JSValue {
+        return context.globalObject.forProperty("Promise").construct(withArguments: [unsafeBitCast({ (resolve, reject) in
+            if let executor = executor {
+                executor(
+                    { resolve.call(withArguments: [$0].flatMap({$0})) },
+                    { reject.call(withArguments: [$0].flatMap({$0})) }
+                )
+            } else {
+                resolve.call(withArguments: [])
+            }
+        } as @convention(block) (JSValue, JSValue) -> Void, to: AnyObject.self)])
+    }
+
+    private func jsError(_ message: String? = nil) -> JSValue {
+        return context.globalObject.forProperty("Error").construct(withArguments: [message].flatMap({$0}))
     }
 
     func getState<T>(_ property: [Constant.State]) -> T? {
