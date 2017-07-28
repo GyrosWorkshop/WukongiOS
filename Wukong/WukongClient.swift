@@ -99,7 +99,7 @@ class WukongClient: NSObject {
                                     }
                                 }
                                 resolve(JSValue(object: object, in: self.context))
-                            }
+                            }.resume()
                         }
                     } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
                     "websocket": unsafeBitCast({ (endpoint, handler) in

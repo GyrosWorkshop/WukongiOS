@@ -37,10 +37,11 @@ extension ViewController: WukongDelegate {
     }
 
     func wukongDidThrowException(_ exception: String) {
-        print(exception)
+        print("exception:", exception)
     }
 
     func wukongRequestOpenURL(_ url: String) {
+        print("url:", url)
     }
 
 }
