@@ -34,11 +34,17 @@ class ScriptLoader: NSObject {
         }.resume()
     }
 
-    func load(_ callback: ((_ script: String?) -> Void)? = nil) {
+    func load(online: Bool, _ callback: ((_ script: String?) -> Void)? = nil) {
         var loaded = false
         if let script = UserDefaults.appDefaults.string(forKey: Constant.Defaults.script) {
             callback?(script)
             loaded = true
+        }
+        guard online else {
+            if !loaded {
+                callback?(nil)
+            }
+            return
         }
         loadVersion { [weak self] (version) in
             guard let wself = self else { return }

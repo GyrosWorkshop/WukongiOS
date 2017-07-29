@@ -19,10 +19,10 @@ protocol WukongDelegate: class {
 
 class WukongClient: NSObject {
 
-    private let context = JSContext()!
     private let scriptLoader = ScriptLoader()
     private let dataLoader = DataLoader()
     private let audioPlayer = AudioPlayer()
+    private var context: JSContext!
 
     private var client: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.main) }
     private var action: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.action) }
@@ -35,23 +35,32 @@ class WukongClient: NSObject {
     weak var delegate: WukongDelegate?
 
     func run() {
-        scriptLoader.load { [unowned self] (script) in
-            guard let script = script else {
-                self.delegate?.wukongDidFailLoadScript()
-                return
-            }
-            self.delegate?.wukongDidLoadScript()
-            self.context.exceptionHandler = { [unowned self] (context, exception) in
-                if let exception = exception?.toString() {
-                    self.delegate?.wukongDidThrowException(exception)
-                }
-            }
-            self.context.evaluateScript(script)
-            self.entry()
+        guard context == nil else { return }
+        scriptLoader.load(online: true) { [unowned self] (script) in
+            self.setupContext(script)
         }
     }
 
-    private func entry() {
+    func reload() {
+        guard context != nil else { return }
+        scriptLoader.load(online: false) { [unowned self] (script) in
+            self.setupContext(script)
+        }
+    }
+
+    private func setupContext(_ script: String?) {
+        guard let script = script else {
+            delegate?.wukongDidFailLoadScript()
+            return
+        }
+        delegate?.wukongDidLoadScript()
+        context = JSContext()!
+        context.exceptionHandler = { [unowned self] (context, exception) in
+            if let exception = exception?.toString() {
+                self.delegate?.wukongDidThrowException(exception)
+            }
+        }
+        context.evaluateScript(script)
         context.globalObject.setValue({
             let apiURL: (String, String) -> String = { (scheme, endpoint) in "\(scheme)s://\(Constant.URL.api)\(endpoint)" }
             var networkHook = JSValue(undefinedIn: context)!
@@ -126,17 +135,20 @@ class WukongClient: NSObject {
                         var timer: Timer? = nil
                         websocket.event.open = {
                             emit.call(withArguments: ["open"])
-                            timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [unowned send] (timer) in
-                                unsafeBitCast(send, to: SendFunction.self)("ping", [:])
+                            timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak send] (timer) in
+                                if let send = send {
+                                    unsafeBitCast(send, to: SendFunction.self)("ping", [:])
+                                } else {
+                                    timer.invalidate()
+                                }
                             }
                             timer?.tolerance = 1
                         }
                         websocket.event.close = { (code, reason, clean) in
                             emit.call(withArguments: ["close"])
                             timer?.invalidate()
-                            timer = nil
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                                websocket.open()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak websocket] in
+                                websocket?.open()
                             }
                         }
                         websocket.event.error = { (error) in
