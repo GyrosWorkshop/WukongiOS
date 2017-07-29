@@ -14,6 +14,7 @@
 		FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB21EAC89360090833C /* AudioPlayer.swift */; };
 		FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB41EAC895A0090833C /* DataLoader.swift */; };
 		FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */; };
+		FEBD3CAA1F2C48F100C73767 /* SwiftWebSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEBD3CA91F2C48F100C73767 /* SwiftWebSocket.framework */; };
 		FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAD1F233B7A001C052B /* WukongClient.swift */; };
 		FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */; };
 /* End PBXBuildFile section */
@@ -28,6 +29,7 @@
 		FE7A7EB21EAC89360090833C /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		FE7A7EB41EAC895A0090833C /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstant.swift; sourceTree = "<group>"; };
+		FEBD3CA91F2C48F100C73767 /* SwiftWebSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftWebSocket.framework; path = Carthage/Build/iOS/SwiftWebSocket.framework; sourceTree = "<group>"; };
 		FECAEAAD1F233B7A001C052B /* WukongClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WukongClient.swift; sourceTree = "<group>"; };
 		FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -37,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEBD3CAA1F2C48F100C73767 /* SwiftWebSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +51,7 @@
 			children = (
 				FE4130321EA8E5CD0070F690 /* Wukong */,
 				FE4130451EA8E6A30070F690 /* Resource */,
+				FEBD3CA81F2C48F100C73767 /* Frameworks */,
 				FE4130311EA8E5CD0070F690 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -84,6 +88,14 @@
 			name = Resource;
 			sourceTree = "<group>";
 		};
+		FEBD3CA81F2C48F100C73767 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FEBD3CA91F2C48F100C73767 /* SwiftWebSocket.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -94,6 +106,7 @@
 				FE41302C1EA8E5CD0070F690 /* Sources */,
 				FE41302D1EA8E5CD0070F690 /* Frameworks */,
 				FE41302E1EA8E5CD0070F690 /* Resources */,
+				FEBD3CAB1F2C492A00C73767 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -156,6 +169,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FEBD3CAB1F2C492A00C73767 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/Carthage/Build/iOS/SwiftWebSocket.framework",
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftWebSocket.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FE41302C1EA8E5CD0070F690 /* Sources */ = {
@@ -288,6 +319,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 7F6HZ4V33U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Wukong/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = me.qusic.Wukong;
@@ -303,6 +338,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 7F6HZ4V33U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Wukong/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = me.qusic.Wukong;
