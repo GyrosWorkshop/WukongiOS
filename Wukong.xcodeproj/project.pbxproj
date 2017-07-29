@@ -11,7 +11,7 @@
 		FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */; };
 		FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130331EA8E5CD0070F690 /* AppDelegate.swift */; };
 		FE4130361EA8E5CD0070F690 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130351EA8E5CD0070F690 /* MainViewController.swift */; };
-		FE4130391EA8E5CD0070F690 /* Phone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE4130371EA8E5CD0070F690 /* Phone.storyboard */; };
+		FE4130391EA8E5CD0070F690 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */; };
 		FE41303B1EA8E5CD0070F690 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE41303A1EA8E5CD0070F690 /* Assets.xcassets */; };
 		FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB21EAC89360090833C /* AudioPlayer.swift */; };
 		FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB41EAC895A0090833C /* DataLoader.swift */; };
@@ -28,7 +28,7 @@
 		FE4130301EA8E5CD0070F690 /* Wukong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wukong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE4130331EA8E5CD0070F690 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FE4130351EA8E5CD0070F690 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		FE4130381EA8E5CD0070F690 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Phone.storyboard; sourceTree = "<group>"; };
+		FE4130381EA8E5CD0070F690 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FE41303A1EA8E5CD0070F690 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Wukong/Assets.xcassets; sourceTree = "<group>"; };
 		FE41303F1EA8E5CD0070F690 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Wukong/Info.plist; sourceTree = "<group>"; };
 		FE7A7EB21EAC89360090833C /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 			children = (
 				FE41303F1EA8E5CD0070F690 /* Info.plist */,
 				FE41303A1EA8E5CD0070F690 /* Assets.xcassets */,
-				FE4130371EA8E5CD0070F690 /* Phone.storyboard */,
+				FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */,
 			);
 			name = Resource;
 			sourceTree = "<group>";
@@ -189,7 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE41303B1EA8E5CD0070F690 /* Assets.xcassets in Resources */,
-				FE4130391EA8E5CD0070F690 /* Phone.storyboard in Resources */,
+				FE4130391EA8E5CD0070F690 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,12 +234,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		FE4130371EA8E5CD0070F690 /* Phone.storyboard */ = {
+		FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				FE4130381EA8E5CD0070F690 /* Base */,
 			);
-			name = Phone.storyboard;
+			name = LaunchScreen.storyboard;
 			path = Wukong;
 			sourceTree = "<group>";
 		};

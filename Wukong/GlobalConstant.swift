@@ -153,11 +153,6 @@ struct Constant {
         case currentLyrics
     }
 
-    enum Segue: String {
-        case webview
-        case webviewUnwind
-    }
-
 }
 
 extension UserDefaults {
