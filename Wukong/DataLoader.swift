@@ -26,7 +26,7 @@ class DataLoader: NSObject {
             URLSession.dataSession.dataTask(with: url) { [weak self] (data, response, error) in
                 guard let wself = self else { return }
                 try? data?.write(to: file)
-                OperationQueue.main.addOperation {
+                DispatchQueue.main.async {
                     wself.callbacks[key]?(data)
                     wself.callbacks.removeValue(forKey: key)
                 }

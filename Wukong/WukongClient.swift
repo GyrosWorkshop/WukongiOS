@@ -74,7 +74,9 @@ class WukongClient: NSObject {
                         self.delegate?.wukongRequestOpenURL(url)
                     } as @convention(block) (String) -> Void, to: AnyObject.self),
                     "reload": unsafeBitCast({ () in
-                        // do nothing
+                        DispatchQueue.main.async { [unowned self] in
+                            self.reload()
+                        }
                     } as @convention(block) () -> Void, to: AnyObject.self)
                 ],
                 "Network": [

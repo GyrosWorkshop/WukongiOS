@@ -52,7 +52,8 @@ class MainViewController: UICollectionViewController {
         guard let type = Constant.Segue(rawValue: identifier) else { return }
         switch type {
         case .webviewUnwind:
-            break // TODO
+            client.reload()
+            break
         default:
             break
         }

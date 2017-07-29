@@ -55,7 +55,7 @@ class ScriptLoader: NSObject {
                 UserDefaults.appDefaults.set(version, forKey: Constant.Defaults.version)
                 UserDefaults.appDefaults.set(script, forKey: Constant.Defaults.script)
                 if !loaded {
-                    OperationQueue.main.addOperation {
+                    DispatchQueue.main.async {
                         callback?(script)
                     }
                 }
