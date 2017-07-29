@@ -52,6 +52,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FE0CAE061F2CC63300394ABB /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */,
+				FECAEAAD1F233B7A001C052B /* WukongClient.swift */,
+				FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */,
+				FE7A7EB41EAC895A0090833C /* DataLoader.swift */,
+				FE7A7EB21EAC89360090833C /* AudioPlayer.swift */,
+			);
+			name = Client;
+			sourceTree = "<group>";
+		};
+		FE0CAE071F2CC63A00394ABB /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				FE4130331EA8E5CD0070F690 /* AppDelegate.swift */,
+				FE4130351EA8E5CD0070F690 /* MainViewController.swift */,
+				FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */,
+				FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */,
+				FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
 		FE4130271EA8E5CD0070F690 = {
 			isa = PBXGroup;
 			children = (
@@ -73,16 +97,8 @@
 		FE4130321EA8E5CD0070F690 /* Wukong */ = {
 			isa = PBXGroup;
 			children = (
-				FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */,
-				FE4130331EA8E5CD0070F690 /* AppDelegate.swift */,
-				FE4130351EA8E5CD0070F690 /* MainViewController.swift */,
-				FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */,
-				FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */,
-				FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */,
-				FECAEAAD1F233B7A001C052B /* WukongClient.swift */,
-				FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */,
-				FE7A7EB41EAC895A0090833C /* DataLoader.swift */,
-				FE7A7EB21EAC89360090833C /* AudioPlayer.swift */,
+				FE0CAE061F2CC63300394ABB /* Client */,
+				FE0CAE071F2CC63A00394ABB /* UI */,
 			);
 			path = Wukong;
 			sourceTree = "<group>";
