@@ -202,8 +202,9 @@ class WukongClient: NSObject {
         _ = object.invokeMethod("create", withArguments: data)
     }
 
-    func subscribeChange() {
-        // TODO
+    func subscribeChange(_ handler: (() -> Void)? = nil) {
+        guard let handler = handler else { return }
+        store.invokeMethod("subscribe", withArguments: [unsafeBitCast(handler, to: AnyObject.self)])
     }
 
 }
