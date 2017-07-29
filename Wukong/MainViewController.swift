@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainViewController.swift
 //  Wukong
 //
 //  Created by Qusic on 4/20/17.
@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 import SafariServices
 
-class ViewController: UICollectionViewController {
+class MainViewController: UICollectionViewController {
 
     fileprivate let client = WukongClient.sharedInstance
 
@@ -28,7 +28,7 @@ class ViewController: UICollectionViewController {
 
 }
 
-extension ViewController: WukongDelegate {
+extension MainViewController: WukongDelegate {
 
     func wukongDidLoadScript() {
     }
