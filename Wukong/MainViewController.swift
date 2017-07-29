@@ -16,14 +16,46 @@ class MainViewController: UICollectionViewController {
 
     override var prefersStatusBarHidden: Bool { return false }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         client.delegate = self
         client.run()
+    }
+
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        guard let type = Constant.Segue(rawValue: identifier) else { return false }
+        switch type {
+        case .webview:
+            return presentedViewController == nil
+        default:
+            return true
+        }
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let identifier = segue.identifier else { return }
+        guard let type = Constant.Segue(rawValue: identifier) else { return }
+        switch type {
+        case .webview:
+            guard let navigationController = segue.destination as? UINavigationController else { return }
+            guard let viewController = navigationController.topViewController as? WebViewController else { return }
+            guard let userInfo = sender as? String else { return }
+            guard let url = URL(string: userInfo) else { return }
+            viewController.url = url
+        default:
+            break
+        }
+    }
+
+    @IBAction func prepare(unwind segue: UIStoryboardSegue) {
+        guard let identifier = segue.identifier else { return }
+        guard let type = Constant.Segue(rawValue: identifier) else { return }
+        switch type {
+        case .webviewUnwind:
+            break // TODO
+        default:
+            break
+        }
     }
 
 }
@@ -31,6 +63,8 @@ class MainViewController: UICollectionViewController {
 extension MainViewController: WukongDelegate {
 
     func wukongDidLoadScript() {
+        // TODO: test
+        // HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
     }
 
     func wukongDidFailLoadScript() {
@@ -41,7 +75,9 @@ extension MainViewController: WukongDelegate {
     }
 
     func wukongRequestOpenURL(_ url: String) {
-        print("url:", url)
+        if shouldPerformSegue(withIdentifier: Constant.Segue.webview.rawValue, sender: url) {
+            performSegue(withIdentifier: Constant.Segue.webview.rawValue, sender: url)
+        }
     }
 
 }

@@ -31,6 +31,7 @@ struct Constant {
     }
 
     struct URL {
+        static let scheme = "wukong"
         static let api = "api.wukongmusic.us"
         static let web = "https://wukongmusic.us"
         static let registry = "https://registry.npmjs.org"
@@ -150,6 +151,11 @@ struct Constant {
         case playerIndex
         case currentSongs
         case currentLyrics
+    }
+
+    enum Segue: String {
+        case webview
+        case webviewUnwind
     }
 
 }

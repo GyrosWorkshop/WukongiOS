@@ -29,7 +29,7 @@
         <scene sceneID="Lgb-QG-6HB">
             <objects>
                 <collectionViewController id="mcb-ei-rIE" customClass="MainViewController" customModule="Wukong" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="ma1-sQ-S7h">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="ma1-sQ-S7h">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -55,10 +55,52 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" id="98s-sb-Vxw"/>
+                    <connections>
+                        <segue destination="x92-tw-Wo4" kind="presentation" identifier="webview" id="SYi-qr-P7h"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kHS-3n-2di" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="513" y="929"/>
+            <point key="canvasLocation" x="526" y="929"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="lEb-qX-Dr7">
+            <objects>
+                <navigationController id="x92-tw-Wo4" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6IH-VJ-Y1a">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ZTG-KQ-LtK" kind="relationship" relationship="rootViewController" id="3eH-E1-u4Q"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Trg-75-lpk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-428" y="1816"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="KTf-Fa-2eM">
+            <objects>
+                <viewController id="ZTG-KQ-LtK" customClass="WebViewController" customModule="Wukong" customModuleProvider="target" sceneMemberID="viewController">
+                    <webView key="view" clipsSubviews="YES" contentMode="scaleToFill" id="Jnr-t3-98k">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="delegate" destination="ZTG-KQ-LtK" id="swa-x8-h2C"/>
+                        </connections>
+                    </webView>
+                    <navigationItem key="navigationItem" id="bnG-jk-ATB"/>
+                    <connections>
+                        <outlet property="webView" destination="Jnr-t3-98k" id="5nl-bL-Lrd"/>
+                        <segue destination="oAg-uz-TOb" kind="unwind" identifier="webviewUnwind" unwindAction="prepareWithUnwind:" id="CUp-1H-da3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y9p-ri-ZvH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="oAg-uz-TOb" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="526" y="1815"/>
         </scene>
     </scenes>
 </document>
