@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 import SafariServices
 
-class MainViewController: UICollectionViewController {
+class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

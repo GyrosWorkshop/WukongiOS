@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE0CAE031F2CB89B00394ABB /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */; };
+		FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */; };
 		FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130331EA8E5CD0070F690 /* AppDelegate.swift */; };
 		FE4130361EA8E5CD0070F690 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130351EA8E5CD0070F690 /* MainViewController.swift */; };
 		FE4130391EA8E5CD0070F690 /* Phone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE4130371EA8E5CD0070F690 /* Phone.storyboard */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
+		FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		FE4130301EA8E5CD0070F690 /* Wukong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wukong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE4130331EA8E5CD0070F690 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FE4130351EA8E5CD0070F690 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +76,8 @@
 				FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */,
 				FE4130331EA8E5CD0070F690 /* AppDelegate.swift */,
 				FE4130351EA8E5CD0070F690 /* MainViewController.swift */,
+				FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */,
+				FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */,
 				FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */,
 				FECAEAAD1F233B7A001C052B /* WukongClient.swift */,
 				FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */,
@@ -202,7 +208,9 @@
 				FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */,
 				FE4130361EA8E5CD0070F690 /* MainViewController.swift in Sources */,
 				FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */,
+				FE0CAE031F2CB89B00394ABB /* MusicViewController.swift in Sources */,
 				FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */,
+				FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */,
 				FEC6DAD31F2C78D800A3B4C0 /* WebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
