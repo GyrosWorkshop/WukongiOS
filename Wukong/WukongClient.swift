@@ -112,21 +112,22 @@ class WukongClient: NSObject {
                             }
                         }
                         let websocket = WebSocket(request: request)
-                        let send = { (eventName, eventData) in
+                        typealias SendFunction = @convention(block) (String, [String: Any]) -> Void
+                        let send = unsafeBitCast({ (eventName, eventData) in
                             var object = eventData
                             object["eventName"] = eventName
                             guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else { return }
                             websocket.send(data: data)
-                        } as @convention(block) (String, [String: Any]) -> Void
-                        guard let emit = handler.call(withArguments: [unsafeBitCast(send, to: AnyObject.self)]) else {
+                        } as SendFunction, to: AnyObject.self)
+                        guard let emit = handler.call(withArguments: [send]) else {
                             websocket.close()
                             return
                         }
                         var timer: Timer? = nil
                         websocket.event.open = {
                             emit.call(withArguments: ["open"])
-                            timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { (timer) in
-                                send("ping", [:])
+                            timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [unowned send] (timer) in
+                                unsafeBitCast(send, to: SendFunction.self)("ping", [:])
                             }
                             timer?.tolerance = 1
                         }
