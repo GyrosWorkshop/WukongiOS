@@ -8,6 +8,7 @@
 
 import UIKit
 import JavaScriptCore
+import SwiftWebSocket
 
 protocol WukongDelegate: class {
     func wukongDidLoadScript()
@@ -54,7 +55,6 @@ class WukongClient: NSObject {
         context.globalObject.setValue({
             let apiURL: (String, String) -> String = { (scheme, endpoint) in "\(scheme)s://\(Constant.URL.api)\(endpoint)" }
             var networkHook = JSValue(undefinedIn: context)!
-
             return [
                 "App": [
                     "url": unsafeBitCast({ [unowned self] () in
@@ -101,10 +101,50 @@ class WukongClient: NSObject {
                                 resolve(JSValue(object: object, in: self.context))
                             }.resume()
                         }
-                    } as @convention(block) (String, String, [String: Any]) -> Any, to: AnyObject.self),
+                    } as @convention(block) (String, String, [String: Any]) -> JSValue, to: AnyObject.self),
                     "websocket": unsafeBitCast({ (endpoint, handler) in
-                        // TODO
-                    } as @convention(block) (String, Any) -> Void, to: AnyObject.self),
+                        guard let url = URL(string: apiURL("ws", endpoint)) else { return }
+                        var request = URLRequest(url: url)
+                        if let cookies = URLSession.apiSession.configuration.httpCookieStorage?.cookies(for: url) {
+                            let headers = HTTPCookie.requestHeaderFields(with: cookies)
+                            headers.forEach {
+                                request.setValue($1, forHTTPHeaderField: $0)
+                            }
+                        }
+                        let websocket = WebSocket(request: request)
+                        let send = { (eventName, eventData) in
+                            var object = eventData
+                            object["eventName"] = eventName
+                            guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else { return }
+                            websocket.send(data: data)
+                        } as @convention(block) (String, [String: Any]) -> Void
+                        guard let emit = handler.call(withArguments: [unsafeBitCast(send, to: AnyObject.self)]) else {
+                            websocket.close()
+                            return
+                        }
+                        var timer: Timer? = nil
+                        websocket.event.open = {
+                            emit.call(withArguments: ["open"])
+                            timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { (timer) in
+                                send("ping", [:])
+                            }
+                            timer?.tolerance = 1
+                        }
+                        websocket.event.close = { (code, reason, clean) in
+                            emit.call(withArguments: ["close"])
+                            timer?.invalidate()
+                            timer = nil
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                websocket.open()
+                            }
+                        }
+                        websocket.event.error = { (error) in
+                            emit.call(withArguments: ["error"])
+                        }
+                        websocket.event.message = { (message) in
+                            print("\(message)")
+                        }
+                    } as @convention(block) (String, JSValue) -> Void, to: AnyObject.self),
                     "hook": unsafeBitCast({ (callback) in
                         networkHook = callback
                     } as @convention(block) (JSValue) -> Void, to: AnyObject.self)
