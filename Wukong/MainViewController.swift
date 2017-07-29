@@ -12,14 +12,9 @@ import SafariServices
 
 class MainViewController: UICollectionViewController {
 
-    fileprivate let client = WukongClient.sharedInstance
-
-    override var prefersStatusBarHidden: Bool { return false }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        client.delegate = self
-        client.run()
+        WukongClient.sharedInstance.run(self)
     }
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -52,7 +47,7 @@ class MainViewController: UICollectionViewController {
         guard let type = Constant.Segue(rawValue: identifier) else { return }
         switch type {
         case .webviewUnwind:
-            client.reload()
+            WukongClient.sharedInstance.reload()
             break
         default:
             break
@@ -64,15 +59,17 @@ class MainViewController: UICollectionViewController {
 extension MainViewController: WukongDelegate {
 
     func wukongDidLoadScript() {
-        // TODO: test
-        // HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
     }
 
     func wukongDidFailLoadScript() {
     }
 
+    func wukongDidLaunch() {
+        // TODO: subscribe
+    }
+
     func wukongDidThrowException(_ exception: String) {
-        print("exception:", exception)
+        print("exception:", exception) // TODO: for test
     }
 
     func wukongRequestOpenURL(_ url: String) {
