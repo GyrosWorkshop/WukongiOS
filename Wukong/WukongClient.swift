@@ -22,30 +22,26 @@ class WukongClient: NSObject {
 
     static let sharedInstance = WukongClient()
 
-    private let scriptLoader = ScriptLoader()
-    private let dataLoader = DataLoader()
-    private let audioPlayer = AudioPlayer()
     private var context: JSContext!
     private weak var delegate: WukongDelegate!
 
     private var client: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.main) }
     private var action: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.action) }
     private var selector: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.selector) }
-
     private var platform: JSValue { return context.globalObject.forProperty(Constant.Script.platform) }
     private var store: JSValue { return context.globalObject.forProperty(Constant.Script.store) }
 
     func run(_ delegate: WukongDelegate) {
         guard context == nil else { return }
         self.delegate = delegate
-        scriptLoader.load(online: true) { [unowned self] (script) in
+        ScriptLoader.sharedInstance.load(online: true) { [unowned self] (script) in
             self.setupContext(script)
         }
     }
 
     func reload() {
         guard context != nil else { return }
-        scriptLoader.load(online: false) { [unowned self] (script) in
+        ScriptLoader.sharedInstance.load(online: false) { [unowned self] (script) in
             self.setupContext(script)
         }
     }

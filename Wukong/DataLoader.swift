@@ -10,6 +10,8 @@ import UIKit
 
 class DataLoader: NSObject {
 
+    static let sharedInstance = DataLoader()
+
     private var callbacks: [String: (_ data: Data?) -> Void] = [:]
 
     func load(key: String, url: URL, _ dataCallback: ((_ data: Data?) -> Void)? = nil) {

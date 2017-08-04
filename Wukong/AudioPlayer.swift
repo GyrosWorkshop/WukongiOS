@@ -12,6 +12,8 @@ import MediaPlayer
 
 class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
+    static let sharedInstance = AudioPlayer()
+
     private let session: AVAudioSession = {
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(AVAudioSessionCategoryPlayback)

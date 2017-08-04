@@ -10,6 +10,8 @@ import UIKit
 
 class ScriptLoader: NSObject {
 
+    static let sharedInstance = ScriptLoader()
+
     private func loadVersion(_ callback: ((_ version: String?) -> Void)? = nil) {
         let url = "\(Constant.URL.registry)/\(Constant.Identifier.client)"
         URLSession.dataSession.dataTask(with: URL(string: url)!) { (data, response, error) in
