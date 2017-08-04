@@ -10,4 +10,18 @@ import UIKit
 
 class ConfigViewController: UIViewController {
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        title = "Config"
+        tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 0)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        self.init()
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
 }

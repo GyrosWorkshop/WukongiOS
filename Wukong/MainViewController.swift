@@ -12,8 +12,26 @@ import SafariServices
 
 class MainViewController: UIViewController {
 
+    fileprivate lazy var musicViewController = MusicViewController()
+    fileprivate lazy var configViewController = ConfigViewController()
+    fileprivate lazy var rootViewController: UIViewController = {
+        let tabController = UITabBarController()
+        tabController.viewControllers = [
+            UINavigationController(rootViewController: self.musicViewController),
+            UINavigationController(rootViewController: self.configViewController)
+        ]
+        return tabController
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(rootViewController.view)
+        view.addConstraints([
+            NSLayoutConstraint(item: rootViewController.view, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: rootViewController.view, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: rootViewController.view, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: rootViewController.view, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
+        ])
         WukongClient.sharedInstance.run(self)
     }
 
