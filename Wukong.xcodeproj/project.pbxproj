@@ -20,6 +20,7 @@
 		FEC6DAD31F2C78D800A3B4C0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */; };
 		FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAD1F233B7A001C052B /* WukongClient.swift */; };
 		FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */; };
+		FED977A61F34A632000DC1B8 /* Cartography.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED977A51F34A632000DC1B8 /* Cartography.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		FECAEAAD1F233B7A001C052B /* WukongClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WukongClient.swift; sourceTree = "<group>"; };
 		FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptLoader.swift; sourceTree = "<group>"; };
+		FED977A51F34A632000DC1B8 /* Cartography.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cartography.framework; path = Carthage/Build/iOS/Cartography.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FED977A61F34A632000DC1B8 /* Cartography.framework in Frameworks */,
 				FEBD3CAA1F2C48F100C73767 /* SwiftWebSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -116,6 +119,7 @@
 		FEBD3CA81F2C48F100C73767 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FED977A51F34A632000DC1B8 /* Cartography.framework */,
 				FEBD3CA91F2C48F100C73767 /* SwiftWebSocket.framework */,
 			);
 			name = Frameworks;
@@ -202,9 +206,11 @@
 			files = (
 			);
 			inputPaths = (
+				"$(PROJECT_DIR)/Carthage/Build/iOS/Cartography.framework",
 				"$(PROJECT_DIR)/Carthage/Build/iOS/SwiftWebSocket.framework",
 			);
 			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Cartography.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftWebSocket.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
