@@ -19,6 +19,7 @@ struct Constant {
     struct Defaults {
         static let version = "\(Identifier.client).version"
         static let script = "\(Identifier.client).script"
+        static let channel = "\(Identifier.name).channel"
     }
 
     struct Script {
