@@ -25,12 +25,11 @@ class DataLoader: NSObject {
         }
         URLSession.dataSession.getAllTasks { (tasks) in
             guard !tasks.contains(where: { $0.originalRequest?.url == url }) else { return }
-            URLSession.dataSession.dataTask(with: url) { [weak self] (data, response, error) in
-                guard let wself = self else { return }
+            URLSession.dataSession.dataTask(with: url) { [unowned self] (data, response, error) in
                 try? data?.write(to: file)
                 DispatchQueue.main.async {
-                    wself.callbacks[key]?(data)
-                    wself.callbacks.removeValue(forKey: key)
+                    self.callbacks[key]?(data)
+                    self.callbacks.removeValue(forKey: key)
                 }
             }.resume()
         }

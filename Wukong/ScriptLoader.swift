@@ -48,11 +48,10 @@ class ScriptLoader: NSObject {
             }
             return
         }
-        loadVersion { [weak self] (version) in
-            guard let wself = self else { return }
+        loadVersion { [unowned self] (version) in
             guard let version = version else { return }
             guard version != UserDefaults.appDefaults.string(forKey: Constant.Defaults.version) else { return }
-            wself.loadScript(version: version) { (script) in
+            self.loadScript(version: version) { (script) in
                 guard let script = script else { return }
                 UserDefaults.appDefaults.set(version, forKey: Constant.Defaults.version)
                 UserDefaults.appDefaults.set(script, forKey: Constant.Defaults.script)
