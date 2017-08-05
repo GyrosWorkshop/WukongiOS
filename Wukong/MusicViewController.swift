@@ -13,14 +13,14 @@ class MusicViewController: UICollectionViewController, AppViewController, UIColl
 
     fileprivate var data = Data()
     fileprivate struct Data {
-        var channel: String = ""
-        var id: String = ""
-        var title: String = ""
-        var album: String = ""
-        var artist: String = ""
-        var artwork: String = ""
-        var link: String = ""
-        var mvLink: String = ""
+        var channel = ""
+        var id = ""
+        var title = ""
+        var album = ""
+        var artist = ""
+        var artwork = ""
+        var link = ""
+        var mvLink = ""
         var playlist: [[String: Any]] = []
     }
 
@@ -193,7 +193,7 @@ class MusicViewController: UICollectionViewController, AppViewController, UIColl
     }
 
     func channelButtonAction() {
-        let alert = UIAlertController(title: "Join Channel", message: "Join Channel", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Join Channel", message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             textField.placeholder = self.data.channel
         }
