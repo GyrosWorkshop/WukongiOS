@@ -72,8 +72,8 @@ class WukongClient: NSObject {
                     "webview": unsafeBitCast({ [unowned self] (url) in
                         self.delegate.wukongRequestOpenURL(url)
                     } as @convention(block) (String) -> Void, to: AnyObject.self),
-                    "reload": unsafeBitCast({ () in
-                        DispatchQueue.main.async { [unowned self] in
+                    "reload": unsafeBitCast({ [unowned self] () in
+                        DispatchQueue.main.async {
                             self.reload()
                         }
                     } as @convention(block) () -> Void, to: AnyObject.self)
@@ -90,7 +90,7 @@ class WukongClient: NSObject {
                             request.httpBody = data
                             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                         }
-                        return self.jsPromise { (resolve, reject) in
+                        return self.jsPromise { [unowned self] (resolve, reject) in
                             URLSession.apiSession.dataTask(with: request) { [unowned self] (data, response, error) in
                                 guard error == nil else {
                                     reject(self.jsError(error?.localizedDescription))
@@ -124,9 +124,7 @@ class WukongClient: NSObject {
                         var request = URLRequest(url: url)
                         if let cookies = URLSession.apiSession.configuration.httpCookieStorage?.cookies(for: url) {
                             let headers = HTTPCookie.requestHeaderFields(with: cookies)
-                            headers.forEach {
-                                request.setValue($1, forHTTPHeaderField: $0)
-                            }
+                            headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
                         }
                         let websocket = WebSocket(request: request)
                         typealias SendFunction = @convention(block) (String, [String: Any]) -> Void
