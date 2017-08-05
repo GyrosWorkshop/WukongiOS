@@ -9,7 +9,7 @@
 import UIKit
 import Cartography
 
-protocol AppViewController: class {
+protocol AppComponent: class {
     func appDidLoad()
 }
 

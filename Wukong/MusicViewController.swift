@@ -9,7 +9,7 @@
 import UIKit
 import Cartography
 
-class MusicViewController: UICollectionViewController, AppViewController, UICollectionViewDelegateFlowLayout {
+class MusicViewController: UICollectionViewController, AppComponent, UICollectionViewDelegateFlowLayout {
 
     fileprivate var data = Data()
     fileprivate struct Data {

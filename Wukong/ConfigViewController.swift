@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConfigViewController: UICollectionViewController, AppViewController {
+class ConfigViewController: UICollectionViewController, AppComponent {
 
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
