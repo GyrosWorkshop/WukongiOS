@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE0836F41F35F8C4003A73CD /* artwork.png in Resources */ = {isa = PBXBuildFile; fileRef = FE0836F01F35F8C4003A73CD /* artwork.png */; };
+		FE0836F51F35F8C4003A73CD /* netease.png in Resources */ = {isa = PBXBuildFile; fileRef = FE0836F11F35F8C4003A73CD /* netease.png */; };
+		FE0836F61F35F8C4003A73CD /* qq.png in Resources */ = {isa = PBXBuildFile; fileRef = FE0836F21F35F8C4003A73CD /* qq.png */; };
+		FE0836F71F35F8C4003A73CD /* xiami.png in Resources */ = {isa = PBXBuildFile; fileRef = FE0836F31F35F8C4003A73CD /* xiami.png */; };
 		FE0CAE031F2CB89B00394ABB /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */; };
 		FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */; };
 		FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130331EA8E5CD0070F690 /* AppDelegate.swift */; };
@@ -24,6 +28,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FE0836F01F35F8C4003A73CD /* artwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = artwork.png; sourceTree = "<group>"; };
+		FE0836F11F35F8C4003A73CD /* netease.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = netease.png; sourceTree = "<group>"; };
+		FE0836F21F35F8C4003A73CD /* qq.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qq.png; sourceTree = "<group>"; };
+		FE0836F31F35F8C4003A73CD /* xiami.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xiami.png; sourceTree = "<group>"; };
 		FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
 		FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		FE4130301EA8E5CD0070F690 /* Wukong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wukong.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +120,10 @@
 				FE41303F1EA8E5CD0070F690 /* Info.plist */,
 				FE41303A1EA8E5CD0070F690 /* Assets.xcassets */,
 				FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */,
+				FE0836F01F35F8C4003A73CD /* artwork.png */,
+				FE0836F11F35F8C4003A73CD /* netease.png */,
+				FE0836F21F35F8C4003A73CD /* qq.png */,
+				FE0836F31F35F8C4003A73CD /* xiami.png */,
 			);
 			name = Resource;
 			sourceTree = "<group>";
@@ -192,8 +204,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE0836F61F35F8C4003A73CD /* qq.png in Resources */,
 				FE41303B1EA8E5CD0070F690 /* Assets.xcassets in Resources */,
+				FE0836F71F35F8C4003A73CD /* xiami.png in Resources */,
 				FE4130391EA8E5CD0070F690 /* LaunchScreen.storyboard in Resources */,
+				FE0836F41F35F8C4003A73CD /* artwork.png in Resources */,
+				FE0836F51F35F8C4003A73CD /* netease.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
