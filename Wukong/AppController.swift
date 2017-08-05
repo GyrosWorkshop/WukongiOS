@@ -9,6 +9,10 @@
 import UIKit
 import Cartography
 
+protocol AppViewController: class {
+    func appDidLoad()
+}
+
 class AppController: UIViewController {
 
     fileprivate lazy var musicViewController = MusicViewController()
@@ -42,7 +46,8 @@ extension AppController: WukongDelegate {
     }
 
     func wukongDidLaunch() {
-        // TODO: subscribe
+        musicViewController.appDidLoad()
+        configViewController.appDidLoad()
     }
 
     func wukongDidThrowException(_ exception: String) {

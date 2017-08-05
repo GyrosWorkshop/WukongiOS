@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConfigViewController: UICollectionViewController {
+class ConfigViewController: UICollectionViewController, AppViewController {
 
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -22,7 +22,11 @@ class ConfigViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.collectionView?.backgroundColor = UIColor.white
+        collectionView?.backgroundColor = UIColor.white
+    }
+
+    func appDidLoad() {
+        
     }
 
 }
