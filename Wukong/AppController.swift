@@ -50,11 +50,12 @@ extension AppController: WukongDelegate {
     }
 
     func wukongRequestOpenURL(_ url: String) {
-        guard presentedViewController == nil else { return }
+        guard mainViewController.presentedViewController == nil else { return }
         guard let urlObject = URL(string: url) else { return }
         let webViewController = WebViewController()
         webViewController.url = urlObject
-        present(UINavigationController(rootViewController: webViewController), animated: true)
+        let navController = UINavigationController(rootViewController: webViewController)
+        mainViewController.present(navController, animated: true)
     }
 
 }
