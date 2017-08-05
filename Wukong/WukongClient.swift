@@ -211,8 +211,9 @@ class WukongClient: NSObject {
     }
 
     func dispatchAction(_ name: [Constant.Action], _ data: [Any]) {
-        let object = name.reduce(action) { $0.forProperty($1.rawValue) }
-        _ = object.invokeMethod("create", withArguments: data)
+        let helper = name.reduce(action) { $0.forProperty($1.rawValue) }
+        guard let object = helper.invokeMethod("create", withArguments: data) else { return }
+        store.invokeMethod("dispatch", withArguments: [object])
     }
 
     func subscribeChange(_ handler: (() -> Void)? = nil) {
