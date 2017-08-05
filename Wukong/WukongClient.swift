@@ -54,6 +54,7 @@ class WukongClient: NSObject {
         delegate.wukongDidLoadScript()
         context = JSContext()!
         context.exceptionHandler = { [unowned self] (context, exception) in
+            context?.exception = exception
             if let exception = exception?.toString() {
                 self.delegate.wukongDidThrowException(exception)
             }
@@ -99,15 +100,19 @@ class WukongClient: NSObject {
                                 let status = response.statusCode
                                 let error = 200 ... 299 ~= status ? NSNull() : HTTPURLResponse.localizedString(forStatusCode: status) as Any
                                 networkHook.call(withArguments: [method, endpoint, status, error])
-                                var object: Any = ""
-                                if let data = data {
-                                    if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
-                                        object = json
-                                    } else if let string = String(data: data, encoding: .utf8) {
-                                        object = string
+                                if let exception = self.context.exception {
+                                    reject(exception)
+                                } else {
+                                    var object: Any = ""
+                                    if let data = data {
+                                        if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
+                                            object = json
+                                        } else if let string = String(data: data, encoding: .utf8) {
+                                            object = string
+                                        }
                                     }
+                                    resolve(JSValue(object: object, in: self.context))
                                 }
-                                resolve(JSValue(object: object, in: self.context))
                             }.resume()
                         }
                     } as @convention(block) (String, String, [String: Any]) -> JSValue, to: AnyObject.self),
