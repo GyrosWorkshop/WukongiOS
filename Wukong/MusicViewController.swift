@@ -85,17 +85,19 @@ class MusicViewController: UICollectionViewController, AppViewController, UIColl
             }
             if channelChanged {
                 DispatchQueue.main.async {
-                    if let item = wself.navigationItem.leftBarButtonItem {
-                        item.title = wself.data.channel.isEmpty ? "Join" : wself.data.channel
-                        wself.navigationItem.leftBarButtonItem = nil
-                        wself.navigationItem.leftBarButtonItem = item
-                    }
+                    guard let item = wself.navigationItem.leftBarButtonItem else { return }
+                    item.title = wself.data.channel.isEmpty ? "Join" : wself.data.channel
+                    wself.navigationItem.leftBarButtonItem = nil
+                    wself.navigationItem.leftBarButtonItem = item
                 }
             }
             if playingChanged {
                 DispatchQueue.main.async {
-                    wself.collectionView?.supplementaryView(forElementKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: 0))
                     // TODO
+                    guard let layout = wself.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+                    let invalidation = UICollectionViewFlowLayoutInvalidationContext()
+                    invalidation.invalidateSupplementaryElements(ofKind: UICollectionElementKindSectionHeader, at: [IndexPath(item: 0, section: 0)])
+                    layout.invalidateLayout(with: invalidation)
                 }
             }
             if playlistChanged {
