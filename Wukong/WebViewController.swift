@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Cartography
 
 class WebViewController: UIViewController {
 
@@ -18,12 +19,12 @@ class WebViewController: UIViewController {
         return view
     }()
 
-    override func loadView() {
-        view = webView
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(webView)
+        constrain(view, webView) { (view, webView) in
+            view.edges == webView.edges
+        }
         guard let url = url else { return }
         webView.loadRequest(URLRequest(url: url))
     }

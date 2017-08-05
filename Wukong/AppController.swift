@@ -1,5 +1,5 @@
 //
-//  MainViewController.swift
+//  AppController.swift
 //  Wukong
 //
 //  Created by Qusic on 4/20/17.
@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import WebKit
-import SafariServices
+import Cartography
 
-class MainViewController: UIViewController {
+class AppController: UIViewController {
 
     fileprivate lazy var musicViewController = MusicViewController()
     fileprivate lazy var configViewController = ConfigViewController()
-    fileprivate lazy var rootViewController: UIViewController = {
+    fileprivate lazy var mainViewController: UIViewController = {
         let tabController = UITabBarController()
         tabController.viewControllers = [
             UINavigationController(rootViewController: self.musicViewController),
@@ -25,19 +24,16 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(rootViewController.view)
-        view.addConstraints([
-            NSLayoutConstraint(item: rootViewController.view, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: rootViewController.view, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: rootViewController.view, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: rootViewController.view, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
-        ])
+        view.addSubview(mainViewController.view)
+        constrain(view, mainViewController.view) { (view, mainView) in
+            view.edges == mainView.edges
+        }
         WukongClient.sharedInstance.run(self)
     }
 
 }
 
-extension MainViewController: WukongDelegate {
+extension AppController: WukongDelegate {
 
     func wukongDidLoadScript() {
     }

@@ -8,10 +8,10 @@
 
 import UIKit
 
-class ConfigViewController: UIViewController {
+class ConfigViewController: UICollectionViewController {
 
     init() {
-        super.init(nibName: nil, bundle: nil)
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
         title = "Config"
         tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 0)
     }
@@ -22,6 +22,7 @@ class ConfigViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.collectionView?.backgroundColor = UIColor.white
     }
 
 }

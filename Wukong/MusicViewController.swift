@@ -11,8 +11,7 @@ import UIKit
 class MusicViewController: UICollectionViewController {
 
     init() {
-        let layout = UICollectionViewFlowLayout()
-        super.init(collectionViewLayout: layout)
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
         title = "Wukong"
         tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
     }
@@ -23,6 +22,7 @@ class MusicViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.collectionView?.backgroundColor = UIColor.white
     }
 
 }
