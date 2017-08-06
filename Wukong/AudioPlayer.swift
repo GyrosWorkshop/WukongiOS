@@ -27,19 +27,19 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         handleControlEvents()
         handleNotifications()
-        if UIApplication.shared.applicationState == .active {
-            scheduleTimer()
-        }
     }
 
     func play(data: Data, time: Date, _ eventCallback: ((_ player: AVAudioPlayer?) -> Void)? = nil) {
         player = try? AVAudioPlayer(data: data)
-        callback = eventCallback
         guard let player = player else { return }
         player.delegate = self
         player.currentTime = -time.timeIntervalSinceNow;
         player.play()
         update()
+        if let eventCallback = eventCallback {
+            callback = eventCallback
+            scheduleTimer()
+        }
     }
 
     func update(title: String?, album: String?, artist: String?, artwork: UIImage?) {
@@ -131,11 +131,13 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
     }
 
     private func scheduleTimer() {
+        guard timer == nil else { return }
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(callout), userInfo: nil, repeats: true)
         timer?.tolerance = 0.5;
     }
 
     private func invalidateTimer() {
+        guard timer != nil else { return }
         timer?.invalidate()
         timer = nil
     }
@@ -146,6 +148,12 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         callout()
+        invalidateTimer()
+    }
+
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+        callout()
+        invalidateTimer()
     }
 
 }
