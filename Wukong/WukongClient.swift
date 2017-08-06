@@ -224,7 +224,9 @@ class WukongClient: NSObject {
 
     func subscribeChange(_ handler: (() -> Void)? = nil) {
         guard let handler = handler else { return }
-        store.invokeMethod("subscribe", withArguments: [unsafeBitCast(handler as @convention(block) () -> Void, to: AnyObject.self)])
+        store.invokeMethod("subscribe", withArguments: [unsafeBitCast({
+            DispatchQueue.main.async(execute: handler)
+        } as @convention(block) () -> Void, to: AnyObject.self)])
     }
 
 }
