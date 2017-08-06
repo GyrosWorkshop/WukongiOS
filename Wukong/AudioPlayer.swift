@@ -14,36 +14,22 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     static let sharedInstance = AudioPlayer()
 
-    private let session: AVAudioSession = {
-        let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(AVAudioSessionCategoryPlayback)
-        return session
-    }()
-    private var commands: [Any] = []
     private var player: AVAudioPlayer?
     private var info: [String: Any] = [:]
     private var timer: Timer?
     private var callback: ((_ player: AVAudioPlayer?) -> Void)?
 
-    func start() {
+    override init() {
+        super.init()
+        let session = AVAudioSession.sharedInstance()
+        try? session.setCategory(AVAudioSessionCategoryPlayback)
         try? session.setActive(true)
         UIApplication.shared.beginReceivingRemoteControlEvents()
-        registerControlEvents()
+        handleControlEvents()
+        handleNotifications()
         if UIApplication.shared.applicationState == .active {
             scheduleTimer()
         }
-        addObservers()
-    }
-
-    func stop() {
-        invalidateTimer()
-        player?.stop()
-        player = nil
-        info.removeAll()
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
-        deregisterControlEvents()
-        UIApplication.shared.endReceivingRemoteControlEvents()
-        try? session.setActive(false)
     }
 
     func play(data: Data, time: Date, _ eventCallback: ((_ player: AVAudioPlayer?) -> Void)? = nil) {
@@ -62,22 +48,18 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         info[MPMediaItemPropertyAlbumTitle] = album ?? ""
         info[MPMediaItemPropertyArtist] = artist ?? ""
         if let artwork = artwork {
-            info[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: artwork.size) { _ in artwork }
+            info[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: artwork.size) { (size) in artwork }
         }
         update()
     }
 
-    func update() {
+    private func update() {
         info[MPMediaItemPropertyPlaybackDuration] = player?.duration ?? 0
         info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player?.currentTime ?? 0
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
 
-    func callout() {
-        callback?(player)
-    }
-
-    private func registerControlEvents() {
+    private func handleControlEvents() {
         let center = MPRemoteCommandCenter.shared()
         center.pauseCommand.isEnabled = true
         center.playCommand.isEnabled = true
@@ -99,27 +81,53 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         center.likeCommand.isEnabled = false
         center.dislikeCommand.isEnabled = false
         center.bookmarkCommand.isEnabled = false
-        commands.append(contentsOf: [
-            center.pauseCommand.addTarget { [unowned self] _ in
-                guard let player = self.player else { return .noActionableNowPlayingItem }
-                player.pause()
-                self.update()
-                return .success
-            },
-            center.playCommand.addTarget { [unowned self] _ in
-                guard let player = self.player else { return .noActionableNowPlayingItem }
-                player.play()
-                self.update()
-                return .success
-            }
-        ])
+        center.pauseCommand.addTarget { [unowned self] _ in
+            guard let player = self.player else { return .noActionableNowPlayingItem }
+            player.pause()
+            self.update()
+            return .success
+        }
+        center.playCommand.addTarget { [unowned self] _ in
+            guard let player = self.player else { return .noActionableNowPlayingItem }
+            player.play()
+            self.update()
+            return .success
+        }
     }
 
-    private func deregisterControlEvents() {
-        let center = MPRemoteCommandCenter.shared()
-        center.playCommand.removeTarget(nil)
-        center.pauseCommand.removeTarget(nil)
-        commands.removeAll()
+    private func handleNotifications() {
+        let center = NotificationCenter.default
+        center.addObserver(forName: Notification.Name.UIApplicationWillEnterForeground, object: nil, queue: nil) { [unowned self] (notification) in
+            self.scheduleTimer()
+        }
+        center.addObserver(forName: Notification.Name.UIApplicationDidEnterBackground, object: nil, queue: nil) { [unowned self] (notification) in
+            self.invalidateTimer()
+        }
+        center.addObserver(forName: Notification.Name.AVAudioSessionInterruption, object: nil, queue: nil) { [unowned self] (notification) in
+            guard let userInfo = notification.userInfo else { return }
+            guard let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt else { return }
+            guard let type = AVAudioSessionInterruptionType(rawValue: typeValue) else { return }
+            switch type {
+            case .began:
+                break
+            case .ended:
+                try? AVAudioSession.sharedInstance().setActive(true)
+                self.player?.play()
+            }
+        }
+        center.addObserver(forName: Notification.Name.AVAudioSessionSilenceSecondaryAudioHint, object: nil, queue: nil) { [unowned self] (notification) in
+            guard let userInfo = notification.userInfo else { return }
+            guard let typeValue = userInfo[AVAudioSessionSilenceSecondaryAudioHintTypeKey] as? UInt else { return }
+            guard let type = AVAudioSessionSilenceSecondaryAudioHintType(rawValue: typeValue) else { return }
+            switch type {
+            case .begin:
+                self.player?.pause()
+                break
+            case .end:
+                self.player?.play()
+                break
+            }
+        }
     }
 
     private func scheduleTimer() {
@@ -132,21 +140,8 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         timer = nil
     }
 
-    private func addObservers() {
-        let center = NotificationCenter.default
-        center.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
-        center.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name.UIApplicationDidEnterBackground, object: nil)
-    }
-
-    func handleNotification(_ notification: Notification) {
-        switch notification.name {
-        case Notification.Name.UIApplicationWillEnterForeground:
-            scheduleTimer()
-        case Notification.Name.UIApplicationDidEnterBackground:
-            invalidateTimer()
-        default:
-            break
-        }
+    func callout() {
+        callback?(player)
     }
 
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
