@@ -14,13 +14,12 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
     fileprivate var data = Data()
     fileprivate struct Data {
         var channel = ""
-        var id = ""
-        var title = ""
-        var album = ""
-        var artist = ""
-        var artwork = ""
-        var link = ""
-        var mvLink = ""
+        var playingId = ""
+        var preloadId = ""
+        var time = 0.0
+        var reload = false
+        var files: [Constant.Selector: String] = [:]
+        var playing: [Constant.State: String] = [:]
         var playlist: [[String: Any]] = []
     }
 
@@ -38,68 +37,111 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
 
     func appDidLoad() {
         let client = WukongClient.sharedInstance
-        client.subscribeChange { [unowned client, weak self] in
-            guard let wself = self else { return }
+        client.subscribeChange {
             var channelChanged = false
+            defer {
+                if channelChanged {
+                    if let item = self.navigationItem.leftBarButtonItem {
+                        let channel = self.data.channel
+                        item.title = channel.isEmpty ? "Join" : "#\(channel)"
+                        self.navigationItem.leftBarButtonItem = nil
+                        self.navigationItem.leftBarButtonItem = item
+                    }
+                }
+            }
+            var trackChanged = false
+            defer {
+                if trackChanged {
+                    let playingId = self.data.playingId
+                    if !playingId.isEmpty {
+                        let dataLoader = DataLoader.sharedInstance
+                        let audioPlayer = AudioPlayer.sharedInstance
+                        let title = self.data.playing[.title]
+                        let album = self.data.playing[.album]
+                        let artist = self.data.playing[.artist]
+                        audioPlayer.update(title: title, album: album, artist: artist, artwork: nil)
+                        if let url = URL(string: self.data.files[.playingArtwork] ?? "") {
+                            dataLoader.load(key: "\(playingId).\(url.pathExtension)", url: url) { (data) in
+                                guard let data = data else { return }
+                                audioPlayer.update(title: title, album: album, artist: artist, artwork: UIImage(data: data))
+                            }
+                        }
+                        if let url = URL(string: self.data.files[.playingFile] ?? "") {
+                            dataLoader.load(key: "\(playingId).\(url.pathExtension)", url: url) { (data) in
+                                guard let data = data else { return }
+                                audioPlayer.play(data: data, time: Date(timeIntervalSince1970: self.data.time), { (player) in
+                                    // TODO: dispatch running elapsed duration ended
+                                })
+                            }
+                        }
+                    }
+                    if self.data.reload {
+                        client.dispatchAction([.Player, .reload], [false])
+                    }
+                }
+            }
+            var preloadChanged = false
+            defer {
+                if preloadChanged {
+                    let preloadId = self.data.preloadId
+                    if !preloadId.isEmpty {
+                        let dataLoader = DataLoader.sharedInstance
+                        if let url = URL(string: self.data.files[.preloadArtwork] ?? "") {
+                            dataLoader.load(key: "\(preloadId).\(url.pathExtension)", url: url)
+                        }
+                        if let url = URL(string: self.data.files[.preloadFile] ?? "") {
+                            dataLoader.load(key: "\(preloadId).\(url.pathExtension)", url: url)
+                        }
+                    }
+                }
+            }
             var playingChanged = false
+            defer {
+                if playingChanged {
+                    self.collectionView?.reloadSections(IndexSet(integer: 0))
+                }
+            }
             var playlistChanged = false
-            if let channel = client.getState([.channel, .name]) as String?, wself.data.channel != channel {
-                wself.data.channel = channel
-                channelChanged = true
+            defer {
+                if playlistChanged {
+                    self.collectionView?.reloadSections(IndexSet(integer: 1))
+                }
             }
-            if let id = client.getState([.song, .playing, .id]) as String?, wself.data.id != id {
-                wself.data.id = id
-                playingChanged = true
+            if let channel = client.getState([.channel, .name]) as String? {
+                channelChanged = self.data.channel != channel
+                self.data.channel = channel
             }
-            if let title = client.getState([.song, .playing, .title]) as String?, wself.data.title != title {
-                wself.data.title = title
-                playingChanged = true
+            if let playingId = client.getState([.song, .playing, .id]) as String?,
+                let preloadId = client.getState([.song, .preload, .id]) as String?,
+                let time = client.getState([.song, .playing, .time]) as Double?,
+                let reload = client.getState([.player, .reload]) as Bool? {
+                trackChanged = reload || self.data.playingId != playingId || abs(self.data.time - time) > 10
+                preloadChanged = self.data.preloadId != preloadId
+                self.data.playingId = playingId
+                self.data.preloadId = preloadId
+                self.data.time = time
+                self.data.reload = reload
             }
-            if let album = client.getState([.song, .playing, .album]) as String?, wself.data.album != album {
-                wself.data.album = album
-                playingChanged = true
+            let selectors: [Constant.Selector] = [.playingArtwork, .playingFile, .preloadArtwork, .preloadFile]
+            selectors.forEach { (selector) in
+                guard let value = client.querySelector(selector) as String? else { return }
+                self.data.files[selector] = value
             }
-            if let artist = client.getState([.song, .playing, .artist]) as String?, wself.data.artist != artist {
-                wself.data.artist = artist
-                playingChanged = true
-            }
-            if let artwork = client.querySelector(.playingArtwork) as String?, wself.data.artwork != artwork {
-                wself.data.artwork = artwork
-                playingChanged = true
-            }
-            if let link = client.getState([.song, .playing, .link]) as String?, wself.data.link != link {
-                wself.data.link = link
-                playingChanged = true
-            }
-            if let mvLink = client.getState([.song, .playing, .mvLink]) as String?, wself.data.mvLink != mvLink {
-                wself.data.mvLink = mvLink
-                playingChanged = true
+            if let playing = client.getState([.song, .playing]) as [String: Any]? {
+                let fields: [Constant.State] = [.title, .album, .artist, .link, .mvLink]
+                fields.forEach { (field) in
+                    guard let value = playing[field.rawValue] as? String else { return }
+                    playingChanged = playingChanged || self.data.playing[field] != value
+                    self.data.playing[field] = value
+                }
             }
             if let playlist = client.getState([.song, .playlist]) as [[String: Any]]? {
-                playlistChanged = !wself.data.playlist.elementsEqual(playlist) {
+                playlistChanged = !self.data.playlist.elementsEqual(playlist) {
                     let id0 = $0[Constant.State.id.rawValue] as? String
                     let id1 = $1[Constant.State.id.rawValue] as? String
                     return id0 == id1
                 }
-                wself.data.playlist = playlist
-            }
-            if channelChanged {
-                DispatchQueue.main.async {
-                    guard let item = wself.navigationItem.leftBarButtonItem else { return }
-                    item.title = wself.data.channel.isEmpty ? "Join" : "#\(wself.data.channel)"
-                    wself.navigationItem.leftBarButtonItem = nil
-                    wself.navigationItem.leftBarButtonItem = item
-                }
-            }
-            if playingChanged {
-                DispatchQueue.main.async {
-                    wself.collectionView?.reloadSections(IndexSet(integer: 0))
-                }
-            }
-            if playlistChanged {
-                DispatchQueue.main.async {
-                    wself.collectionView?.reloadSections(IndexSet(integer: 1))
-                }
+                self.data.playlist = playlist
             }
         }
         if let channel = UserDefaults.appDefaults.string(forKey: Constant.Defaults.channel), !channel.isEmpty {
@@ -134,12 +176,16 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: MusicPlayingSongCell.self), for: indexPath)
             if let cell = cell as? MusicPlayingSongCell {
-                cell.titleLabel.text = data.title
-                cell.albumLabel.text = data.album
-                cell.artistLabel.text = data.artist
+                let title = data.playing[.title] ?? ""
+                let album = data.playing[.album] ?? ""
+                let artist = data.playing[.artist] ?? ""
+                let artwork = data.playing[.artwork] ?? ""
+                cell.titleLabel.text = title
+                cell.albumLabel.text = album
+                cell.artistLabel.text = artist
                 cell.artworkView.image = UIImage(named: "artwork")
-                if let url = URL(string: data.artwork) {
-                    DataLoader.sharedInstance.load(key: "\(data.id).\(url.pathExtension)", url: url) { [weak cell] (data) in
+                if let url = URL(string: artwork) {
+                    DataLoader.sharedInstance.load(key: "\(data.playingId).\(url.pathExtension)", url: url) { [weak cell] (data) in
                         guard let cell = cell, let data = data else { return }
                         cell.artworkView.image = UIImage(data: data)
                     }
