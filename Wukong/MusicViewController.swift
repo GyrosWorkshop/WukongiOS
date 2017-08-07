@@ -186,6 +186,7 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.backgroundColor = UIColor.white
+        collectionView?.alwaysBounceVertical = true
         collectionView?.register(MusicPlayingSongCell.self, forCellWithReuseIdentifier: String(describing: MusicPlayingSongCell.self))
         collectionView?.register(MusicPlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: MusicPlaylistSongCell.self))
     }
@@ -303,6 +304,7 @@ class MusicPlayingSongCell: UICollectionViewCell {
     lazy var artworkView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
         return view
     }()
     lazy var titleLabel: UILabel = {
@@ -359,7 +361,8 @@ class MusicPlaylistSongCell: UICollectionViewCell {
 
     lazy var iconView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleAspectFit
+        view.clipsToBounds = true
         return view
     }()
     lazy var titleLabel: UILabel = {
