@@ -23,7 +23,7 @@ class WebViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(webView)
         constrain(view, webView) { (view, webView) in
-            view.edges == webView.edges
+            webView.edges == view.edges
         }
         guard let url = url else { return }
         webView.loadRequest(URLRequest(url: url))

@@ -30,7 +30,7 @@ class AppController: UIViewController {
         super.viewDidLoad()
         view.addSubview(mainViewController.view)
         constrain(view, mainViewController.view) { (view, mainView) in
-            view.edges == mainView.edges
+            mainView.edges == view.edges
         }
         WukongClient.sharedInstance.run(self)
     }
