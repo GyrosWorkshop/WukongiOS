@@ -110,6 +110,7 @@ class WukongClient: NSObject {
                                 let error = 200 ... 299 ~= status ? NSNull() : HTTPURLResponse.localizedString(forStatusCode: status) as Any
                                 networkHook.call(withArguments: [method, endpoint, status, error])
                                 if let exception = self.context.exception {
+                                    self.context.exception = nil
                                     print("HTTP:", method, endpoint, exception)
                                     reject(exception)
                                 } else {
