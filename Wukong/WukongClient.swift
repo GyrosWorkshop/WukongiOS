@@ -122,7 +122,8 @@ class WukongClient: NSObject {
                     "websocket": unsafeBitCast({ (endpoint, handler) in
                         guard let url = URL(string: apiURL("ws", endpoint)) else { return }
                         var request = URLRequest(url: url)
-                        if let cookies = URLSession.apiSession.configuration.httpCookieStorage?.cookies(for: url) {
+                        if let cookieUrl = URL(string: apiURL("http", endpoint)),
+                            let cookies = URLSession.apiSession.configuration.httpCookieStorage?.cookies(for: cookieUrl) {
                             let headers = HTTPCookie.requestHeaderFields(with: cookies)
                             headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
                         }
@@ -161,7 +162,12 @@ class WukongClient: NSObject {
                             emit.call(withArguments: ["error"])
                         }
                         websocket.event.message = { (message) in
-                            print("\(message)") // TODO
+                            guard let string = message as? String else { return }
+                            guard let data = string.data(using: .utf8) else { return }
+                            guard var object = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String: Any] else { return }
+                            guard let name = object["eventName"] else { return }
+                            object.removeValue(forKey: "eventName")
+                            emit.call(withArguments: [name, object])
                         }
                     } as @convention(block) (String, JSValue) -> Void, to: AnyObject.self),
                     "hook": unsafeBitCast({ (callback) in
