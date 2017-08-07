@@ -69,8 +69,28 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
                         if let url = URL(string: self.data.files[.playingFile] ?? "") {
                             dataLoader.load(key: "\(playingId).\(url.pathExtension)", url: url) { (data) in
                                 guard let data = data else { return }
+                                var running = false
+                                var elapsed = 0.0
+                                var duration = 0.0
                                 audioPlayer.play(data: data, time: Date(timeIntervalSince1970: self.data.time), { (player) in
-                                    // TODO: dispatch running elapsed duration ended
+                                    let nextRunning = player?.isPlaying ?? false
+                                    let nextElapsed = player?.currentTime ?? 0.0
+                                    let nextDuration = player?.duration ?? 0.0
+                                    if running != nextRunning {
+                                        client.dispatchAction([.Player, .running], [nextRunning])
+                                    }
+                                    if elapsed != nextElapsed {
+                                        client.dispatchAction([.Player, .elapsed], [nextElapsed])
+                                    }
+                                    if duration != nextDuration {
+                                        client.dispatchAction([.Player, .duration], [nextDuration])
+                                    }
+                                    if running && !nextRunning && duration - elapsed < 1 {
+                                        client.dispatchAction([.Player, .ended], [])
+                                    }
+                                    running = nextRunning
+                                    elapsed = nextElapsed
+                                    duration = nextDuration
                                 })
                             }
                         }
