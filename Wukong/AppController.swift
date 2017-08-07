@@ -26,8 +26,11 @@ class AppController: UIViewController {
         return tabController
     }()
 
+    override var prefersStatusBarHidden: Bool { return false }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        addChildViewController(mainViewController)
         view.addSubview(mainViewController.view)
         constrain(view, mainViewController.view) { (view, mainView) in
             mainView.edges == view.edges

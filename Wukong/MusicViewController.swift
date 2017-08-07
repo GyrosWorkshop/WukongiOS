@@ -190,6 +190,12 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
         collectionView?.register(MusicPlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: MusicPlaylistSongCell.self))
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { (context) in
+            self.collectionViewLayout.invalidateLayout()
+        })
+    }
+
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
