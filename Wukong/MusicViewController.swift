@@ -144,8 +144,15 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
             }
             let selectors: [Constant.Selector] = [.playingArtwork, .playingFile, .preloadArtwork, .preloadFile]
             selectors.forEach { (selector) in
-                guard let value = client.querySelector(selector) as String? else { return }
-                self.data.files[selector] = value
+                guard let value = client.querySelector(selector) as Any? else { return }
+                switch value {
+                case let string as String:
+                    self.data.files[selector] = string
+                case let object as [String: Any]:
+                    self.data.files[selector] = object[Constant.State.url.rawValue] as? String ?? ""
+                default:
+                    self.data.files[selector] = ""
+                }
             }
             if let playing = client.getState([.song, .playing]) as [String: Any]? {
                 let fields: [Constant.State] = [.title, .album, .artist, .link, .mvLink]
@@ -199,7 +206,7 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
                 let title = data.playing[.title] ?? ""
                 let album = data.playing[.album] ?? ""
                 let artist = data.playing[.artist] ?? ""
-                let artwork = data.playing[.artwork] ?? ""
+                let artwork = data.files[.playingArtwork] ?? ""
                 cell.titleLabel.text = title
                 cell.albumLabel.text = album
                 cell.artistLabel.text = artist

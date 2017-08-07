@@ -90,6 +90,7 @@ struct Constant {
         case mvFile
         case lyrics
 
+        case url
         case urls
         case format
         case quality
