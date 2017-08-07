@@ -90,7 +90,7 @@ class WukongClient: NSObject {
                         guard let url = URL(string: apiURL("http", endpoint)) else { return self.jsPromise() }
                         var request = URLRequest(url: url)
                         request.httpMethod = method
-                        if let data = try? JSONSerialization.data(withJSONObject: body, options: []) {
+                        if method != "GET", let data = try? JSONSerialization.data(withJSONObject: body, options: []) {
                             request.httpBody = data
                             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                         }
