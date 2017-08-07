@@ -51,7 +51,6 @@ extension AppController: WukongDelegate {
     }
 
     func wukongDidThrowException(_ exception: String) {
-        print("exception:", exception) // TODO: for test
     }
 
     func wukongRequestOpenURL(_ url: String) {

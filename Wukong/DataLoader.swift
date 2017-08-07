@@ -17,6 +17,7 @@ class DataLoader: NSObject {
     func load(key: String, url: URL, _ dataCallback: ((_ data: Data?) -> Void)? = nil) {
         let file = URL.cacheDirectory.appendingPathComponent(key, isDirectory: false)
         if let data = try? Data(contentsOf: file) {
+            print("Data:", "cached", data.count, key, url)
             dataCallback?(data)
             return
         }
@@ -26,6 +27,7 @@ class DataLoader: NSObject {
         URLSession.dataSession.getAllTasks { (tasks) in
             guard !tasks.contains(where: { $0.originalRequest?.url == url }) else { return }
             URLSession.dataSession.dataTask(with: url) { [unowned self] (data, response, error) in
+                print("Data:", "fetched", data?.count ?? 0, key, url)
                 try? data?.write(to: file)
                 DispatchQueue.main.async {
                     self.callbacks[key]?(data)

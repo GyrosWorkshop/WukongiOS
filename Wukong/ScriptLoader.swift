@@ -39,6 +39,7 @@ class ScriptLoader: NSObject {
     func load(online: Bool, _ callback: ((_ script: String?) -> Void)? = nil) {
         var loaded = false
         if let script = UserDefaults.appDefaults.string(forKey: Constant.Defaults.script) {
+            print("Client:", "version", UserDefaults.appDefaults.string(forKey: Constant.Defaults.version) ?? "unknown")
             callback?(script)
             loaded = true
         }
@@ -53,6 +54,7 @@ class ScriptLoader: NSObject {
             guard version != UserDefaults.appDefaults.string(forKey: Constant.Defaults.version) else { return }
             self.loadScript(version: version) { (script) in
                 guard let script = script else { return }
+                print("Client:", "updated", version)
                 UserDefaults.appDefaults.set(version, forKey: Constant.Defaults.version)
                 UserDefaults.appDefaults.set(script, forKey: Constant.Defaults.script)
                 if !loaded {

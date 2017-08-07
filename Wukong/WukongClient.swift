@@ -48,14 +48,17 @@ class WukongClient: NSObject {
 
     private func setupContext(_ script: String?) {
         guard let script = script else {
+            print("Client:", "failed")
             delegate.wukongDidFailLoadScript()
             return
         }
+        print("Client:", "loaded")
         delegate.wukongDidLoadScript()
         context = JSContext()!
         context.exceptionHandler = { [unowned self] (context, exception) in
             context?.exception = exception
             if let exception = exception?.toString() {
+                print("Client:", "exception", exception)
                 self.delegate.wukongDidThrowException(exception)
             }
         }
@@ -70,6 +73,7 @@ class WukongClient: NSObject {
                         return "wukong://\(channel)"
                     } as @convention(block) () -> String, to: AnyObject.self),
                     "webview": unsafeBitCast({ [unowned self] (url) in
+                        print("Client:", "open", url)
                         self.delegate.wukongRequestOpenURL(url)
                     } as @convention(block) (String) -> Void, to: AnyObject.self),
                     "reload": unsafeBitCast({ [unowned self] () in
@@ -93,10 +97,12 @@ class WukongClient: NSObject {
                         return self.jsPromise { [unowned self] (resolve, reject) in
                             URLSession.apiSession.dataTask(with: request) { [unowned self] (data, response, error) in
                                 guard error == nil else {
+                                    print("HTTP:", method, endpoint, error?.localizedDescription ?? "unknown error")
                                     reject(self.jsError(error?.localizedDescription))
                                     return
                                 }
                                 guard let response = response as? HTTPURLResponse else {
+                                    print("HTTP:", method, endpoint, "unknown response")
                                     reject(self.jsError("No response"))
                                     return
                                 }
@@ -104,6 +110,7 @@ class WukongClient: NSObject {
                                 let error = 200 ... 299 ~= status ? NSNull() : HTTPURLResponse.localizedString(forStatusCode: status) as Any
                                 networkHook.call(withArguments: [method, endpoint, status, error])
                                 if let exception = self.context.exception {
+                                    print("HTTP:", method, endpoint, exception)
                                     reject(exception)
                                 } else {
                                     var object: Any = ""
@@ -114,6 +121,7 @@ class WukongClient: NSObject {
                                             object = string
                                         }
                                     }
+                                    print("HTTP:", method, endpoint, "ok")
                                     resolve(JSValue(object: object, in: self.context))
                                 }
                             }.resume()
@@ -141,6 +149,7 @@ class WukongClient: NSObject {
                         }
                         var timer: Timer? = nil
                         websocket.event.open = {
+                            print("WebSocket:", "open")
                             emit.call(withArguments: ["open"])
                             timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak send] (timer) in
                                 if let send = send {
@@ -152,6 +161,7 @@ class WukongClient: NSObject {
                             timer?.tolerance = 1
                         }
                         websocket.event.close = { (code, reason, clean) in
+                            print("WebSocket:", "close", code, reason, clean)
                             emit.call(withArguments: ["close"])
                             timer?.invalidate()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak websocket] in
@@ -159,6 +169,7 @@ class WukongClient: NSObject {
                             }
                         }
                         websocket.event.error = { (error) in
+                            print("WebSocket:", "error", error)
                             emit.call(withArguments: ["error"])
                         }
                         websocket.event.message = { (message) in
@@ -167,6 +178,7 @@ class WukongClient: NSObject {
                             guard var object = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String: Any] else { return }
                             guard let name = object["eventName"] else { return }
                             object.removeValue(forKey: "eventName")
+                            print("WebSocket:", "event", name)
                             emit.call(withArguments: [name, object])
                         }
                     } as @convention(block) (String, JSValue) -> Void, to: AnyObject.self),
@@ -190,6 +202,7 @@ class WukongClient: NSObject {
         context.globalObject.setValue({
             return client.call(withArguments: [platform])
         }(), forProperty: Constant.Script.store)
+        print("Client:", "launched")
         delegate.wukongDidLaunch()
     }
 
