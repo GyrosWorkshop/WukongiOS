@@ -162,6 +162,13 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
                     self.data.playing[field] = value
                 }
             }
+            if let playing = client.querySelector(.playingFile) as [String: Any]? {
+                let format = playing[Constant.State.format.rawValue] as? String ?? "unknown"
+                let quality = playing[Constant.State.quality.rawValue] as? [String: Any] ?? [:]
+                let qualityDescription = quality[Constant.State.description.rawValue] as? String ?? ""
+                self.data.playing[.format] = format
+                self.data.playing[.quality] = qualityDescription
+            }
             if let playlist = client.getState([.song, .playlist]) as [[String: Any]]? {
                 playlistChanged = !self.data.playlist.elementsEqual(playlist) {
                     let id0 = $0[Constant.State.id.rawValue] as? String
