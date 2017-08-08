@@ -226,8 +226,8 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
                 cell.artistLabel.text = artist
                 cell.artworkView.image = UIImage(named: "artwork")
                 if let url = URL(string: artwork) {
-                    DataLoader.sharedInstance.load(key: "\(data.playingId).\(url.pathExtension)", url: url) { [weak cell] (data) in
-                        guard let cell = cell, let data = data else { return }
+                    DataLoader.sharedInstance.load(key: "\(data.playingId).\(url.pathExtension)", url: url) { (data) in
+                        guard let data = data else { return }
                         cell.artworkView.image = UIImage(data: data)
                     }
                 }
