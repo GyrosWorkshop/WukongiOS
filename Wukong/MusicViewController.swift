@@ -20,6 +20,7 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
         var reload = false
         var files: [Constant.Selector: String] = [:]
         var playing: [Constant.State: String] = [:]
+        var members: [[String: Any]] = []
         var playlist: [[String: Any]] = []
     }
 
@@ -118,7 +119,13 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
             var playingChanged = false
             defer {
                 if playingChanged {
-                    self.collectionView?.reloadSections(IndexSet(integer: 0))
+                    self.collectionView?.reloadItems(at: [IndexPath(item: 0, section: 0)])
+                }
+            }
+            var membersChanged = false
+            defer {
+                if membersChanged {
+                    self.collectionView?.reloadItems(at: [IndexPath(item: 1, section: 0)])
                 }
             }
             var playlistChanged = false
@@ -168,6 +175,14 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
                 let qualityDescription = quality[Constant.State.description.rawValue] as? String ?? ""
                 self.data.playing[.format] = format
                 self.data.playing[.quality] = qualityDescription
+            }
+            if let members = client.getState([.channel, .members]) as [[String: Any]]? {
+                membersChanged = !self.data.members.elementsEqual(members) {
+                    let id0 = $0[Constant.State.id.rawValue] as? String
+                    let id1 = $1[Constant.State.id.rawValue] as? String
+                    return id0 == id1
+                }
+                self.data.members = members
             }
             if let playlist = client.getState([.song, .playlist]) as [[String: Any]]? {
                 playlistChanged = !self.data.playlist.elementsEqual(playlist) {
