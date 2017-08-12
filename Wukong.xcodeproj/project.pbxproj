@@ -17,6 +17,7 @@
 		FE4130361EA8E5CD0070F690 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130351EA8E5CD0070F690 /* AppController.swift */; };
 		FE4130391EA8E5CD0070F690 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */; };
 		FE41303B1EA8E5CD0070F690 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE41303A1EA8E5CD0070F690 /* Assets.xcassets */; };
+		FE77584B1F3EAD4A0052C07D /* Eureka.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE77584A1F3EAD4A0052C07D /* Eureka.framework */; };
 		FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB21EAC89360090833C /* AudioPlayer.swift */; };
 		FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB41EAC895A0090833C /* DataLoader.swift */; };
 		FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */; };
@@ -40,6 +41,7 @@
 		FE4130381EA8E5CD0070F690 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FE41303A1EA8E5CD0070F690 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Wukong/Assets.xcassets; sourceTree = "<group>"; };
 		FE41303F1EA8E5CD0070F690 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Wukong/Info.plist; sourceTree = "<group>"; };
+		FE77584A1F3EAD4A0052C07D /* Eureka.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eureka.framework; path = Carthage/Build/iOS/Eureka.framework; sourceTree = "<group>"; };
 		FE7A7EB21EAC89360090833C /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		FE7A7EB41EAC895A0090833C /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstant.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			files = (
 				FED977A61F34A632000DC1B8 /* Cartography.framework in Frameworks */,
 				FEBD3CAA1F2C48F100C73767 /* SwiftWebSocket.framework in Frameworks */,
+				FE77584B1F3EAD4A0052C07D /* Eureka.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +134,7 @@
 		FEBD3CA81F2C48F100C73767 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FE77584A1F3EAD4A0052C07D /* Eureka.framework */,
 				FED977A51F34A632000DC1B8 /* Cartography.framework */,
 				FEBD3CA91F2C48F100C73767 /* SwiftWebSocket.framework */,
 			);
@@ -224,10 +228,12 @@
 			inputPaths = (
 				"$(PROJECT_DIR)/Carthage/Build/iOS/Cartography.framework",
 				"$(PROJECT_DIR)/Carthage/Build/iOS/SwiftWebSocket.framework",
+				"$(PROJECT_DIR)/Carthage/Build/iOS/Eureka.framework",
 			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Cartography.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftWebSocket.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Eureka.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

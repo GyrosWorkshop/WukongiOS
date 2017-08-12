@@ -1,2 +1,3 @@
 github "robb/Cartography"
 github "tidwall/SwiftWebSocket"
+github "xmartlabs/Eureka"

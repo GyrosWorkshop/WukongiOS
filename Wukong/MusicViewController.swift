@@ -314,7 +314,7 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
 
 }
 
-class MusicPlayingSongCell: UICollectionViewCell {
+private class MusicPlayingSongCell: UICollectionViewCell {
 
     lazy var artworkView: UIImageView = {
         let view = UIImageView()
@@ -372,7 +372,7 @@ class MusicPlayingSongCell: UICollectionViewCell {
 
 }
 
-class MusicPlaylistSongCell: UICollectionViewCell {
+private class MusicPlaylistSongCell: UICollectionViewCell {
 
     lazy var iconView: UIImageView = {
         let view = UIImageView()
