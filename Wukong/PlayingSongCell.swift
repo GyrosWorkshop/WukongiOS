@@ -43,14 +43,14 @@ class PlayingSongCell: UICollectionViewCell {
         contentView.addSubview(albumLabel)
         contentView.addSubview(artistLabel)
         constrain(contentView, artworkView) { (view, artworkView) in
-            artworkView.top == view.top + 12
-            artworkView.bottom == view.bottom - 12
-            artworkView.leading == view.leading + 12
+            artworkView.top == view.top
+            artworkView.bottom == view.bottom
+            artworkView.leading == view.leading
             artworkView.width == artworkView.height
         }
         constrain(contentView, artworkView, titleLabel) { (view, artworkView, titleLabel) in
             titleLabel.leading == artworkView.trailing + 12
-            titleLabel.trailing == view.trailing - 12
+            titleLabel.trailing == view.trailing
             titleLabel.bottom == artworkView.centerY - 7
         }
         constrain(titleLabel, albumLabel, artistLabel) { (titleLabel, albumLabel, artistLabel) in

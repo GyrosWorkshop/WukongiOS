@@ -36,14 +36,14 @@ class PlaylistSongCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(detailLabel)
         constrain(contentView, iconView) { (view, iconView) in
-            iconView.top == view.top + 8
-            iconView.bottom == view.bottom - 8
-            iconView.leading == view.leading + 12
+            iconView.top == view.top
+            iconView.bottom == view.bottom
+            iconView.leading == view.leading
             iconView.width == iconView.height
         }
         constrain(contentView, iconView, titleLabel) { (view, iconView, titleLabel) in
             titleLabel.leading == iconView.trailing + 8
-            titleLabel.trailing == view.trailing - 12
+            titleLabel.trailing == view.trailing
             titleLabel.bottom == iconView.centerY + 1
         }
         constrain(titleLabel, detailLabel) { (titleLabel, detailLabel) in

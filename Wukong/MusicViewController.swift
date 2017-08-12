@@ -20,6 +20,7 @@ class MusicViewController: UICollectionViewController {
         var files: [Constant.Selector: String] = [:]
         var playing: [Constant.State: String] = [:]
         var members: [[String: Any]] = []
+        var playerIndex = -1
         var playlist: [[String: Any]] = []
     }
 
@@ -40,6 +41,7 @@ class MusicViewController: UICollectionViewController {
         collectionView?.backgroundColor = UIColor.white
         collectionView?.alwaysBounceVertical = true
         collectionView?.register(PlayingSongCell.self, forCellWithReuseIdentifier: String(describing: PlayingSongCell.self))
+        collectionView?.register(ChannelMembersCell.self, forCellWithReuseIdentifier: String(describing: ChannelMembersCell.self))
         collectionView?.register(PlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: PlaylistSongCell.self))
     }
 
@@ -60,7 +62,7 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 1
+            return 2
         case 1:
             return data.playlist.count
         default:
@@ -71,24 +73,35 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlayingSongCell.self), for: indexPath)
-            if let cell = cell as? PlayingSongCell {
-                let title = data.playing[.title] ?? ""
-                let album = data.playing[.album] ?? ""
-                let artist = data.playing[.artist] ?? ""
-                let artwork = data.files[.playingArtwork] ?? ""
-                cell.titleLabel.text = title
-                cell.albumLabel.text = album
-                cell.artistLabel.text = artist
-                cell.artworkView.image = UIImage(named: "artwork")
-                if let url = URL(string: artwork) {
-                    DataLoader.sharedInstance.load(key: "\(data.playingId).\(url.pathExtension)", url: url) { (data) in
-                        guard let data = data else { return }
-                        cell.artworkView.image = UIImage(data: data)
+            switch indexPath.item {
+            case 0:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlayingSongCell.self), for: indexPath)
+                if let cell = cell as? PlayingSongCell {
+                    let title = data.playing[.title] ?? ""
+                    let album = data.playing[.album] ?? ""
+                    let artist = data.playing[.artist] ?? ""
+                    let artwork = data.files[.playingArtwork] ?? ""
+                    cell.titleLabel.text = title
+                    cell.albumLabel.text = album
+                    cell.artistLabel.text = artist
+                    cell.artworkView.image = UIImage(named: "artwork")
+                    if let url = URL(string: artwork) {
+                        DataLoader.sharedInstance.load(key: "\(data.playingId).\(url.pathExtension)", url: url) { (data) in
+                            guard let data = data else { return }
+                            cell.artworkView.image = UIImage(data: data)
+                        }
                     }
                 }
+                return cell
+            case 1:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ChannelMembersCell.self), for: indexPath)
+                if let cell = cell as? ChannelMembersCell {
+                    cell.setData(members: data.members, highlightedIndex: data.playerIndex)
+                }
+                return cell
+            default:
+                return UICollectionViewCell()
             }
-            return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlaylistSongCell.self), for: indexPath)
             if let cell = cell as? PlaylistSongCell {
@@ -119,20 +132,38 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch indexPath.section {
         case 0:
-            return CGSize(width: collectionView.bounds.size.width, height: 120)
-        case 1:
-            return CGSize(width: collectionView.bounds.size.width, height: 48)
-        default:
-            return CGSize.zero
+            switch indexPath.item {
+            case 0: return CGSize(width: collectionView.bounds.size.width - 24, height: 96)
+            case 1: return CGSize(width: collectionView.bounds.size.width - 24, height: 64)
+            default: return CGSize.zero
+            }
+        case 1: return CGSize(width: collectionView.bounds.size.width - 24, height: 32)
+        default: return CGSize.zero
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        switch section {
+        case 0: return UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        case 1: return UIEdgeInsets(top: 0, left: 12, bottom: 12, right: 12)
+        default: return UIEdgeInsets.zero
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        switch section {
+        case 0: return 12
+        case 1: return 8
+        default: return 0
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        switch section {
+        case 0: return 12
+        case 1: return 8
+        default: return 0
+        }
     }
 
 }
@@ -287,6 +318,10 @@ extension MusicViewController: AppComponent {
                     return id0 == id1
                 }
                 self.data.members = members
+            }
+            if let playerIndex = client.querySelector(.playerIndex) as Int? {
+                membersChanged = membersChanged || self.data.playerIndex != playerIndex
+                self.data.playerIndex = playerIndex
             }
             if let playlist = client.getState([.song, .playlist]) as [[String: Any]]? {
                 playlistChanged = !self.data.playlist.elementsEqual(playlist) {

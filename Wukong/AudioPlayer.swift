@@ -24,7 +24,6 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(AVAudioSessionCategoryPlayback)
         try? session.setActive(true)
-        UIApplication.shared.beginReceivingRemoteControlEvents()
         handleControlEvents()
         handleNotifications()
     }
@@ -35,6 +34,9 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         player.delegate = self
         player.currentTime = -time.timeIntervalSinceNow;
         player.play()
+        if TARGET_OS_SIMULATOR > 0 {
+            player.volume = 0.1
+        }
         update()
         if let eventCallback = eventCallback {
             callback = eventCallback
@@ -60,6 +62,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
     }
 
     private func handleControlEvents() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
         let center = MPRemoteCommandCenter.shared()
         center.pauseCommand.isEnabled = true
         center.playCommand.isEnabled = true
