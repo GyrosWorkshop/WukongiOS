@@ -13,6 +13,7 @@
 		FE0836F71F35F8C4003A73CD /* xiami.png in Resources */ = {isa = PBXBuildFile; fileRef = FE0836F31F35F8C4003A73CD /* xiami.png */; };
 		FE0CAE031F2CB89B00394ABB /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */; };
 		FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */; };
+		FE0E0ABD1F3F1C87000E3D4A /* CurrentLyricsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */; };
 		FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130331EA8E5CD0070F690 /* AppDelegate.swift */; };
 		FE4130361EA8E5CD0070F690 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130351EA8E5CD0070F690 /* AppController.swift */; };
 		FE4130391EA8E5CD0070F690 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */; };
@@ -39,6 +40,7 @@
 		FE0836F31F35F8C4003A73CD /* xiami.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xiami.png; sourceTree = "<group>"; };
 		FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
 		FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
+		FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentLyricsCell.swift; sourceTree = "<group>"; };
 		FE4130301EA8E5CD0070F690 /* Wukong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wukong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE4130331EA8E5CD0070F690 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FE4130351EA8E5CD0070F690 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				FE7758501F3EB2210052C07D /* PlaylistSongCell.swift */,
 				FE7758521F3EB2F10052C07D /* ChannelMembersCell.swift */,
 				FE7758541F3EB30B0052C07D /* ChannelMemberCell.swift */,
+				FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */,
 				FE77584F1F3EB2100052C07D /* PlayingSongCell.swift in Sources */,
 				FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */,
+				FE0E0ABD1F3F1C87000E3D4A /* CurrentLyricsCell.swift in Sources */,
 				FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */,
 				FE7758551F3EB30B0052C07D /* ChannelMemberCell.swift in Sources */,
 				FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */,

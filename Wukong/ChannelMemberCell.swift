@@ -59,6 +59,7 @@ class ChannelMemberCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        contentView.layoutSubviews()
         avatarView.layer.cornerRadius = avatarView.bounds.size.width / 2
     }
 

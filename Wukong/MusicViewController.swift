@@ -19,6 +19,10 @@ class MusicViewController: UICollectionViewController {
         var reload = false
         var files: [Constant.Selector: String] = [:]
         var playing: [Constant.State: String] = [:]
+        var running = false
+        var elapsed = 0.0
+        var duration = 0.0
+        var lyrics = ""
         var members: [[String: Any]] = []
         var playerIndex = -1
         var playlist: [[String: Any]] = []
@@ -41,6 +45,7 @@ class MusicViewController: UICollectionViewController {
         collectionView?.backgroundColor = UIColor.white
         collectionView?.alwaysBounceVertical = true
         collectionView?.register(PlayingSongCell.self, forCellWithReuseIdentifier: String(describing: PlayingSongCell.self))
+        collectionView?.register(CurrentLyricsCell.self, forCellWithReuseIdentifier: String(describing: CurrentLyricsCell.self))
         collectionView?.register(ChannelMembersCell.self, forCellWithReuseIdentifier: String(describing: ChannelMembersCell.self))
         collectionView?.register(PlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: PlaylistSongCell.self))
     }
@@ -62,7 +67,7 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 2
+            return 3
         case 1:
             return data.playlist.count
         default:
@@ -80,10 +85,15 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
                     let title = data.playing[.title] ?? ""
                     let album = data.playing[.album] ?? ""
                     let artist = data.playing[.artist] ?? ""
+                    let running = data.running
+                    let remaining = Int(ceil(data.duration - data.elapsed))
+                    let format = data.playing[.format] ?? ""
+                    let quality = data.playing[.quality] ?? ""
                     let artwork = data.files[.playingArtwork] ?? ""
                     cell.titleLabel.text = title
                     cell.albumLabel.text = album
                     cell.artistLabel.text = artist
+                    cell.infoLabel.text = running ? "\(String(format: "%d:%0.2d", remaining / 60, remaining % 60)) \(format) \(quality)" : ""
                     cell.artworkView.image = UIImage(named: "artwork")
                     if let url = URL(string: artwork) {
                         DataLoader.sharedInstance.load(key: "\(data.playingId).\(url.pathExtension)", url: url) { (data) in
@@ -94,6 +104,12 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
                 }
                 return cell
             case 1:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CurrentLyricsCell.self), for: indexPath)
+                if let cell = cell as? CurrentLyricsCell {
+                    cell.label.text = data.lyrics
+                }
+                return cell
+            case 2:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ChannelMembersCell.self), for: indexPath)
                 if let cell = cell as? ChannelMembersCell {
                     cell.setData(members: data.members, highlightedIndex: data.playerIndex)
@@ -134,7 +150,8 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             switch indexPath.item {
             case 0: return CGSize(width: collectionView.bounds.size.width - 24, height: 96)
-            case 1: return CGSize(width: collectionView.bounds.size.width - 24, height: 64)
+            case 1: return CGSize(width: collectionView.bounds.size.width - 24, height: 30)
+            case 2: return CGSize(width: collectionView.bounds.size.width - 24, height: 64)
             default: return CGSize.zero
             }
         case 1: return CGSize(width: collectionView.bounds.size.width - 24, height: 32)
@@ -254,13 +271,23 @@ extension MusicViewController: AppComponent {
             var playingChanged = false
             defer {
                 if playingChanged {
-                    self.collectionView?.reloadItems(at: [IndexPath(item: 0, section: 0)])
+                    UIView.performWithoutAnimation {
+                        self.collectionView?.reloadItems(at: [IndexPath(item: 0, section: 0)])
+                    }
+                }
+            }
+            var lyricsChanged = false
+            defer {
+                if lyricsChanged {
+                    UIView.performWithoutAnimation {
+                        self.collectionView?.reloadItems(at: [IndexPath(item: 1, section: 0)])
+                    }
                 }
             }
             var membersChanged = false
             defer {
                 if membersChanged {
-                    self.collectionView?.reloadItems(at: [IndexPath(item: 1, section: 0)])
+                    self.collectionView?.reloadItems(at: [IndexPath(item: 2, section: 0)])
                 }
             }
             var playlistChanged = false
@@ -284,8 +311,7 @@ extension MusicViewController: AppComponent {
                 self.data.time = time
                 self.data.reload = reload
             }
-            let selectors: [Constant.Selector] = [.playingArtwork, .playingFile, .preloadArtwork, .preloadFile]
-            selectors.forEach { (selector) in
+            ([.playingArtwork, .playingFile, .preloadArtwork, .preloadFile] as [Constant.Selector]).forEach { (selector) in
                 guard let value = client.querySelector(selector) as Any? else { return }
                 switch value {
                 case let string as String:
@@ -297,8 +323,7 @@ extension MusicViewController: AppComponent {
                 }
             }
             if let playing = client.getState([.song, .playing]) as [String: Any]? {
-                let fields: [Constant.State] = [.title, .album, .artist, .link, .mvLink]
-                fields.forEach { (field) in
+                ([.title, .album, .artist, .link, .mvLink] as [Constant.State]).forEach { (field) in
                     guard let value = playing[field.rawValue] as? String else { return }
                     playingChanged = playingChanged || self.data.playing[field] != value
                     self.data.playing[field] = value
@@ -308,8 +333,25 @@ extension MusicViewController: AppComponent {
                 let format = playing[Constant.State.format.rawValue] as? String ?? "unknown"
                 let quality = playing[Constant.State.quality.rawValue] as? [String: Any] ?? [:]
                 let qualityDescription = quality[Constant.State.description.rawValue] as? String ?? ""
+                playingChanged = playingChanged || self.data.playing[.format] != format
+                playingChanged = playingChanged || self.data.playing[.quality] != qualityDescription
                 self.data.playing[.format] = format
                 self.data.playing[.quality] = qualityDescription
+            }
+            if let running = client.getState([.player, .running]) as Bool?,
+                let elapsed = client.getState([.player, .elapsed]) as Double?,
+                let duration = client.getState([.player, .duration]) as Double? {
+                playingChanged = playingChanged || self.data.running != running
+                playingChanged = playingChanged || self.data.elapsed != elapsed
+                playingChanged = playingChanged || self.data.duration != duration
+                self.data.running = running
+                self.data.elapsed = elapsed
+                self.data.duration = duration
+            }
+            if let lyrics = client.querySelector(.currentLyrics) as [String]? {
+                let lyricsString = lyrics.joined(separator: "\n")
+                lyricsChanged = self.data.lyrics != lyricsString
+                self.data.lyrics = lyricsString
             }
             if let members = client.getState([.channel, .members]) as [[String: Any]]? {
                 membersChanged = !self.data.members.elementsEqual(members) {

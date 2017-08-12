@@ -35,6 +35,12 @@ class PlayingSongCell: UICollectionViewCell {
         view.textColor = UIColor.black
         return view
     }()
+    lazy var infoLabel: UILabel = {
+        let view = UILabel()
+        view.font = UIFont.systemFont(ofSize: 12)
+        view.textColor = UIColor.gray
+        return view
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,6 +48,7 @@ class PlayingSongCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(albumLabel)
         contentView.addSubview(artistLabel)
+        contentView.addSubview(infoLabel)
         constrain(contentView, artworkView) { (view, artworkView) in
             artworkView.top == view.top
             artworkView.bottom == view.bottom
@@ -51,13 +58,14 @@ class PlayingSongCell: UICollectionViewCell {
         constrain(contentView, artworkView, titleLabel) { (view, artworkView, titleLabel) in
             titleLabel.leading == artworkView.trailing + 12
             titleLabel.trailing == view.trailing
-            titleLabel.bottom == artworkView.centerY - 7
+            titleLabel.bottom == artworkView.centerY - 15
         }
-        constrain(titleLabel, albumLabel, artistLabel) { (titleLabel, albumLabel, artistLabel) in
-            align(leading: titleLabel, albumLabel, artistLabel)
-            align(trailing: titleLabel, albumLabel, artistLabel)
+        constrain(titleLabel, albumLabel, artistLabel, infoLabel) { (titleLabel, albumLabel, artistLabel, infoLabel) in
+            align(leading: titleLabel, albumLabel, artistLabel, infoLabel)
+            align(trailing: titleLabel, albumLabel, artistLabel, infoLabel)
             albumLabel.top == titleLabel.bottom
             artistLabel.top == albumLabel.bottom
+            infoLabel.top == artistLabel.bottom
         }
     }
 
