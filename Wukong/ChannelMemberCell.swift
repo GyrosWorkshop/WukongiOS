@@ -27,6 +27,12 @@ class ChannelMemberCell: UICollectionViewCell {
         return view
     }()
 
+    override var isSelected: Bool {
+        didSet {
+            nameLabel.font = isSelected ? UIFont.boldSystemFont(ofSize: 14) : UIFont.systemFont(ofSize: 14)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(avatarView)

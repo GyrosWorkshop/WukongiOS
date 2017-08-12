@@ -25,6 +25,7 @@ class ChannelMembersCell: UICollectionViewCell {
         view.delegate = self
         view.backgroundColor = UIColor.white
         view.alwaysBounceHorizontal = true
+        view.allowsSelection = false
         view.register(ChannelMemberCell.self, forCellWithReuseIdentifier: String(describing: ChannelMemberCell.self))
         return view
     }()
@@ -45,11 +46,9 @@ class ChannelMembersCell: UICollectionViewCell {
         data.members = members
         data.highlightedIndex = highlightedIndex
         collectionView.reloadSections(IndexSet(integer: 0))
-        if 0 ..< members.count ~= highlightedIndex {
-            collectionView.scrollToItem(at: IndexPath(item: highlightedIndex, section: 0), at: .centeredHorizontally, animated: true)
-        } else {
-            collectionView.contentOffset = CGPoint.zero
-        }
+        guard 0 ..< members.count ~= highlightedIndex else { return }
+        guard let cell = collectionView.cellForItem(at: IndexPath(item: highlightedIndex, section: 0)) else { return }
+        collectionView.scrollRectToVisible(cell.frame, animated: true)
     }
 
 }
@@ -70,6 +69,7 @@ extension ChannelMembersCell: UICollectionViewDataSource, UICollectionViewDelega
             let name = data.members[indexPath.item][Constant.State.nickname.rawValue] as? String ?? ""
             let avatar = data.members[indexPath.item][Constant.State.avatar.rawValue] as? String ?? ""
             cell.nameLabel.text = name
+            cell.isSelected = indexPath.item == data.highlightedIndex
             if let url = URL(string: avatar) {
                 DataLoader.sharedInstance.load(url: url) { (data) in
                     guard let data = data else { return }
@@ -82,6 +82,10 @@ extension ChannelMembersCell: UICollectionViewDataSource, UICollectionViewDelega
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 60, height: collectionView.bounds.size.height)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets.zero
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
