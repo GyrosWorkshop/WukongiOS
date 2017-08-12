@@ -178,6 +178,6 @@ extension URL {
 extension URLSession {
 
     static let apiSession: URLSession = URLSession(configuration: URLSessionConfiguration.default)
-    static let dataSession: URLSession = URLSession(configuration: URLSessionConfiguration.ephemeral)
+    static let dataSession: URLSession = URLSession(configuration: URLSessionConfiguration.default)
 
 }
