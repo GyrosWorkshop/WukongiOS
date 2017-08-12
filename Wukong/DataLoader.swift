@@ -23,9 +23,9 @@ class DataLoader: NSObject {
         }.resume()
     }
 
-    func load(key: String, url: URL, _ dataCallback: ((_ data: Data?) -> Void)? = nil) {
+    func load(key: String, url: URL, force: Bool = false, _ dataCallback: ((_ data: Data?) -> Void)? = nil) {
         let file = URL.cacheDirectory.appendingPathComponent(key, isDirectory: false)
-        if let data = try? Data(contentsOf: file) {
+        if !force, let data = try? Data(contentsOf: file) {
             print("Data:", "cached", data.count, key, url)
             dataCallback?(data)
             return

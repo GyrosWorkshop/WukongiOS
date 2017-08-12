@@ -157,6 +157,7 @@ extension MusicViewController: AppComponent {
             defer {
                 if trackChanged {
                     let playingId = self.data.playingId
+                    let reload = self.data.reload
                     if !playingId.isEmpty {
                         let dataLoader = DataLoader.sharedInstance
                         let audioPlayer = AudioPlayer.sharedInstance
@@ -165,13 +166,13 @@ extension MusicViewController: AppComponent {
                         let artist = self.data.playing[.artist]
                         audioPlayer.update(title: title, album: album, artist: artist, artwork: nil)
                         if let url = URL(string: self.data.files[.playingArtwork] ?? "") {
-                            dataLoader.load(key: "\(playingId).\(url.pathExtension)", url: url) { (data) in
+                            dataLoader.load(key: "\(playingId).\(url.pathExtension)", url: url, force: reload) { (data) in
                                 guard let data = data else { return }
                                 audioPlayer.update(title: title, album: album, artist: artist, artwork: UIImage(data: data))
                             }
                         }
                         if let url = URL(string: self.data.files[.playingFile] ?? "") {
-                            dataLoader.load(key: "\(playingId).\(url.pathExtension)", url: url) { (data) in
+                            dataLoader.load(key: "\(playingId).\(url.pathExtension)", url: url, force: reload) { (data) in
                                 guard let data = data else { return }
                                 var running = false
                                 var elapsed = 0.0
@@ -199,7 +200,7 @@ extension MusicViewController: AppComponent {
                             }
                         }
                     }
-                    if self.data.reload {
+                    if reload {
                         client.dispatchAction([.Player, .reload], [false])
                     }
                 }
