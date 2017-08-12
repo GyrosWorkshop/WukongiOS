@@ -44,6 +44,14 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         }
     }
 
+    func stop() {
+        player?.stop()
+        player = nil
+        info.removeAll()
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        invalidateTimer()
+    }
+
     func update(title: String?, album: String?, artist: String?, artwork: UIImage?) {
         info[MPNowPlayingInfoPropertyMediaType] = MPNowPlayingInfoMediaType.audio.rawValue
         info[MPMediaItemPropertyTitle] = title ?? ""
