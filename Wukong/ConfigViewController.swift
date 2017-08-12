@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConfigViewController: UICollectionViewController, AppComponent, UICollectionViewDelegateFlowLayout {
+class ConfigViewController: UICollectionViewController {
 
     fileprivate var data = Data()
     fileprivate struct Data {
@@ -24,10 +24,54 @@ class ConfigViewController: UICollectionViewController, AppComponent, UICollecti
         title = "Config"
         tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 0)
     }
-    
+
     required convenience init?(coder aDecoder: NSCoder) {
         self.init()
     }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        collectionView?.backgroundColor = UIColor.white
+        collectionView?.alwaysBounceVertical = true
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { (context) in
+            self.collectionViewLayout.invalidateLayout()
+        })
+    }
+
+}
+
+extension ConfigViewController: UICollectionViewDelegateFlowLayout {
+
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 0 // TODO
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 0 // TODO
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return UICollectionViewCell() // TODO
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize.zero // TODO
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+
+}
+
+extension ConfigViewController: AppComponent {
 
     func appDidLoad() {
         let client = WukongClient.sharedInstance
@@ -59,42 +103,6 @@ class ConfigViewController: UICollectionViewController, AppComponent, UICollecti
                 self.data.cookie = cookie
             }
         }
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        collectionView?.backgroundColor = UIColor.white
-        collectionView?.alwaysBounceVertical = true
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        coordinator.animate(alongsideTransition: { (context) in
-            self.collectionViewLayout.invalidateLayout()
-        })
-    }
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 0 // TODO
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0 // TODO
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell() // TODO
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize.zero // TODO
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
     }
 
 }

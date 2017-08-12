@@ -18,6 +18,10 @@
 		FE4130391EA8E5CD0070F690 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */; };
 		FE41303B1EA8E5CD0070F690 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE41303A1EA8E5CD0070F690 /* Assets.xcassets */; };
 		FE77584B1F3EAD4A0052C07D /* Eureka.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE77584A1F3EAD4A0052C07D /* Eureka.framework */; };
+		FE77584F1F3EB2100052C07D /* PlayingSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE77584E1F3EB2100052C07D /* PlayingSongCell.swift */; };
+		FE7758511F3EB2210052C07D /* PlaylistSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7758501F3EB2210052C07D /* PlaylistSongCell.swift */; };
+		FE7758531F3EB2F10052C07D /* ChannelMembersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7758521F3EB2F10052C07D /* ChannelMembersCell.swift */; };
+		FE7758551F3EB30B0052C07D /* ChannelMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7758541F3EB30B0052C07D /* ChannelMemberCell.swift */; };
 		FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB21EAC89360090833C /* AudioPlayer.swift */; };
 		FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB41EAC895A0090833C /* DataLoader.swift */; };
 		FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */; };
@@ -42,6 +46,10 @@
 		FE41303A1EA8E5CD0070F690 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Wukong/Assets.xcassets; sourceTree = "<group>"; };
 		FE41303F1EA8E5CD0070F690 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Wukong/Info.plist; sourceTree = "<group>"; };
 		FE77584A1F3EAD4A0052C07D /* Eureka.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eureka.framework; path = Carthage/Build/iOS/Eureka.framework; sourceTree = "<group>"; };
+		FE77584E1F3EB2100052C07D /* PlayingSongCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayingSongCell.swift; sourceTree = "<group>"; };
+		FE7758501F3EB2210052C07D /* PlaylistSongCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistSongCell.swift; sourceTree = "<group>"; };
+		FE7758521F3EB2F10052C07D /* ChannelMembersCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelMembersCell.swift; sourceTree = "<group>"; };
+		FE7758541F3EB30B0052C07D /* ChannelMemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelMemberCell.swift; sourceTree = "<group>"; };
 		FE7A7EB21EAC89360090833C /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		FE7A7EB41EAC895A0090833C /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstant.swift; sourceTree = "<group>"; };
@@ -83,9 +91,8 @@
 			children = (
 				FE4130331EA8E5CD0070F690 /* AppDelegate.swift */,
 				FE4130351EA8E5CD0070F690 /* AppController.swift */,
-				FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */,
-				FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */,
-				FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */,
+				FE77584D1F3EB1E60052C07D /* Pages */,
+				FE77584C1F3EB1DE0052C07D /* Cells */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -129,6 +136,27 @@
 				FE0836F31F35F8C4003A73CD /* xiami.png */,
 			);
 			name = Resource;
+			sourceTree = "<group>";
+		};
+		FE77584C1F3EB1DE0052C07D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FE77584E1F3EB2100052C07D /* PlayingSongCell.swift */,
+				FE7758501F3EB2210052C07D /* PlaylistSongCell.swift */,
+				FE7758521F3EB2F10052C07D /* ChannelMembersCell.swift */,
+				FE7758541F3EB30B0052C07D /* ChannelMemberCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		FE77584D1F3EB1E60052C07D /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */,
+				FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */,
+				FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */,
+			);
+			name = Pages;
 			sourceTree = "<group>";
 		};
 		FEBD3CA81F2C48F100C73767 /* Frameworks */ = {
@@ -246,15 +274,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE7758511F3EB2210052C07D /* PlaylistSongCell.swift in Sources */,
 				FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */,
+				FE77584F1F3EB2100052C07D /* PlayingSongCell.swift in Sources */,
 				FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */,
 				FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */,
+				FE7758551F3EB30B0052C07D /* ChannelMemberCell.swift in Sources */,
 				FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */,
 				FE4130361EA8E5CD0070F690 /* AppController.swift in Sources */,
 				FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */,
 				FE0CAE031F2CB89B00394ABB /* MusicViewController.swift in Sources */,
 				FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */,
 				FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */,
+				FE7758531F3EB2F10052C07D /* ChannelMembersCell.swift in Sources */,
 				FEC6DAD31F2C78D800A3B4C0 /* WebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

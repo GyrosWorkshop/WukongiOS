@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import Cartography
 
-class MusicViewController: UICollectionViewController, AppComponent, UICollectionViewDelegateFlowLayout {
+class MusicViewController: UICollectionViewController {
 
     fileprivate var data = Data()
     fileprivate struct Data {
@@ -35,6 +34,110 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
     required convenience init?(coder aDecoder: NSCoder) {
         self.init()
     }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        collectionView?.backgroundColor = UIColor.white
+        collectionView?.alwaysBounceVertical = true
+        collectionView?.register(PlayingSongCell.self, forCellWithReuseIdentifier: String(describing: PlayingSongCell.self))
+        collectionView?.register(PlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: PlaylistSongCell.self))
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { (context) in
+            self.collectionViewLayout.invalidateLayout()
+        })
+    }
+
+}
+
+extension MusicViewController: UICollectionViewDelegateFlowLayout {
+
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return data.playlist.count
+        default:
+            return 0
+        }
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        switch indexPath.section {
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlayingSongCell.self), for: indexPath)
+            if let cell = cell as? PlayingSongCell {
+                let title = data.playing[.title] ?? ""
+                let album = data.playing[.album] ?? ""
+                let artist = data.playing[.artist] ?? ""
+                let artwork = data.files[.playingArtwork] ?? ""
+                cell.titleLabel.text = title
+                cell.albumLabel.text = album
+                cell.artistLabel.text = artist
+                cell.artworkView.image = UIImage(named: "artwork")
+                if let url = URL(string: artwork) {
+                    DataLoader.sharedInstance.load(key: "\(data.playingId).\(url.pathExtension)", url: url) { (data) in
+                        guard let data = data else { return }
+                        cell.artworkView.image = UIImage(data: data)
+                    }
+                }
+            }
+            return cell
+        case 1:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlaylistSongCell.self), for: indexPath)
+            if let cell = cell as? PlaylistSongCell {
+                let item = data.playlist[indexPath.item]
+                let title = item[Constant.State.title.rawValue] as? String ?? ""
+                let album = item[Constant.State.album.rawValue] as? String ?? ""
+                let artist = item[Constant.State.artist.rawValue] as? String ?? ""
+                let siteId = item[Constant.State.siteId.rawValue] as? String ?? ""
+                cell.titleLabel.text = title
+                cell.detailLabel.text = "\(artist) − \(album)"
+                switch siteId {
+                case "netease-cloud-music":
+                    cell.iconView.image = UIImage(named: "netease")
+                case "QQMusic":
+                    cell.iconView.image = UIImage(named: "qq")
+                case "Xiami":
+                    cell.iconView.image = UIImage(named: "xiami")
+                default:
+                    break
+                }
+            }
+            return cell
+        default:
+            return UICollectionViewCell()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        switch indexPath.section {
+        case 0:
+            return CGSize(width: collectionView.bounds.size.width, height: 120)
+        case 1:
+            return CGSize(width: collectionView.bounds.size.width, height: 48)
+        default:
+            return CGSize.zero
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+
+}
+
+extension MusicViewController: AppComponent {
 
     func appDidLoad() {
         let client = WukongClient.sharedInstance
@@ -198,102 +301,6 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
         }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        collectionView?.backgroundColor = UIColor.white
-        collectionView?.alwaysBounceVertical = true
-        collectionView?.register(MusicPlayingSongCell.self, forCellWithReuseIdentifier: String(describing: MusicPlayingSongCell.self))
-        collectionView?.register(MusicPlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: MusicPlaylistSongCell.self))
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        coordinator.animate(alongsideTransition: { (context) in
-            self.collectionViewLayout.invalidateLayout()
-        })
-    }
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return data.playlist.count
-        default:
-            return 0
-        }
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: MusicPlayingSongCell.self), for: indexPath)
-            if let cell = cell as? MusicPlayingSongCell {
-                let title = data.playing[.title] ?? ""
-                let album = data.playing[.album] ?? ""
-                let artist = data.playing[.artist] ?? ""
-                let artwork = data.files[.playingArtwork] ?? ""
-                cell.titleLabel.text = title
-                cell.albumLabel.text = album
-                cell.artistLabel.text = artist
-                cell.artworkView.image = UIImage(named: "artwork")
-                if let url = URL(string: artwork) {
-                    DataLoader.sharedInstance.load(key: "\(data.playingId).\(url.pathExtension)", url: url) { (data) in
-                        guard let data = data else { return }
-                        cell.artworkView.image = UIImage(data: data)
-                    }
-                }
-            }
-            return cell
-        case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: MusicPlaylistSongCell.self), for: indexPath)
-            if let cell = cell as? MusicPlaylistSongCell {
-                let item = data.playlist[indexPath.item]
-                let title = item[Constant.State.title.rawValue] as? String ?? ""
-                let album = item[Constant.State.album.rawValue] as? String ?? ""
-                let artist = item[Constant.State.artist.rawValue] as? String ?? ""
-                let siteId = item[Constant.State.siteId.rawValue] as? String ?? ""
-                cell.titleLabel.text = title
-                cell.detailLabel.text = "\(artist) − \(album)"
-                switch siteId {
-                case "netease-cloud-music":
-                    cell.iconView.image = UIImage(named: "netease")
-                case "QQMusic":
-                    cell.iconView.image = UIImage(named: "qq")
-                case "Xiami":
-                    cell.iconView.image = UIImage(named: "xiami")
-                default:
-                    break
-                }
-            }
-            return cell
-        default:
-            return UICollectionViewCell()
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch indexPath.section {
-        case 0:
-            return CGSize(width: collectionView.bounds.size.width, height: 120)
-        case 1:
-            return CGSize(width: collectionView.bounds.size.width, height: 48)
-        default:
-            return CGSize.zero
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-
     func channelButtonAction() {
         let alert = UIAlertController(title: "Join Channel", message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
@@ -310,114 +317,6 @@ class MusicViewController: UICollectionViewController, AppComponent, UICollectio
 
     func shuffleButtonAction() {
         WukongClient.sharedInstance.dispatchAction([.Song, .shuffle], [])
-    }
-
-}
-
-private class MusicPlayingSongCell: UICollectionViewCell {
-
-    lazy var artworkView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        return view
-    }()
-    lazy var titleLabel: UILabel = {
-        let view = UILabel()
-        view.font = UIFont.systemFont(ofSize: 20)
-        view.textColor = UIColor.black
-        return view
-    }()
-    lazy var albumLabel: UILabel = {
-        let view = UILabel()
-        view.font = UIFont.systemFont(ofSize: 16)
-        view.textColor = UIColor.black
-        return view
-    }()
-    lazy var artistLabel: UILabel = {
-        let view = UILabel()
-        view.font = UIFont.systemFont(ofSize: 16)
-        view.textColor = UIColor.black
-        return view
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.addSubview(artworkView)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(albumLabel)
-        contentView.addSubview(artistLabel)
-        constrain(contentView, artworkView) { (view, artworkView) in
-            artworkView.top == view.top + 12
-            artworkView.bottom == view.bottom - 12
-            artworkView.leading == view.leading + 12
-            artworkView.width == artworkView.height
-        }
-        constrain(contentView, artworkView, titleLabel) { (view, artworkView, titleLabel) in
-            titleLabel.leading == artworkView.trailing + 12
-            titleLabel.trailing == view.trailing - 12
-            titleLabel.bottom == artworkView.centerY - 7
-        }
-        constrain(titleLabel, albumLabel, artistLabel) { (titleLabel, albumLabel, artistLabel) in
-            align(leading: titleLabel, albumLabel, artistLabel)
-            align(trailing: titleLabel, albumLabel, artistLabel)
-            albumLabel.top == titleLabel.bottom
-            artistLabel.top == albumLabel.bottom
-        }
-    }
-    
-    required convenience init?(coder aDecoder: NSCoder) {
-        self.init(frame: CGRect.zero)
-    }
-
-}
-
-private class MusicPlaylistSongCell: UICollectionViewCell {
-
-    lazy var iconView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        view.clipsToBounds = true
-        return view
-    }()
-    lazy var titleLabel: UILabel = {
-        let view = UILabel()
-        view.font = UIFont.systemFont(ofSize: 16)
-        view.textColor = UIColor.black
-        return view
-    }()
-    lazy var detailLabel: UILabel = {
-        let view = UILabel()
-        view.font = UIFont.systemFont(ofSize: 14)
-        view.textColor = UIColor.gray
-        return view
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.addSubview(iconView)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(detailLabel)
-        constrain(contentView, iconView) { (view, iconView) in
-            iconView.top == view.top + 8
-            iconView.bottom == view.bottom - 8
-            iconView.leading == view.leading + 12
-            iconView.width == iconView.height
-        }
-        constrain(contentView, iconView, titleLabel) { (view, iconView, titleLabel) in
-            titleLabel.leading == iconView.trailing + 8
-            titleLabel.trailing == view.trailing - 12
-            titleLabel.bottom == iconView.centerY + 1
-        }
-        constrain(titleLabel, detailLabel) { (titleLabel, detailLabel) in
-            align(leading: titleLabel, detailLabel)
-            align(trailing: titleLabel, detailLabel)
-            detailLabel.top == titleLabel.bottom
-        }
-    }
-
-    required convenience init?(coder aDecoder: NSCoder) {
-        self.init(frame: CGRect.zero)
     }
 
 }
