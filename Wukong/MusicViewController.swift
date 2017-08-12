@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class MusicViewController: UICollectionViewController {
 
@@ -181,6 +182,102 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
         case 1: return 8
         default: return 0
         }
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            switch indexPath.item {
+            case 0:
+                let sheet = UIAlertController(title: data.playing[.title], message: nil, preferredStyle: .actionSheet)
+                if let url = URL(string: self.data.playing[.link] ?? "") {
+                    sheet.addAction(UIAlertAction(title: "Track Page", style: .default) { (action) in
+                        let viewController = SFSafariViewController(url: url)
+                        viewController.hidesBottomBarWhenPushed = true
+                        self.navigationController?.pushViewController(viewController, animated: true)
+                    })
+                }
+                if let url = URL(string: self.data.playing[.mvLink] ?? "") {
+                    sheet.addAction(UIAlertAction(title: "Video Page", style: .default) { (action) in
+                        let viewController = SFSafariViewController(url: url)
+                        viewController.hidesBottomBarWhenPushed = true
+                        self.navigationController?.pushViewController(viewController, animated: true)
+                    })
+                }
+                if let url = URL(string: self.data.files[.playingArtwork] ?? "") {
+                    sheet.addAction(UIAlertAction(title: "Artwork File", style: .default) { (action) in
+                        let viewController = SFSafariViewController(url: url)
+                        viewController.hidesBottomBarWhenPushed = true
+                        self.navigationController?.pushViewController(viewController, animated: true)
+                    })
+                }
+                if let url = URL(string: self.data.files[.playingFile] ?? "") {
+                    sheet.addAction(UIAlertAction(title: "Audio File", style: .default) { (action) in
+                        let viewController = SFSafariViewController(url: url)
+                        viewController.hidesBottomBarWhenPushed = true
+                        self.navigationController?.pushViewController(viewController, animated: true)
+                    })
+                }
+                sheet.addAction(UIAlertAction(title: "Downvote", style: .default) { (action) in
+                    WukongClient.sharedInstance.dispatchAction([.Player, .downvote], [])
+                })
+                guard sheet.actions.count > 0 else { return }
+                sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                present(sheet, animated: true)
+                break
+            default:
+                break
+            }
+        case 1:
+            let item = data.playlist[indexPath.item]
+            let sheet = UIAlertController(title: item[Constant.State.title.rawValue] as? String, message: nil, preferredStyle: .actionSheet)
+            if let url = URL(string: item[Constant.State.link.rawValue] as? String ?? "") {
+                sheet.addAction(UIAlertAction(title: "Track Page", style: .default) { (action) in
+                    let viewController = SFSafariViewController(url: url)
+                    viewController.hidesBottomBarWhenPushed = true
+                    self.navigationController?.pushViewController(viewController, animated: true)
+                })
+            }
+            if let url = URL(string: item[Constant.State.mvLink.rawValue] as? String ?? "") {
+                sheet.addAction(UIAlertAction(title: "Video Page", style: .default) { (action) in
+                    let viewController = SFSafariViewController(url: url)
+                    viewController.hidesBottomBarWhenPushed = true
+                    self.navigationController?.pushViewController(viewController, animated: true)
+                })
+            }
+            if let id = item[Constant.State.id.rawValue] as? String {
+                sheet.addAction(UIAlertAction(title: "Upnext", style: .default) { (action) in
+                    WukongClient.sharedInstance.dispatchAction([.Song, .move], [id, 0])
+                })
+                sheet.addAction(UIAlertAction(title: "Delete", style: .destructive) { (action) in
+                    WukongClient.sharedInstance.dispatchAction([.Song, .remove], [id])
+                })
+            }
+            guard sheet.actions.count > 0 else { return }
+            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            present(sheet, animated: true)
+            break
+        default:
+            break
+        }
+    }
+
+    func channelButtonAction() {
+        let alert = UIAlertController(title: "Join Channel", message: nil, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = self.data.channel
+        }
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { (action) in
+            guard let channel = alert.textFields?.first?.text, !channel.isEmpty else { return }
+            UserDefaults.appDefaults.set(channel, forKey: Constant.Defaults.channel)
+            WukongClient.sharedInstance.dispatchAction([.Channel, .name], [channel])
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default))
+        present(alert, animated: true)
+    }
+
+    func shuffleButtonAction() {
+        WukongClient.sharedInstance.dispatchAction([.Song, .shuffle], [])
     }
 
 }
@@ -377,24 +474,6 @@ extension MusicViewController: AppComponent {
         if let channel = UserDefaults.appDefaults.string(forKey: Constant.Defaults.channel), !channel.isEmpty {
             client.dispatchAction([.Channel, .name], [channel])
         }
-    }
-
-    func channelButtonAction() {
-        let alert = UIAlertController(title: "Join Channel", message: nil, preferredStyle: .alert)
-        alert.addTextField { (textField) in
-            textField.placeholder = self.data.channel
-        }
-        alert.addAction(UIAlertAction(title: "OK", style: .default) { (action) in
-            guard let channel = alert.textFields?.first?.text, !channel.isEmpty else { return }
-            UserDefaults.appDefaults.set(channel, forKey: Constant.Defaults.channel)
-            WukongClient.sharedInstance.dispatchAction([.Channel, .name], [channel])
-        })
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default))
-        present(alert, animated: true)
-    }
-
-    func shuffleButtonAction() {
-        WukongClient.sharedInstance.dispatchAction([.Song, .shuffle], [])
     }
 
 }
