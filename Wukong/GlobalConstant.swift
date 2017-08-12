@@ -177,20 +177,7 @@ extension URL {
 
 extension URLSession {
 
-    static let apiSession: URLSession = {
-        let configuration = URLSessionConfiguration.default
-        return URLSession(configuration: configuration)
-    }()
-
-    static let dataSession: URLSession = {
-        let configuration = URLSessionConfiguration.default
-        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-        configuration.httpShouldSetCookies = false
-        configuration.httpCookieAcceptPolicy = .never
-        configuration.httpCookieStorage = nil
-        configuration.urlCredentialStorage = nil
-        configuration.urlCache = nil
-        return URLSession(configuration: configuration)
-    }()
+    static let apiSession: URLSession = URLSession(configuration: URLSessionConfiguration.default)
+    static let dataSession: URLSession = URLSession(configuration: URLSessionConfiguration.ephemeral)
 
 }

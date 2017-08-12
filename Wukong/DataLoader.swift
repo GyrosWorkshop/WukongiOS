@@ -14,6 +14,15 @@ class DataLoader: NSObject {
 
     private var callbacks: [String: (_ data: Data?) -> Void] = [:]
 
+    func load(url: URL, _ dataCallback: ((_ data: Data?) -> Void)? = nil) {
+        URLSession.dataSession.dataTask(with: url) { (data, response, error) in
+            print("Data:", "fetched", data?.count ?? 0, url)
+            DispatchQueue.main.async {
+                dataCallback?(data)
+            }
+        }.resume()
+    }
+
     func load(key: String, url: URL, _ dataCallback: ((_ data: Data?) -> Void)? = nil) {
         let file = URL.cacheDirectory.appendingPathComponent(key, isDirectory: false)
         if let data = try? Data(contentsOf: file) {
