@@ -65,7 +65,7 @@ class WukongClient: NSObject {
         context.evaluateScript(script)
         context.globalObject.setValue({
             let apiURL: (String, String) -> String = { (scheme, endpoint) in "\(scheme)s://\(Constant.URL.api)\(endpoint)" }
-            var networkHook = JSValue(undefinedIn: context)!
+            var networkHook: JSManagedValue? = nil
             return [
                 "App": [
                     "url": unsafeBitCast({ [unowned self] () in
@@ -108,7 +108,7 @@ class WukongClient: NSObject {
                                 }
                                 let status = response.statusCode
                                 let error = 200 ... 299 ~= status ? NSNull() : HTTPURLResponse.localizedString(forStatusCode: status) as Any
-                                networkHook.call(withArguments: [method, endpoint, status, error])
+                                _ = networkHook?.value?.call(withArguments: [method, endpoint, status, error])
                                 if let exception = self.context.exception {
                                     self.context.exception = nil
                                     print("HTTP:", method, endpoint, exception)
@@ -144,14 +144,23 @@ class WukongClient: NSObject {
                             guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else { return }
                             websocket.send(data: data)
                         } as SendFunction, to: AnyObject.self)
-                        guard let emit = handler.call(withArguments: [send]) else {
+                        guard let emit = JSManagedValue(value: handler.call(withArguments: [send]), andOwner: websocket) else {
                             websocket.close()
                             return
                         }
                         var timer: Timer? = nil
+                        let checkStatus = { [weak websocket] () -> Bool in
+                            if emit.value == nil {
+                                websocket?.close()
+                                timer?.invalidate()
+                                return false
+                            }
+                            return true
+                        }
                         websocket.event.open = {
                             print("WebSocket:", "open")
-                            emit.call(withArguments: ["open"])
+                            guard checkStatus() else { return }
+                            _ = emit.value?.call(withArguments: ["open"])
                             timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak send] (timer) in
                                 if let send = send {
                                     unsafeBitCast(send, to: SendFunction.self)("ping", [:])
@@ -163,7 +172,8 @@ class WukongClient: NSObject {
                         }
                         websocket.event.close = { (code, reason, clean) in
                             print("WebSocket:", "close", code, reason, clean)
-                            emit.call(withArguments: ["close"])
+                            guard checkStatus() else { return }
+                            _ = emit.value?.call(withArguments: ["close"])
                             timer?.invalidate()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak websocket] in
                                 websocket?.open()
@@ -171,20 +181,22 @@ class WukongClient: NSObject {
                         }
                         websocket.event.error = { (error) in
                             print("WebSocket:", "error", error)
-                            emit.call(withArguments: ["error"])
+                            guard checkStatus() else { return }
+                            _ = emit.value?.call(withArguments: ["error"])
                         }
                         websocket.event.message = { (message) in
+                            guard checkStatus() else { return }
                             guard let string = message as? String else { return }
                             guard let data = string.data(using: .utf8) else { return }
                             guard var object = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String: Any] else { return }
                             guard let name = object["eventName"] else { return }
                             object.removeValue(forKey: "eventName")
                             print("WebSocket:", "event", name)
-                            emit.call(withArguments: [name, object])
+                            _ = emit.value?.call(withArguments: [name, object])
                         }
                     } as @convention(block) (String, JSValue) -> Void, to: AnyObject.self),
-                    "hook": unsafeBitCast({ (callback) in
-                        networkHook = callback
+                    "hook": unsafeBitCast({ [unowned self] (callback) in
+                        networkHook = JSManagedValue(value: callback, andOwner: self.context)
                     } as @convention(block) (JSValue) -> Void, to: AnyObject.self)
                 ],
                 "Database": [
