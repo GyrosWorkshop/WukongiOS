@@ -285,6 +285,7 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
 extension MusicViewController: AppComponent {
 
     func appDidLoad() {
+        data = Data()
         let client = WukongClient.sharedInstance
         client.subscribeChange {
             var channelChanged = false

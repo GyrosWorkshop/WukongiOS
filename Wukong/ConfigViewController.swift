@@ -101,6 +101,7 @@ class ConfigViewController: FormViewController {
 extension ConfigViewController: AppComponent {
 
     func appDidLoad() {
+        data = Data()
         let client = WukongClient.sharedInstance
         client.subscribeChange {
             var preferencesChanged = false
