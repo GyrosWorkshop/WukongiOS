@@ -173,7 +173,7 @@ extension ConfigViewController: AppComponent {
                         })
                     }
                     <<< ButtonRow() { (row) in
-                        row.title = "Reload Virtual Machine"
+                        row.title = "Restart Virtual Machine"
                         row.onCellSelection({ (cell, row) in
                             AudioPlayer.sharedInstance.stop()
                             client.reload()

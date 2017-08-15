@@ -32,7 +32,7 @@ class ListenViewController: UICollectionViewController {
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
         title = "Wukong"
-        tabBarItem = UITabBarItem(title: "Listen", image: UIImage(named: "music0"), selectedImage: UIImage(named: "music1"))
+        tabBarItem = UITabBarItem(title: "Listen", image: UIImage(named: "listen0"), selectedImage: UIImage(named: "listen1"))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Join", style: .plain, target: self, action: #selector(channelButtonAction))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Shuffle", style: .plain, target: self, action: #selector(shuffleButtonAction))
     }
@@ -385,7 +385,9 @@ extension ListenViewController: AppComponent {
             var membersChanged = false
             defer {
                 if membersChanged {
-                    self.collectionView?.reloadItems(at: [IndexPath(item: 2, section: 0)])
+                    UIView.performWithoutAnimation {
+                        self.collectionView?.reloadItems(at: [IndexPath(item: 2, section: 0)])
+                    }
                 }
             }
             var playlistChanged = false

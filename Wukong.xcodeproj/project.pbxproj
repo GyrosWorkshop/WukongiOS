@@ -37,6 +37,7 @@
 		FEF16C4C1F435C5400B1F97B /* search0@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FEF16C421F435C5400B1F97B /* search0@3x.png */; };
 		FEF16C4D1F435C5400B1F97B /* search1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FEF16C431F435C5400B1F97B /* search1@3x.png */; };
 		FEF16C4E1F435C5400B1F97B /* xiami.png in Resources */ = {isa = PBXBuildFile; fileRef = FEF16C441F435C5400B1F97B /* xiami.png */; };
+		FEF16C501F435D5D00B1F97B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF16C4F1F435D5D00B1F97B /* SearchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		FEF16C421F435C5400B1F97B /* search0@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search0@3x.png"; path = "Resources/search0@3x.png"; sourceTree = "<group>"; };
 		FEF16C431F435C5400B1F97B /* search1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search1@3x.png"; path = "Resources/search1@3x.png"; sourceTree = "<group>"; };
 		FEF16C441F435C5400B1F97B /* xiami.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = xiami.png; path = Resources/xiami.png; sourceTree = "<group>"; };
+		FEF16C4F1F435D5D00B1F97B /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				FE0CAE021F2CB89B00394ABB /* ListenViewController.swift */,
+				FEF16C4F1F435D5D00B1F97B /* SearchViewController.swift */,
 				FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */,
 				FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */,
 			);
@@ -319,6 +322,7 @@
 				FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */,
 				FE4130361EA8E5CD0070F690 /* AppController.swift in Sources */,
 				FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */,
+				FEF16C501F435D5D00B1F97B /* SearchViewController.swift in Sources */,
 				FE0CAE031F2CB89B00394ABB /* ListenViewController.swift in Sources */,
 				FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */,
 				FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */,

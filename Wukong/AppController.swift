@@ -15,14 +15,16 @@ protocol AppComponent: class {
 
 class AppController: UIViewController {
 
-    fileprivate lazy var listenViewController = ListenViewController()
-    fileprivate lazy var configViewController = ConfigViewController()
+    fileprivate lazy var components: [AppComponent] = [
+        ListenViewController(),
+        SearchViewController(),
+        ConfigViewController()
+    ]
     fileprivate lazy var mainViewController: UIViewController = {
         let tabController = UITabBarController()
-        tabController.viewControllers = [
-            UINavigationController(rootViewController: self.listenViewController),
-            UINavigationController(rootViewController: self.configViewController)
-        ]
+        tabController.viewControllers = self.components
+            .flatMap { $0 as? UIViewController }
+            .map { UINavigationController(rootViewController: $0) }
         return tabController
     }()
 
@@ -49,8 +51,7 @@ extension AppController: WukongDelegate {
     }
 
     func wukongDidLaunch() {
-        listenViewController.appDidLoad()
-        configViewController.appDidLoad()
+        components.forEach { $0.appDidLoad() }
     }
 
     func wukongDidThrowException(_ exception: String) {
