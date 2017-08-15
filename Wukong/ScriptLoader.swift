@@ -36,16 +36,16 @@ class ScriptLoader: NSObject {
         }.resume()
     }
 
-    func load(online: Bool, _ callback: ((_ script: String?) -> Void)? = nil) {
+    func load(online: Bool, _ callback: ((_ version: String?, _ script: String?) -> Void)? = nil) {
         var loaded = false
-        if let script = UserDefaults.appDefaults.string(forKey: Constant.Defaults.script) {
-            print("Client:", "version", UserDefaults.appDefaults.string(forKey: Constant.Defaults.version) ?? "unknown")
-            callback?(script)
+        if let version = UserDefaults.appDefaults.string(forKey: Constant.Defaults.version),
+            let script = UserDefaults.appDefaults.string(forKey: Constant.Defaults.script) {
+            callback?(version, script)
             loaded = true
         }
         guard online else {
             if !loaded {
-                callback?(nil)
+                callback?(nil, nil)
             }
             return
         }
@@ -54,12 +54,11 @@ class ScriptLoader: NSObject {
             guard version != UserDefaults.appDefaults.string(forKey: Constant.Defaults.version) else { return }
             self.loadScript(version: version) { (script) in
                 guard let script = script else { return }
-                print("Client:", "updated", version)
                 UserDefaults.appDefaults.set(version, forKey: Constant.Defaults.version)
                 UserDefaults.appDefaults.set(script, forKey: Constant.Defaults.script)
                 if !loaded {
                     DispatchQueue.main.async {
-                        callback?(script)
+                        callback?(version, script)
                     }
                 }
             }

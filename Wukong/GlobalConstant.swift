@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftWebSocket
 
 struct Constant {
 
@@ -29,6 +30,8 @@ struct Constant {
         static let selector = "Selector"
         static let platform = "Platform"
         static let store = "Store"
+        static let httpHook = "httpHook"
+        static let websocketEmit = "websocketEmit"
     }
 
     struct URL {
@@ -177,7 +180,13 @@ extension URL {
 
 extension URLSession {
 
-    static let apiSession: URLSession = URLSession(configuration: URLSessionConfiguration.default)
-    static let dataSession: URLSession = URLSession(configuration: URLSessionConfiguration.default)
+    static let apiSession = URLSession(configuration: URLSessionConfiguration.default)
+    static let dataSession = URLSession(configuration: URLSessionConfiguration.default)
+
+}
+
+extension WebSocket {
+
+    static let apiSocket = WebSocket()
 
 }
