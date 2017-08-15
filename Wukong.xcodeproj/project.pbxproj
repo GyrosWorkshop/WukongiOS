@@ -11,7 +11,7 @@
 		FE0836F51F35F8C4003A73CD /* netease.png in Resources */ = {isa = PBXBuildFile; fileRef = FE0836F11F35F8C4003A73CD /* netease.png */; };
 		FE0836F61F35F8C4003A73CD /* qq.png in Resources */ = {isa = PBXBuildFile; fileRef = FE0836F21F35F8C4003A73CD /* qq.png */; };
 		FE0836F71F35F8C4003A73CD /* xiami.png in Resources */ = {isa = PBXBuildFile; fileRef = FE0836F31F35F8C4003A73CD /* xiami.png */; };
-		FE0CAE031F2CB89B00394ABB /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */; };
+		FE0CAE031F2CB89B00394ABB /* ListenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE021F2CB89B00394ABB /* ListenViewController.swift */; };
 		FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */; };
 		FE0E0ABD1F3F1C87000E3D4A /* CurrentLyricsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */; };
 		FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130331EA8E5CD0070F690 /* AppDelegate.swift */; };
@@ -31,6 +31,12 @@
 		FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAD1F233B7A001C052B /* WukongClient.swift */; };
 		FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */; };
 		FED977A61F34A632000DC1B8 /* Cartography.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED977A51F34A632000DC1B8 /* Cartography.framework */; };
+		FEF16C181F43582E00B1F97B /* config0@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FEF16C121F43582E00B1F97B /* config0@3x.png */; };
+		FEF16C191F43582E00B1F97B /* config1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FEF16C131F43582E00B1F97B /* config1@3x.png */; };
+		FEF16C1A1F43582E00B1F97B /* listen0@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FEF16C141F43582E00B1F97B /* listen0@3x.png */; };
+		FEF16C1B1F43582E00B1F97B /* listen1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FEF16C151F43582E00B1F97B /* listen1@3x.png */; };
+		FEF16C1C1F43582E00B1F97B /* search0@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FEF16C161F43582E00B1F97B /* search0@3x.png */; };
+		FEF16C1D1F43582E00B1F97B /* search1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FEF16C171F43582E00B1F97B /* search1@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,7 +44,7 @@
 		FE0836F11F35F8C4003A73CD /* netease.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = netease.png; sourceTree = "<group>"; };
 		FE0836F21F35F8C4003A73CD /* qq.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qq.png; sourceTree = "<group>"; };
 		FE0836F31F35F8C4003A73CD /* xiami.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xiami.png; sourceTree = "<group>"; };
-		FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
+		FE0CAE021F2CB89B00394ABB /* ListenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListenViewController.swift; sourceTree = "<group>"; };
 		FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentLyricsCell.swift; sourceTree = "<group>"; };
 		FE4130301EA8E5CD0070F690 /* Wukong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wukong.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +66,12 @@
 		FECAEAAD1F233B7A001C052B /* WukongClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WukongClient.swift; sourceTree = "<group>"; };
 		FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptLoader.swift; sourceTree = "<group>"; };
 		FED977A51F34A632000DC1B8 /* Cartography.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cartography.framework; path = Carthage/Build/iOS/Cartography.framework; sourceTree = "<group>"; };
+		FEF16C121F43582E00B1F97B /* config0@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "config0@3x.png"; sourceTree = "<group>"; };
+		FEF16C131F43582E00B1F97B /* config1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "config1@3x.png"; sourceTree = "<group>"; };
+		FEF16C141F43582E00B1F97B /* listen0@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "listen0@3x.png"; sourceTree = "<group>"; };
+		FEF16C151F43582E00B1F97B /* listen1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "listen1@3x.png"; sourceTree = "<group>"; };
+		FEF16C161F43582E00B1F97B /* search0@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search0@3x.png"; sourceTree = "<group>"; };
+		FEF16C171F43582E00B1F97B /* search1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search1@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +144,12 @@
 				FE41303F1EA8E5CD0070F690 /* Info.plist */,
 				FE41303A1EA8E5CD0070F690 /* Assets.xcassets */,
 				FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */,
+				FEF16C141F43582E00B1F97B /* listen0@3x.png */,
+				FEF16C151F43582E00B1F97B /* listen1@3x.png */,
+				FEF16C161F43582E00B1F97B /* search0@3x.png */,
+				FEF16C171F43582E00B1F97B /* search1@3x.png */,
+				FEF16C121F43582E00B1F97B /* config0@3x.png */,
+				FEF16C131F43582E00B1F97B /* config1@3x.png */,
 				FE0836F01F35F8C4003A73CD /* artwork.png */,
 				FE0836F11F35F8C4003A73CD /* netease.png */,
 				FE0836F21F35F8C4003A73CD /* qq.png */,
@@ -155,7 +173,7 @@
 		FE77584D1F3EB1E60052C07D /* Pages */ = {
 			isa = PBXGroup;
 			children = (
-				FE0CAE021F2CB89B00394ABB /* MusicViewController.swift */,
+				FE0CAE021F2CB89B00394ABB /* ListenViewController.swift */,
 				FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */,
 				FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */,
 			);
@@ -239,8 +257,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEF16C181F43582E00B1F97B /* config0@3x.png in Resources */,
+				FEF16C1B1F43582E00B1F97B /* listen1@3x.png in Resources */,
+				FEF16C1A1F43582E00B1F97B /* listen0@3x.png in Resources */,
+				FEF16C1C1F43582E00B1F97B /* search0@3x.png in Resources */,
 				FE0836F61F35F8C4003A73CD /* qq.png in Resources */,
 				FE41303B1EA8E5CD0070F690 /* Assets.xcassets in Resources */,
+				FEF16C191F43582E00B1F97B /* config1@3x.png in Resources */,
+				FEF16C1D1F43582E00B1F97B /* search1@3x.png in Resources */,
 				FE0836F71F35F8C4003A73CD /* xiami.png in Resources */,
 				FE4130391EA8E5CD0070F690 /* LaunchScreen.storyboard in Resources */,
 				FE0836F41F35F8C4003A73CD /* artwork.png in Resources */,
@@ -287,7 +311,7 @@
 				FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */,
 				FE4130361EA8E5CD0070F690 /* AppController.swift in Sources */,
 				FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */,
-				FE0CAE031F2CB89B00394ABB /* MusicViewController.swift in Sources */,
+				FE0CAE031F2CB89B00394ABB /* ListenViewController.swift in Sources */,
 				FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */,
 				FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */,
 				FE7758531F3EB2F10052C07D /* ChannelMembersCell.swift in Sources */,

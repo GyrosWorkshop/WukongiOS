@@ -15,12 +15,12 @@ protocol AppComponent: class {
 
 class AppController: UIViewController {
 
-    fileprivate lazy var musicViewController = MusicViewController()
+    fileprivate lazy var listenViewController = ListenViewController()
     fileprivate lazy var configViewController = ConfigViewController()
     fileprivate lazy var mainViewController: UIViewController = {
         let tabController = UITabBarController()
         tabController.viewControllers = [
-            UINavigationController(rootViewController: self.musicViewController),
+            UINavigationController(rootViewController: self.listenViewController),
             UINavigationController(rootViewController: self.configViewController)
         ]
         return tabController
@@ -49,7 +49,7 @@ extension AppController: WukongDelegate {
     }
 
     func wukongDidLaunch() {
-        musicViewController.appDidLoad()
+        listenViewController.appDidLoad()
         configViewController.appDidLoad()
     }
 

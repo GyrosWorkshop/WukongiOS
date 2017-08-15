@@ -1,5 +1,5 @@
 //
-//  MusicViewController.swift
+//  ListenViewController.swift
 //  Wukong
 //
 //  Created by Qusic on 7/29/17.
@@ -9,7 +9,7 @@
 import UIKit
 import SafariServices
 
-class MusicViewController: UICollectionViewController {
+class ListenViewController: UICollectionViewController {
 
     fileprivate var data = Data()
     fileprivate struct Data {
@@ -32,7 +32,7 @@ class MusicViewController: UICollectionViewController {
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
         title = "Wukong"
-        tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
+        tabBarItem = UITabBarItem(title: "Listen", image: UIImage(named: "music0"), selectedImage: UIImage(named: "music1"))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Join", style: .plain, target: self, action: #selector(channelButtonAction))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Shuffle", style: .plain, target: self, action: #selector(shuffleButtonAction))
     }
@@ -59,7 +59,7 @@ class MusicViewController: UICollectionViewController {
 
 }
 
-extension MusicViewController: UICollectionViewDelegateFlowLayout {
+extension ListenViewController: UICollectionViewDelegateFlowLayout {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
@@ -282,7 +282,7 @@ extension MusicViewController: UICollectionViewDelegateFlowLayout {
 
 }
 
-extension MusicViewController: AppComponent {
+extension ListenViewController: AppComponent {
 
     func appDidLoad() {
         data = Data()

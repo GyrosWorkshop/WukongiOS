@@ -23,7 +23,7 @@ class ConfigViewController: FormViewController {
     init() {
         super.init(style: .grouped)
         title = "Config"
-        tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 0)
+        tabBarItem = UITabBarItem(title: "Config", image: UIImage(named: "config0"), selectedImage: UIImage(named: "config1"))
     }
 
     required convenience init?(coder aDecoder: NSCoder) {
