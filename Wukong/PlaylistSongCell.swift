@@ -11,19 +11,19 @@ import Cartography
 
 class PlaylistSongCell: UICollectionViewCell {
 
-    lazy var iconView: UIImageView = {
+    private lazy var iconView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
         return view
     }()
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 16)
         view.textColor = UIColor.black
         return view
     }()
-    lazy var detailLabel: UILabel = {
+    private lazy var detailLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 14)
         view.textColor = UIColor.gray
@@ -55,6 +55,25 @@ class PlaylistSongCell: UICollectionViewCell {
 
     required convenience init?(coder aDecoder: NSCoder) {
         self.init(frame: CGRect.zero)
+    }
+
+    func setData(song: [String: Any]) {
+        let title = song[Constant.State.title.rawValue] as? String ?? ""
+        let album = song[Constant.State.album.rawValue] as? String ?? ""
+        let artist = song[Constant.State.artist.rawValue] as? String ?? ""
+        let siteId = song[Constant.State.siteId.rawValue] as? String ?? ""
+        titleLabel.text = title
+        detailLabel.text = "\(artist) − \(album)"
+        switch siteId {
+        case "netease-cloud-music":
+            iconView.image = UIImage(named: "netease")
+        case "QQMusic":
+            iconView.image = UIImage(named: "qq")
+        case "Xiami":
+            iconView.image = UIImage(named: "xiami")
+        default:
+            break
+        }
     }
 
 }

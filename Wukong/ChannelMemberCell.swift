@@ -11,13 +11,13 @@ import Cartography
 
 class ChannelMemberCell: UICollectionViewCell {
 
-    lazy var avatarView: UIImageView = {
+    private lazy var avatarView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         return view
     }()
-    lazy var nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 14)
         view.textColor = UIColor.black
@@ -61,6 +61,18 @@ class ChannelMemberCell: UICollectionViewCell {
         super.layoutSubviews()
         contentView.layoutSubviews()
         avatarView.layer.cornerRadius = avatarView.bounds.size.width / 2
+    }
+
+    func setData(member: [String: Any]) {
+        let name = member[Constant.State.nickname.rawValue] as? String ?? ""
+        let avatar = member[Constant.State.avatar.rawValue] as? String ?? ""
+        nameLabel.text = name
+        if let url = URL(string: avatar) {
+            DataLoader.sharedInstance.load(url: url) { [weak self] (data) in
+                guard let data = data else { return }
+                self?.avatarView.image = UIImage(data: data)
+            }
+        }
     }
 
 }

@@ -23,7 +23,7 @@ class ListenViewController: UICollectionViewController {
         var running = false
         var elapsed = 0.0
         var duration = 0.0
-        var lyrics = ""
+        var lyrics: [String] = []
         var members: [[String: Any]] = []
         var playerIndex = -1
         var playlist: [[String: Any]] = []
@@ -83,31 +83,13 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
             case 0:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlayingSongCell.self), for: indexPath)
                 if let cell = cell as? PlayingSongCell {
-                    let title = data.playing[.title] ?? ""
-                    let album = data.playing[.album] ?? ""
-                    let artist = data.playing[.artist] ?? ""
-                    let running = data.running
-                    let remaining = Int(ceil(data.duration - data.elapsed))
-                    let format = data.playing[.format] ?? ""
-                    let quality = data.playing[.quality] ?? ""
-                    let artwork = data.files[.playingArtwork] ?? ""
-                    cell.titleLabel.text = title
-                    cell.albumLabel.text = album
-                    cell.artistLabel.text = artist
-                    cell.infoLabel.text = running ? "\(String(format: "%d:%0.2d", remaining / 60, remaining % 60)) \(format) \(quality)" : ""
-                    cell.artworkView.image = UIImage(named: "artwork")
-                    if let url = URL(string: artwork) {
-                        DataLoader.sharedInstance.load(key: "\(data.playingId).\(url.pathExtension)", url: url) { (data) in
-                            guard let data = data else { return }
-                            cell.artworkView.image = UIImage(data: data)
-                        }
-                    }
+                    cell.setData(id: data.playingId, song: data.playing, artworkFile: data.files[.playingArtwork], running: data.running, elapsed: data.elapsed, duration: data.duration)
                 }
                 return cell
             case 1:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CurrentLyricsCell.self), for: indexPath)
                 if let cell = cell as? CurrentLyricsCell {
-                    cell.label.text = data.lyrics
+                    cell.setData(lyrics: data.lyrics)
                 }
                 return cell
             case 2:
@@ -122,23 +104,7 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlaylistSongCell.self), for: indexPath)
             if let cell = cell as? PlaylistSongCell {
-                let item = data.playlist[indexPath.item]
-                let title = item[Constant.State.title.rawValue] as? String ?? ""
-                let album = item[Constant.State.album.rawValue] as? String ?? ""
-                let artist = item[Constant.State.artist.rawValue] as? String ?? ""
-                let siteId = item[Constant.State.siteId.rawValue] as? String ?? ""
-                cell.titleLabel.text = title
-                cell.detailLabel.text = "\(artist) − \(album)"
-                switch siteId {
-                case "netease-cloud-music":
-                    cell.iconView.image = UIImage(named: "netease")
-                case "QQMusic":
-                    cell.iconView.image = UIImage(named: "qq")
-                case "Xiami":
-                    cell.iconView.image = UIImage(named: "xiami")
-                default:
-                    break
-                }
+                cell.setData(song: data.playlist[indexPath.item])
             }
             return cell
         default:
@@ -449,9 +415,8 @@ extension ListenViewController: AppComponent {
                 self.data.duration = duration
             }
             if let lyrics = client.querySelector(.currentLyrics) as [String]? {
-                let lyricsString = lyrics.joined(separator: "\n")
-                lyricsChanged = self.data.lyrics != lyricsString
-                self.data.lyrics = lyricsString
+                lyricsChanged = self.data.lyrics.elementsEqual(lyrics)
+                self.data.lyrics = lyrics
             }
             if let members = client.getState([.channel, .members]) as [[String: Any]]? {
                 membersChanged = !self.data.members.elementsEqual(members) {

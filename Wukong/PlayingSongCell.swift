@@ -11,31 +11,31 @@ import Cartography
 
 class PlayingSongCell: UICollectionViewCell {
 
-    lazy var artworkView: UIImageView = {
+    private lazy var artworkView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         return view
     }()
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 20)
         view.textColor = UIColor.black
         return view
     }()
-    lazy var albumLabel: UILabel = {
+    private lazy var albumLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 16)
         view.textColor = UIColor.black
         return view
     }()
-    lazy var artistLabel: UILabel = {
+    private lazy var artistLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 16)
         view.textColor = UIColor.black
         return view
     }()
-    lazy var infoLabel: UILabel = {
+    private lazy var infoLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 12)
         view.textColor = UIColor.gray
@@ -71,6 +71,27 @@ class PlayingSongCell: UICollectionViewCell {
 
     required convenience init?(coder aDecoder: NSCoder) {
         self.init(frame: CGRect.zero)
+    }
+
+    func setData(id: String, song: [Constant.State: String], artworkFile: String?, running: Bool, elapsed: Double, duration: Double) {
+        let title = song[.title] ?? ""
+        let album = song[.album] ?? ""
+        let artist = song[.artist] ?? ""
+        let format = song[.format] ?? ""
+        let quality = song[.quality] ?? ""
+        let artwork = artworkFile ?? ""
+        let remaining = Int(ceil(duration - elapsed))
+        titleLabel.text = title
+        albumLabel.text = album
+        artistLabel.text = artist
+        infoLabel.text = running ? String(format: "%d:%0.2d %s %s", remaining / 60, remaining % 60, format, quality) : ""
+        artworkView.image = UIImage(named: "artwork")
+        if let url = URL(string: artwork) {
+            DataLoader.sharedInstance.load(key: "\(id).\(url.pathExtension)", url: url) { [weak self] (data) in
+                guard let data = data else { return }
+                self?.artworkView.image = UIImage(data: data)
+            }
+        }
     }
 
 }

@@ -17,7 +17,7 @@ class ChannelMembersCell: UICollectionViewCell {
         var highlightedIndex: Int = -1
     }
 
-    lazy var collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let view = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
@@ -45,7 +45,9 @@ class ChannelMembersCell: UICollectionViewCell {
     func setData(members: [[String: Any]], highlightedIndex: Int) {
         data.members = members
         data.highlightedIndex = highlightedIndex
-        collectionView.reloadSections(IndexSet(integer: 0))
+        UIView.performWithoutAnimation {
+            collectionView.reloadSections(IndexSet(integer: 0))
+        }
         guard 0 ..< members.count ~= highlightedIndex else { return }
         guard let cell = collectionView.cellForItem(at: IndexPath(item: highlightedIndex, section: 0)) else { return }
         collectionView.scrollRectToVisible(cell.frame, animated: true)
@@ -66,16 +68,8 @@ extension ChannelMembersCell: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ChannelMemberCell.self), for: indexPath)
         if let cell = cell as? ChannelMemberCell {
-            let name = data.members[indexPath.item][Constant.State.nickname.rawValue] as? String ?? ""
-            let avatar = data.members[indexPath.item][Constant.State.avatar.rawValue] as? String ?? ""
-            cell.nameLabel.text = name
+            cell.setData(member: data.members[indexPath.item])
             cell.isSelected = indexPath.item == data.highlightedIndex
-            if let url = URL(string: avatar) {
-                DataLoader.sharedInstance.load(url: url) { (data) in
-                    guard let data = data else { return }
-                    cell.avatarView.image = UIImage(data: data)
-                }
-            }
         }
         return cell
     }

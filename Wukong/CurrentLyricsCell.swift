@@ -11,7 +11,7 @@ import Cartography
 
 class CurrentLyricsCell: UICollectionViewCell {
 
-    lazy var label: UILabel = {
+    private lazy var label: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 12)
         view.textColor = UIColor.black
@@ -30,6 +30,10 @@ class CurrentLyricsCell: UICollectionViewCell {
 
     required convenience init?(coder aDecoder: NSCoder) {
         self.init(frame: CGRect.zero)
+    }
+
+    func setData(lyrics: [String]) {
+        label.text = lyrics.joined(separator: "\n")
     }
 
 }
