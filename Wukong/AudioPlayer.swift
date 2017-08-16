@@ -49,6 +49,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         player = nil
         info.removeAll()
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        callback = nil
         invalidateTimer()
     }
 
@@ -63,7 +64,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         update()
     }
 
-    private func update() {
+    func update() {
         info[MPMediaItemPropertyPlaybackDuration] = player?.duration ?? 0
         info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player?.currentTime ?? 0
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info

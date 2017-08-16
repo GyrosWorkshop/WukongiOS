@@ -303,6 +303,9 @@ extension ListenViewController: AppComponent {
                                     if running && !nextRunning && duration - elapsed < 1 {
                                         client.dispatchAction([.Player, .ended], [])
                                     }
+                                    if running != nextRunning {
+                                        audioPlayer.update()
+                                    }
                                     running = nextRunning
                                     elapsed = nextElapsed
                                     duration = nextDuration
