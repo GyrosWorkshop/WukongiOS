@@ -43,12 +43,13 @@ class ListenViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.backgroundColor = UIColor.white
-        collectionView?.alwaysBounceVertical = true
-        collectionView?.register(PlayingSongCell.self, forCellWithReuseIdentifier: String(describing: PlayingSongCell.self))
-        collectionView?.register(CurrentLyricsCell.self, forCellWithReuseIdentifier: String(describing: CurrentLyricsCell.self))
-        collectionView?.register(ChannelMembersCell.self, forCellWithReuseIdentifier: String(describing: ChannelMembersCell.self))
-        collectionView?.register(PlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: PlaylistSongCell.self))
+        guard let collectionView = collectionView else { return }
+        collectionView.backgroundColor = UIColor.white
+        collectionView.alwaysBounceVertical = true
+        collectionView.register(PlayingSongCell.self, forCellWithReuseIdentifier: String(describing: PlayingSongCell.self))
+        collectionView.register(CurrentLyricsCell.self, forCellWithReuseIdentifier: String(describing: CurrentLyricsCell.self))
+        collectionView.register(ChannelMembersCell.self, forCellWithReuseIdentifier: String(describing: ChannelMembersCell.self))
+        collectionView.register(PlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: PlaylistSongCell.self))
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -67,12 +68,9 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
-        case 0:
-            return 3
-        case 1:
-            return data.playlist.count
-        default:
-            return 0
+        case 0: return 3
+        case 1: return data.playlist.count
+        default: return 0
         }
     }
 

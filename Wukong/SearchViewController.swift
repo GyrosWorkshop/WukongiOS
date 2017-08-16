@@ -8,6 +8,7 @@
 
 import UIKit
 import SafariServices
+import Cartography
 
 class SearchViewController: UICollectionViewController {
 
@@ -15,6 +16,13 @@ class SearchViewController: UICollectionViewController {
     fileprivate struct Data {
         var results: [[String: Any]] = []
     }
+
+    fileprivate lazy var searchBar: UISearchBar = {
+        let view = UISearchBar()
+        view.delegate = self
+        return view
+    }()
+    fileprivate var searchBarCell: UICollectionViewCell?
 
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -28,9 +36,11 @@ class SearchViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.backgroundColor = UIColor.white
-        collectionView?.alwaysBounceVertical = true
-        collectionView?.register(PlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: PlaylistSongCell.self))
+        guard let collectionView = collectionView else { return }
+        collectionView.backgroundColor = UIColor.white
+        collectionView.alwaysBounceVertical = true
+        collectionView.register(PlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: PlaylistSongCell.self))
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: String(describing: UISearchBar.self))
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -44,60 +54,129 @@ class SearchViewController: UICollectionViewController {
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 2
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.results.count
+        switch section {
+        case 0: return 1
+        case 1: return data.results.count
+        default: return 0
+        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlaylistSongCell.self), for: indexPath)
-        if let cell = cell as? PlaylistSongCell {
-            cell.setData(song: data.results[indexPath.item])
+        switch indexPath.section {
+        case 0:
+            if let searchBarCell = searchBarCell {
+                return searchBarCell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: UISearchBar.self), for: indexPath)
+                cell.contentView.addSubview(searchBar)
+                constrain(cell.contentView, searchBar) { (view, searchBar) in
+                    searchBar.edges == view.edges
+                }
+                searchBarCell = cell
+                return cell
+            }
+        case 1:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlaylistSongCell.self), for: indexPath)
+            if let cell = cell as? PlaylistSongCell {
+                cell.setData(song: data.results[indexPath.item])
+            }
+            return cell
+        default:
+            return UICollectionViewCell()
         }
-        return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.size.width - 24, height: 32)
+        switch indexPath.section {
+        case 0: return CGSize(width: collectionView.bounds.size.width, height: 44)
+        case 1: return CGSize(width: collectionView.bounds.size.width - 24, height: 32)
+        default: return CGSize.zero
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        switch section {
+        case 0: return UIEdgeInsets.zero
+        case 1: return UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        default: return UIEdgeInsets.zero
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        switch section {
+        case 0: return 0
+        case 1: return 8
+        default: return 0
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        switch section {
+        case 0: return 0
+        case 1: return 8
+        default: return 0
+        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = data.results[indexPath.item]
-        let sheet = UIAlertController(title: item[Constant.State.title.rawValue] as? String, message: nil, preferredStyle: .actionSheet)
-        if let url = URL(string: item[Constant.State.link.rawValue] as? String ?? "") {
-            sheet.addAction(UIAlertAction(title: "Track Page", style: .default) { (action) in
-                let viewController = SFSafariViewController(url: url)
-                viewController.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(viewController, animated: true)
-            })
+        if searchBar.isFirstResponder {
+            searchBar.resignFirstResponder()
         }
-        if let url = URL(string: item[Constant.State.mvLink.rawValue] as? String ?? "") {
-            sheet.addAction(UIAlertAction(title: "Video Page", style: .default) { (action) in
-                let viewController = SFSafariViewController(url: url)
-                viewController.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(viewController, animated: true)
+        switch indexPath.section {
+        case 0:
+            break
+        case 1:
+            let item = data.results[indexPath.item]
+            let sheet = UIAlertController(title: item[Constant.State.title.rawValue] as? String, message: nil, preferredStyle: .actionSheet)
+            if let url = URL(string: item[Constant.State.link.rawValue] as? String ?? "") {
+                sheet.addAction(UIAlertAction(title: "Track Page", style: .default) { (action) in
+                    let viewController = SFSafariViewController(url: url)
+                    viewController.hidesBottomBarWhenPushed = true
+                    self.navigationController?.pushViewController(viewController, animated: true)
+                })
+            }
+            if let url = URL(string: item[Constant.State.mvLink.rawValue] as? String ?? "") {
+                sheet.addAction(UIAlertAction(title: "Video Page", style: .default) { (action) in
+                    let viewController = SFSafariViewController(url: url)
+                    viewController.hidesBottomBarWhenPushed = true
+                    self.navigationController?.pushViewController(viewController, animated: true)
+                })
+            }
+            sheet.addAction(UIAlertAction(title: "Upnext", style: .default) { (action) in
+                WukongClient.sharedInstance.dispatchAction([.Song, .add], [item])
             })
+            guard sheet.actions.count > 0 else { return }
+            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            present(sheet, animated: true)
+        default:
+            break
         }
-        sheet.addAction(UIAlertAction(title: "Upnext", style: .default) { (action) in
-            WukongClient.sharedInstance.dispatchAction([.Song, .add], [item])
-        })
-        guard sheet.actions.count > 0 else { return }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(sheet, animated: true)
+    }
+
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if searchBar.isFirstResponder {
+            searchBar.resignFirstResponder()
+        }
+    }
+
+}
+
+extension SearchViewController: UISearchBarDelegate {
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            WukongClient.sharedInstance.dispatchAction([.Search, .keyword], [searchText])
+        }
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let searchText = searchBar.text {
+            WukongClient.sharedInstance.dispatchAction([.Search, .keyword], [searchText])
+        }
     }
 
 }
@@ -111,7 +190,7 @@ extension SearchViewController: AppComponent {
             var resultsChanged = false
             defer {
                 if resultsChanged {
-                    self.collectionView?.reloadSections(IndexSet(integer: 0))
+                    self.collectionView?.reloadSections(IndexSet(integer: 1))
                 }
             }
             if let results = client.getState([.search, .results]) as [[String: Any]]? {
