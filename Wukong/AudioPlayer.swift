@@ -34,9 +34,6 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         player.delegate = self
         player.currentTime = -time.timeIntervalSinceNow;
         player.play()
-        if TARGET_OS_SIMULATOR > 0 {
-            player.volume = 0.1
-        }
         update()
         if let eventCallback = eventCallback {
             callback = eventCallback
