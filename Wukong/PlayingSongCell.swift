@@ -84,7 +84,7 @@ class PlayingSongCell: UICollectionViewCell {
         titleLabel.text = title
         albumLabel.text = album
         artistLabel.text = artist
-        infoLabel.text = running ? String(format: "%d:%0.2d %s %s", remaining / 60, remaining % 60, format, quality) : ""
+        infoLabel.text = running ? "\(String(format: "%d:%0.2d", remaining / 60, remaining % 60)) \(format) \(quality)" : ""
         artworkView.image = UIImage(named: "artwork")
         if let url = URL(string: artwork) {
             DataLoader.sharedInstance.load(key: "\(id).\(url.pathExtension)", url: url) { [weak self] (data) in
