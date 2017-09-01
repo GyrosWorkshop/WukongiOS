@@ -44,7 +44,7 @@ class ListenViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let collectionView = collectionView else { return }
-        collectionView.backgroundColor = UIColor.white
+        collectionView.backgroundColor = .white
         collectionView.alwaysBounceVertical = true
         collectionView.register(PlayingSongCell.self, forCellWithReuseIdentifier: String(describing: PlayingSongCell.self))
         collectionView.register(CurrentLyricsCell.self, forCellWithReuseIdentifier: String(describing: CurrentLyricsCell.self))

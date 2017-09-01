@@ -20,7 +20,7 @@ class ChannelMemberCell: UICollectionViewCell {
     private lazy var nameLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 14)
-        view.textColor = UIColor.black
+        view.textColor = .black
         view.textAlignment = .center
         view.adjustsFontSizeToFitWidth = true
         view.minimumScaleFactor = 0.6
@@ -30,6 +30,7 @@ class ChannelMemberCell: UICollectionViewCell {
     override var isSelected: Bool {
         didSet {
             nameLabel.font = isSelected ? UIFont.boldSystemFont(ofSize: 14) : UIFont.systemFont(ofSize: 14)
+            nameLabel.textColor = isSelected ? .black : .gray
         }
     }
 

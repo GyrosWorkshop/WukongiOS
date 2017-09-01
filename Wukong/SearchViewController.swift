@@ -37,7 +37,7 @@ class SearchViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let collectionView = collectionView else { return }
-        collectionView.backgroundColor = UIColor.white
+        collectionView.backgroundColor = .white
         collectionView.alwaysBounceVertical = true
         collectionView.register(PlaylistSongCell.self, forCellWithReuseIdentifier: String(describing: PlaylistSongCell.self))
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: String(describing: UISearchBar.self))

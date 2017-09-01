@@ -23,7 +23,7 @@ class ChannelMembersCell: UICollectionViewCell {
         let view = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         view.dataSource = self
         view.delegate = self
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = .white
         view.alwaysBounceHorizontal = true
         view.allowsSelection = false
         view.register(ChannelMemberCell.self, forCellWithReuseIdentifier: String(describing: ChannelMemberCell.self))

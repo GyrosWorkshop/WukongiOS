@@ -20,25 +20,25 @@ class PlayingSongCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 20)
-        view.textColor = UIColor.black
+        view.textColor = .black
         return view
     }()
     private lazy var albumLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 16)
-        view.textColor = UIColor.black
+        view.textColor = .black
         return view
     }()
     private lazy var artistLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 16)
-        view.textColor = UIColor.black
+        view.textColor = .black
         return view
     }()
     private lazy var infoLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 12)
-        view.textColor = UIColor.gray
+        view.textColor = .gray
         return view
     }()
 

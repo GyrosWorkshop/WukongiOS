@@ -14,7 +14,7 @@ class CurrentLyricsCell: UICollectionViewCell {
     private lazy var label: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 12)
-        view.textColor = UIColor.black
+        view.textColor = .black
         view.textAlignment = .center
         view.numberOfLines = 0
         return view

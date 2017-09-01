@@ -20,13 +20,13 @@ class PlaylistSongCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 16)
-        view.textColor = UIColor.black
+        view.textColor = .black
         return view
     }()
     private lazy var detailLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont.systemFont(ofSize: 14)
-        view.textColor = UIColor.gray
+        view.textColor = .gray
         return view
     }()
 
