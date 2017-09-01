@@ -27,7 +27,7 @@ class SearchViewController: UICollectionViewController {
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
         title = "Search"
-        tabBarItem = UITabBarItem(title: "Search", image: UIImage(named: "search0"), selectedImage: UIImage(named: "search1"))
+        tabBarItem = UITabBarItem(title: "Search", image: #imageLiteral(resourceName: "SearchUnselected"), selectedImage: #imageLiteral(resourceName: "SearchSelected"))
     }
 
     required convenience init?(coder aDecoder: NSCoder) {

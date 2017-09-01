@@ -86,9 +86,9 @@ class PlayingSongCell: UICollectionViewCell {
         artistLabel.text = artist
         infoLabel.text = running ? "\(String(format: "%d:%0.2d", remaining / 60, remaining % 60)) \(format) \(quality)" : ""
         if let url = URL(string: artwork) {
-            artworkView.setImage(key: "\(id).\(url.pathExtension)", url: url, placeholder: UIImage(named: "artwork"))
+            artworkView.setImage(key: "\(id).\(url.pathExtension)", url: url, placeholder: #imageLiteral(resourceName: "Artwork"))
         } else {
-            artworkView.setImage(placeholder: UIImage(named: "artwork"))
+            artworkView.setImage(placeholder: #imageLiteral(resourceName: "Artwork"))
         }
     }
 

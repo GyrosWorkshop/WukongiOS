@@ -66,11 +66,11 @@ class PlaylistSongCell: UICollectionViewCell {
         detailLabel.text = "\(artist) − \(album)"
         switch siteId {
         case "netease-cloud-music":
-            iconView.image = UIImage(named: "netease")
+            iconView.image = #imageLiteral(resourceName: "NetEase")
         case "QQMusic":
-            iconView.image = UIImage(named: "qq")
+            iconView.image = #imageLiteral(resourceName: "QQ")
         case "Xiami":
-            iconView.image = UIImage(named: "xiami")
+            iconView.image = #imageLiteral(resourceName: "XiaMi")
         default:
             break
         }

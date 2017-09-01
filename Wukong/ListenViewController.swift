@@ -32,7 +32,7 @@ class ListenViewController: UICollectionViewController {
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
         title = "Wukong"
-        tabBarItem = UITabBarItem(title: "Listen", image: UIImage(named: "listen0"), selectedImage: UIImage(named: "listen1"))
+        tabBarItem = UITabBarItem(title: "Listen", image: #imageLiteral(resourceName: "ListenUnselected"), selectedImage: #imageLiteral(resourceName: "ListenSelected"))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Join", style: .plain, target: self, action: #selector(channelButtonAction))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Shuffle", style: .plain, target: self, action: #selector(shuffleButtonAction))
     }
