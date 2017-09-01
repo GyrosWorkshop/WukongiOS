@@ -11,8 +11,8 @@ import Cartography
 
 class ChannelMemberCell: UICollectionViewCell {
 
-    private lazy var avatarView: UIImageView = {
-        let view = UIImageView()
+    private lazy var avatarView: ImageView = {
+        let view = ImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         return view
@@ -68,12 +68,7 @@ class ChannelMemberCell: UICollectionViewCell {
         let name = member[Constant.State.nickname.rawValue] as? String ?? ""
         let avatar = member[Constant.State.avatar.rawValue] as? String ?? ""
         nameLabel.text = name
-        if let url = URL(string: avatar) {
-            DataLoader.sharedInstance.load(url: url) { [weak self] (data) in
-                guard let data = data else { return }
-                self?.avatarView.image = UIImage(data: data)
-            }
-        }
+        avatarView.setImage(url: URL(string: avatar))
     }
 
 }

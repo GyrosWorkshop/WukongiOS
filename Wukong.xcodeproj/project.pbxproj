@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3072A8211F596A9300D145D5 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3072A8201F596A9300D145D5 /* ImageView.swift */; };
 		FE0CAE031F2CB89B00394ABB /* ListenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE021F2CB89B00394ABB /* ListenViewController.swift */; };
 		FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */; };
 		FE0E0ABD1F3F1C87000E3D4A /* CurrentLyricsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3072A8201F596A9300D145D5 /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		FE0CAE021F2CB89B00394ABB /* ListenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListenViewController.swift; sourceTree = "<group>"; };
 		FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentLyricsCell.swift; sourceTree = "<group>"; };
@@ -90,6 +92,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3072A81F1F596A3900D145D5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3072A8201F596A9300D145D5 /* ImageView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		FE0CAE061F2CC63300394ABB /* Client */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +118,7 @@
 				FE4130331EA8E5CD0070F690 /* AppDelegate.swift */,
 				FE4130351EA8E5CD0070F690 /* AppController.swift */,
 				FE77584D1F3EB1E60052C07D /* Pages */,
+				3072A81F1F596A3900D145D5 /* Views */,
 				FE77584C1F3EB1DE0052C07D /* Cells */,
 			);
 			name = UI;
@@ -315,6 +326,7 @@
 				FE7758511F3EB2210052C07D /* PlaylistSongCell.swift in Sources */,
 				FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */,
 				FE77584F1F3EB2100052C07D /* PlayingSongCell.swift in Sources */,
+				3072A8211F596A9300D145D5 /* ImageView.swift in Sources */,
 				FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */,
 				FE0E0ABD1F3F1C87000E3D4A /* CurrentLyricsCell.swift in Sources */,
 				FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */,

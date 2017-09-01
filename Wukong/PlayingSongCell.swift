@@ -11,8 +11,8 @@ import Cartography
 
 class PlayingSongCell: UICollectionViewCell {
 
-    private lazy var artworkView: UIImageView = {
-        let view = UIImageView()
+    private lazy var artworkView: ImageView = {
+        let view = ImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         return view
@@ -85,12 +85,10 @@ class PlayingSongCell: UICollectionViewCell {
         albumLabel.text = album
         artistLabel.text = artist
         infoLabel.text = running ? "\(String(format: "%d:%0.2d", remaining / 60, remaining % 60)) \(format) \(quality)" : ""
-        artworkView.image = UIImage(named: "artwork")
         if let url = URL(string: artwork) {
-            DataLoader.sharedInstance.load(key: "\(id).\(url.pathExtension)", url: url) { [weak self] (data) in
-                guard let data = data else { return }
-                self?.artworkView.image = UIImage(data: data)
-            }
+            artworkView.setImage(key: "\(id).\(url.pathExtension)", url: url, placeholder: UIImage(named: "artwork"))
+        } else {
+            artworkView.setImage(placeholder: UIImage(named: "artwork"))
         }
     }
 

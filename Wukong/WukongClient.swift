@@ -135,8 +135,8 @@ class WukongClient: NSObject {
                     "websocket": unsafeBitCast({ [unowned self] (endpoint, handler) in
                         guard let url = URL(string: apiURL("ws", endpoint)) else { return }
                         var request = URLRequest(url: url)
-                        if let cookieUrl = URL(string: apiURL("http", endpoint)),
-                            let cookies = URLSession.apiSession.configuration.httpCookieStorage?.cookies(for: cookieUrl) {
+                        if let cookieURL = URL(string: apiURL("http", endpoint)),
+                            let cookies = URLSession.apiSession.configuration.httpCookieStorage?.cookies(for: cookieURL) {
                             let headers = HTTPCookie.requestHeaderFields(with: cookies)
                             headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
                         }
