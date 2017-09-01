@@ -34,6 +34,9 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         player.delegate = self
         player.currentTime = -time.timeIntervalSinceNow;
         player.play()
+        #if (arch(i386) || arch(x86_64)) && (os(iOS) || os(watchOS) || os(tvOS))
+            player.volume = 0.1
+        #endif
         update()
         if let eventCallback = eventCallback {
             callback = eventCallback
