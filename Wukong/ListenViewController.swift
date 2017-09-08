@@ -53,9 +53,17 @@ class ListenViewController: UICollectionViewController {
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: { (context) in
             self.collectionViewLayout.invalidateLayout()
         })
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+            collectionViewLayout.invalidateLayout()
+        }
     }
 
 }
