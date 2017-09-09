@@ -92,9 +92,15 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let sectionInset = self.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: indexPath.section)
+        let interitemSpacing = self.collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: indexPath.section)
+        let sectionWidth = collectionView.bounds.size.width - sectionInset.left - sectionInset.right
         switch indexPath.section {
-        case 0: return CGSize(width: collectionView.bounds.size.width, height: 44)
-        case 1: return CGSize(width: collectionView.bounds.size.width - 24, height: 32)
+        case 0: return CGSize(width: sectionWidth, height: 44)
+        case 1:
+            let columnCount = min(max(UInt(sectionWidth / 300), 1), 3)
+            let columnWidth = (sectionWidth - interitemSpacing * CGFloat(columnCount - 1)) / CGFloat(columnCount)
+            return CGSize(width: columnWidth, height: 32)
         default: return CGSize.zero
         }
     }

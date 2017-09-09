@@ -112,15 +112,34 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let sectionInset = self.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: indexPath.section)
+        let interitemSpacing = self.collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: indexPath.section)
+        let sectionWidth = collectionView.bounds.size.width - sectionInset.left - sectionInset.right
         switch indexPath.section {
         case 0:
-            switch indexPath.item {
-            case 0: return CGSize(width: collectionView.bounds.size.width - 24, height: 96)
-            case 1: return CGSize(width: collectionView.bounds.size.width - 24, height: 30)
-            case 2: return CGSize(width: collectionView.bounds.size.width - 24, height: 64)
+            let columnCount = min(max(Int(sectionWidth / 300), 1), 2)
+            let columnWidth = (sectionWidth - interitemSpacing * CGFloat(columnCount - 1)) / CGFloat(columnCount)
+            switch columnCount {
+            case 1:
+                switch indexPath.item {
+                case 0: return CGSize(width: columnWidth, height: 96)
+                case 1: return CGSize(width: columnWidth, height: 30)
+                case 2: return CGSize(width: columnWidth, height: 64)
+                default: return CGSize.zero
+                }
+            case 2:
+                switch indexPath.item {
+                case 0: return CGSize(width: columnWidth, height: 96)
+                case 1: return CGSize(width: columnWidth, height: 96)
+                case 2: return CGSize(width: sectionWidth, height: 64)
+                default: return CGSize.zero
+                }
             default: return CGSize.zero
             }
-        case 1: return CGSize(width: collectionView.bounds.size.width - 24, height: 32)
+        case 1:
+            let columnCount = min(max(UInt(sectionWidth / 300), 1), 3)
+            let columnWidth = (sectionWidth - interitemSpacing * CGFloat(columnCount - 1)) / CGFloat(columnCount)
+            return CGSize(width: columnWidth, height: 32)
         default: return CGSize.zero
         }
     }
