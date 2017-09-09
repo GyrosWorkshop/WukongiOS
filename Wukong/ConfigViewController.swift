@@ -45,6 +45,22 @@ class ConfigViewController: FormViewController {
         dispatchValues()
     }
 
+    override func insertAnimation(forSections sections: [Section]) -> UITableViewRowAnimation {
+        return .fade
+    }
+
+    override func insertAnimation(forRows rows: [BaseRow]) -> UITableViewRowAnimation {
+        return .fade
+    }
+
+    override func deleteAnimation(forSections sections: [Section]) -> UITableViewRowAnimation {
+        return .fade
+    }
+
+    override func deleteAnimation(forRows rows: [BaseRow]) -> UITableViewRowAnimation {
+        return .fade
+    }
+
     fileprivate func reloadForm() {
         let client = WukongClient.sharedInstance
         form.removeAll()
