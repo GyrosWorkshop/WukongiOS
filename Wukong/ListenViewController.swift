@@ -59,13 +59,6 @@ class ListenViewController: UICollectionViewController {
         })
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
-            collectionViewLayout.invalidateLayout()
-        }
-    }
-
 }
 
 extension ListenViewController: UICollectionViewDelegateFlowLayout {

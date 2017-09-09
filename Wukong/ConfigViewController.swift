@@ -45,6 +45,82 @@ class ConfigViewController: FormViewController {
         dispatchValues()
     }
 
+    fileprivate func reloadForm() {
+        let client = WukongClient.sharedInstance
+        form.removeAll()
+        form
+        +++ Section()
+        <<< SwitchRow(Constant.State.listenOnly.rawValue) { (row) in
+            row.title = "Listen Only"
+            row.value = self.data.listenOnly
+        }
+        <<< SwitchRow(Constant.State.connection.rawValue) { (row) in
+            row.title = "Use CDN"
+            row.value = self.data.connection > 0
+        }
+        +++ Section("Audio Quality")
+        <<< SegmentedRow<String>(Constant.State.audioQuality.rawValue) { (row) in
+            row.options = ["Low", "Medium", "High", "Lossless"]
+            row.value = row.options[self.data.audioQuality]
+        }
+        +++ Section()
+        <<< ButtonRow() { (row) in
+            row.title = "Sync Playlist"
+            row.onCellSelection({ (cell, row) in
+                client.dispatchAction([.Song, .sync], [])
+            })
+        }
+        +++ MultivaluedSection(header: "Playlist Links") { (section) in
+            section.tag = Constant.State.sync.rawValue
+            section.multivaluedOptions = [.Insert, .Delete, .Reorder]
+            section.addButtonProvider = { (section) in
+                return ButtonRow() { (row) in
+                    row.title = "Add New Playlist"
+                }
+            }
+            section.multivaluedRowToInsertAt = { (index) in
+                return TextRow()
+            }
+            self.data.sync.components(separatedBy: "\n").filter({!$0.isEmpty}).forEach { (playlist) in
+                section <<< TextRow() { (row) in
+                    row.value = playlist
+                }
+            }
+        }
+        +++ MultivaluedSection(header: "Cookie Entries") { (section) in
+            section.tag = Constant.State.cookie.rawValue
+            section.multivaluedOptions = [.Insert, .Delete, .Reorder]
+            section.addButtonProvider = { (section) in
+                return ButtonRow() { (row) in
+                    row.title = "Add New Cookie"
+                }
+            }
+            section.multivaluedRowToInsertAt = { (index) in
+                return TextRow()
+            }
+            self.data.cookie.components(separatedBy: "\n").filter({!$0.isEmpty}).forEach { (cookie) in
+                section <<< TextRow() { (row) in
+                    row.value = cookie
+                }
+            }
+        }
+        +++ Section()
+        <<< ButtonRow() { (row) in
+            row.title = "Reload Current Track"
+            row.onCellSelection({ (cell, row) in
+                AudioPlayer.sharedInstance.stop()
+                client.dispatchAction([.Player, .reload], [true])
+            })
+        }
+        <<< ButtonRow() { (row) in
+            row.title = "Restart Virtual Machine"
+            row.onCellSelection({ (cell, row) in
+                AudioPlayer.sharedInstance.stop()
+                client.reload()
+            })
+        }
+    }
+
     private func dispatchValues() {
         let values: [String: Any] = [
             Constant.State.listenOnly.rawValue: {
@@ -107,78 +183,7 @@ extension ConfigViewController: AppComponent {
             var preferencesChanged = false
             defer {
                 if preferencesChanged {
-                    self.form.removeAll()
-                    self.form
-                    +++ Section()
-                    <<< SwitchRow(Constant.State.listenOnly.rawValue) { (row) in
-                        row.title = "Listen Only"
-                        row.value = self.data.listenOnly
-                    }
-                    <<< SwitchRow(Constant.State.connection.rawValue) { (row) in
-                        row.title = "Use CDN"
-                        row.value = self.data.connection > 0
-                    }
-                    +++ Section("Audio Quality")
-                    <<< SegmentedRow<String>(Constant.State.audioQuality.rawValue) { (row) in
-                        row.options = ["Low", "Medium", "High", "Lossless"]
-                        row.value = row.options[self.data.audioQuality]
-                    }
-                    +++ Section()
-                    <<< ButtonRow() { (row) in
-                        row.title = "Sync Playlist"
-                        row.onCellSelection({ (cell, row) in
-                            client.dispatchAction([.Song, .sync], [])
-                        })
-                    }
-                    +++ MultivaluedSection(header: "Playlist Links") { (section) in
-                        section.tag = Constant.State.sync.rawValue
-                        section.multivaluedOptions = [.Insert, .Delete, .Reorder]
-                        section.addButtonProvider = { (section) in
-                            return ButtonRow() { (row) in
-                                row.title = "Add New Playlist"
-                            }
-                        }
-                        section.multivaluedRowToInsertAt = { (index) in
-                            return TextRow()
-                        }
-                        self.data.sync.components(separatedBy: "\n").forEach { (playlist) in
-                            section <<< TextRow() { (row) in
-                                row.value = playlist
-                            }
-                        }
-                    }
-                    +++ MultivaluedSection(header: "Cookie Entries") { (section) in
-                        section.tag = Constant.State.cookie.rawValue
-                        section.multivaluedOptions = [.Insert, .Delete, .Reorder]
-                        section.addButtonProvider = { (section) in
-                            return ButtonRow() { (row) in
-                                row.title = "Add New Cookie"
-                            }
-                        }
-                        section.multivaluedRowToInsertAt = { (index) in
-                            return TextRow()
-                        }
-                        self.data.cookie.components(separatedBy: "\n").forEach { (cookie) in
-                            section <<< TextRow() { (row) in
-                                row.value = cookie
-                            }
-                        }
-                    }
-                    +++ Section()
-                    <<< ButtonRow() { (row) in
-                        row.title = "Reload Current Track"
-                        row.onCellSelection({ (cell, row) in
-                            AudioPlayer.sharedInstance.stop()
-                            client.dispatchAction([.Player, .reload], [true])
-                        })
-                    }
-                    <<< ButtonRow() { (row) in
-                        row.title = "Restart Virtual Machine"
-                        row.onCellSelection({ (cell, row) in
-                            AudioPlayer.sharedInstance.stop()
-                            client.reload()
-                        })
-                    }
+                    self.reloadForm()
                 }
             }
             if let listenOnly = client.getState([.user, .preferences, .listenOnly]) as Bool? {
@@ -202,6 +207,7 @@ extension ConfigViewController: AppComponent {
                 self.data.cookie = cookie
             }
         }
+        reloadForm()
     }
 
 }
