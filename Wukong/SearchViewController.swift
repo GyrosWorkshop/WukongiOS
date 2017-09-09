@@ -133,12 +133,13 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
         if searchBar.isFirstResponder {
             searchBar.resignFirstResponder()
         }
+        let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         switch indexPath.section {
         case 0:
             break
         case 1:
             let item = data.results[indexPath.item]
-            let sheet = UIAlertController(title: item[Constant.State.title.rawValue] as? String, message: nil, preferredStyle: .actionSheet)
+            sheet.title = item[Constant.State.title.rawValue] as? String
             if let url = URL(string: item[Constant.State.link.rawValue] as? String ?? "") {
                 sheet.addAction(UIAlertAction(title: "Track Page", style: .default) { (action) in
                     let viewController = SFSafariViewController(url: url)
@@ -156,12 +157,15 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
             sheet.addAction(UIAlertAction(title: "Upnext", style: .default) { (action) in
                 WukongClient.sharedInstance.dispatchAction([.Song, .add], [item])
             })
-            guard sheet.actions.count > 0 else { return }
-            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-            present(sheet, animated: true)
         default:
             break
         }
+        guard sheet.actions.count > 0 else { return }
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        sheet.popoverPresentationController?.sourceView = collectionView
+        sheet.popoverPresentationController?.sourceRect = collectionView.cellForItem(at: indexPath)?.frame ?? collectionView.bounds
+        sheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
+        present(sheet, animated: true)
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {

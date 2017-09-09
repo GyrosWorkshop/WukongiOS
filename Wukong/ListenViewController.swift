@@ -169,11 +169,12 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         switch indexPath.section {
         case 0:
             switch indexPath.item {
             case 0:
-                let sheet = UIAlertController(title: data.playing[.title], message: nil, preferredStyle: .actionSheet)
+                sheet.title = data.playing[.title]
                 if let url = URL(string: self.data.playing[.link] ?? "") {
                     sheet.addAction(UIAlertAction(title: "Track Page", style: .default) { (action) in
                         let viewController = SFSafariViewController(url: url)
@@ -205,16 +206,13 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
                 sheet.addAction(UIAlertAction(title: "Downvote", style: .default) { (action) in
                     WukongClient.sharedInstance.dispatchAction([.Player, .downvote], [])
                 })
-                guard sheet.actions.count > 0 else { return }
-                sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                present(sheet, animated: true)
                 break
             default:
                 break
             }
         case 1:
             let item = data.playlist[indexPath.item]
-            let sheet = UIAlertController(title: item[Constant.State.title.rawValue] as? String, message: nil, preferredStyle: .actionSheet)
+            sheet.title = item[Constant.State.title.rawValue] as? String
             if let url = URL(string: item[Constant.State.link.rawValue] as? String ?? "") {
                 sheet.addAction(UIAlertAction(title: "Track Page", style: .default) { (action) in
                     let viewController = SFSafariViewController(url: url)
@@ -237,13 +235,16 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
                     WukongClient.sharedInstance.dispatchAction([.Song, .remove], [id])
                 })
             }
-            guard sheet.actions.count > 0 else { return }
-            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-            present(sheet, animated: true)
             break
         default:
             break
         }
+        guard sheet.actions.count > 0 else { return }
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        sheet.popoverPresentationController?.sourceView = collectionView
+        sheet.popoverPresentationController?.sourceRect = collectionView.cellForItem(at: indexPath)?.frame ?? collectionView.bounds
+        sheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
+        present(sheet, animated: true)
     }
 
     func channelButtonAction() {
