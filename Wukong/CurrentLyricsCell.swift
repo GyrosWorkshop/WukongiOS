@@ -32,6 +32,14 @@ class CurrentLyricsCell: UICollectionViewCell {
         self.init(frame: CGRect.zero)
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layoutSubviews()
+        let fonts = [12, 14, 16].map { UIFont.systemFont(ofSize: $0) }
+        let fitFont = fonts.reversed().first { $0.lineHeight * 2 <= label.bounds.size.height }
+        label.font = fitFont ?? fonts.first
+    }
+
     func setData(lyrics: [String]) {
         label.text = lyrics.joined(separator: "\n")
     }
