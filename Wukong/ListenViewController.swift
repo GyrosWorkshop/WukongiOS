@@ -103,7 +103,7 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlaylistSongCell.self), for: indexPath)
             if let cell = cell as? PlaylistSongCell {
-                cell.setData(song: data.playlist[indexPath.item])
+                cell.setData(song: data.playlist[indexPath.item], showIcon: false)
             }
             return cell
         default:

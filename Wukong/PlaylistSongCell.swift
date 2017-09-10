@@ -30,6 +30,9 @@ class PlaylistSongCell: UICollectionViewCell {
         return view
     }()
 
+    private var iconWidth: NSLayoutConstraint?
+    private var iconMarginTrailing: NSLayoutConstraint?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(iconView)
@@ -39,10 +42,10 @@ class PlaylistSongCell: UICollectionViewCell {
             iconView.top == view.top
             iconView.bottom == view.bottom
             iconView.leading == view.leading
-            iconView.width == iconView.height
+            iconWidth = iconView.width == 0
         }
         constrain(contentView, iconView, titleLabel) { (view, iconView, titleLabel) in
-            titleLabel.leading == iconView.trailing + 8
+            iconMarginTrailing = titleLabel.leading == iconView.trailing
             titleLabel.trailing == view.trailing
             titleLabel.bottom == iconView.centerY + 1
         }
@@ -57,7 +60,7 @@ class PlaylistSongCell: UICollectionViewCell {
         self.init(frame: CGRect.zero)
     }
 
-    func setData(song: [String: Any]) {
+    func setData(song: [String: Any], showIcon: Bool) {
         let title = song[Constant.State.title.rawValue] as? String ?? ""
         let album = song[Constant.State.album.rawValue] as? String ?? ""
         let artist = song[Constant.State.artist.rawValue] as? String ?? ""
@@ -74,6 +77,8 @@ class PlaylistSongCell: UICollectionViewCell {
         default:
             break
         }
+        iconWidth?.constant = showIcon ? contentView.bounds.size.height : 0
+        iconMarginTrailing?.constant = showIcon ? 8 : 0
     }
 
 }

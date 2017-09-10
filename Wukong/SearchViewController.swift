@@ -83,7 +83,7 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlaylistSongCell.self), for: indexPath)
             if let cell = cell as? PlaylistSongCell {
-                cell.setData(song: data.results[indexPath.item])
+                cell.setData(song: data.results[indexPath.item], showIcon: true)
             }
             return cell
         default:
