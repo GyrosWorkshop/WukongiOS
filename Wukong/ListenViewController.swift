@@ -247,7 +247,7 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
         present(sheet, animated: true)
     }
 
-    func channelButtonAction() {
+    @objc func channelButtonAction() {
         let alert = UIAlertController(title: "Join Channel", message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             textField.placeholder = self.data.channel
@@ -261,7 +261,7 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
         present(alert, animated: true)
     }
 
-    func shuffleButtonAction() {
+    @objc func shuffleButtonAction() {
         WukongClient.sharedInstance.dispatchAction([.Song, .shuffle], [])
     }
 

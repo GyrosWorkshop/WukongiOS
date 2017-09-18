@@ -51,7 +51,7 @@ class ChannelMemberCell: UICollectionViewCell {
         constrain(avatarView, nameLabel) { (avatarView, nameLabel) in
             avatarView.bottom == nameLabel.top
         }
-        nameLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .vertical)
+        nameLabel.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     required convenience init?(coder aDecoder: NSCoder) {

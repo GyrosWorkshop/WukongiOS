@@ -144,7 +144,9 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     private func scheduleTimer() {
         guard timer == nil else { return }
-        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(callout), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [unowned self] (timer) in
+            self.callback?(self.player)
+        }
         timer?.tolerance = 0.5;
     }
 
@@ -154,17 +156,13 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         timer = nil
     }
 
-    func callout() {
-        callback?(player)
-    }
-
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        callout()
+        timer?.fire()
         invalidateTimer()
     }
 
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        callout()
+        timer?.fire()
         invalidateTimer()
     }
 
