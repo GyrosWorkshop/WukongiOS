@@ -217,12 +217,15 @@ class WukongClient: NSObject {
     }
 
     private func jsPromise(_ executor: ((@escaping (JSValue?) -> Void, @escaping (JSValue?) -> Void) -> Void)? = nil) -> JSValue {
-        return context.globalObject.forProperty("Promise").construct(withArguments: [unsafeBitCast({ (resolve, reject) in
+        return context.globalObject.forProperty("Promise").construct(withArguments: [unsafeBitCast({ [unowned self] (resolve, reject) in
             if let executor = executor {
-                executor(
-                    { resolve.call(withArguments: [$0].flatMap({$0})) },
-                    { reject.call(withArguments: [$0].flatMap({$0})) }
-                )
+                executor({
+                    guard resolve.context == self.context else { return }
+                    resolve.call(withArguments: [$0].flatMap({$0}))
+                }, {
+                    guard resolve.context == self.context else { return }
+                    reject.call(withArguments: [$0].flatMap({$0}))
+                })
             } else {
                 resolve.call(withArguments: [])
             }
