@@ -14,6 +14,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var backgroundTask = UIBackgroundTaskInvalid
 
+    private func beginBackgroundTask() {
+        guard backgroundTask == UIBackgroundTaskInvalid else { return }
+        backgroundTask = UIApplication.shared.beginBackgroundTask(expirationHandler: endBackgroundTask)
+    }
+
+    private func endBackgroundTask() {
+        guard backgroundTask != UIBackgroundTaskInvalid else { return }
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = UIBackgroundTaskInvalid
+    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         window = UIWindow()
         window?.rootViewController = AppController()
@@ -22,12 +33,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        if UIBackgroundTaskInvalid ~= backgroundTask {
-            backgroundTask = application.beginBackgroundTask {
-                application.endBackgroundTask(self.backgroundTask)
-                self.backgroundTask = UIBackgroundTaskInvalid
-            }
-        }
+        beginBackgroundTask()
+    }
+
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        endBackgroundTask()
     }
 
 }
