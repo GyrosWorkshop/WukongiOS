@@ -77,7 +77,7 @@ class ConfigViewController: FormViewController {
         +++ Section("Audio Quality")
         <<< SegmentedRow<String>(Constant.State.audioQuality.rawValue) { (row) in
             row.options = ["Low", "Medium", "High", "Lossless"]
-            row.value = row.options[self.data.audioQuality]
+            row.value = row.options?[self.data.audioQuality]
         }
         +++ Section()
         <<< ButtonRow() { (row) in
@@ -160,7 +160,7 @@ class ConfigViewController: FormViewController {
                 defer { data.audioQuality = result }
                 guard let row = form.rowBy(tag: Constant.State.audioQuality.rawValue) as? SegmentedRow<String> else { return result }
                 guard let value = row.value else { return result }
-                guard let index = row.options.index(of: value) else { return result }
+                guard let index = row.options?.index(of: value) else { return result }
                 result = index
                 return result
             }(),
