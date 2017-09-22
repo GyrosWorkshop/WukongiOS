@@ -12,12 +12,12 @@ import Cartography
 
 class SearchViewController: UICollectionViewController {
 
-    fileprivate var data = Data()
-    fileprivate struct Data {
+    private var data = Data()
+    private struct Data {
         var results: [[String: Any]] = []
     }
 
-    fileprivate lazy var searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let view = UISearchBar()
         view.delegate = self
         return view

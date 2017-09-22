@@ -11,8 +11,8 @@ import Cartography
 
 class ChannelMembersCell: UICollectionViewCell {
 
-    fileprivate var data = Data()
-    fileprivate struct Data {
+    private var data = Data()
+    private struct Data {
         var members: [[String: Any]] = []
         var highlightedIndex: Int = -1
     }

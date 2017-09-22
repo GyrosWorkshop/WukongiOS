@@ -11,8 +11,8 @@ import SafariServices
 
 class ListenViewController: UICollectionViewController {
 
-    fileprivate var data = Data()
-    fileprivate struct Data {
+    private var data = Data()
+    private struct Data {
         var channel = ""
         var playingId = ""
         var preloadId = ""
@@ -28,6 +28,8 @@ class ListenViewController: UICollectionViewController {
         var playerIndex = -1
         var playlist: [[String: Any]] = []
     }
+
+    private var cells: [IndexPath: UICollectionViewCell] = [:]
 
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())

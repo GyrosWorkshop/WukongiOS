@@ -11,8 +11,8 @@ import Eureka
 
 class ConfigViewController: FormViewController {
 
-    fileprivate var data = Data()
-    fileprivate struct Data {
+    private var data = Data()
+    private struct Data {
         var listenOnly = false
         var connection = 0
         var audioQuality = 2
@@ -61,7 +61,7 @@ class ConfigViewController: FormViewController {
         return .fade
     }
 
-    fileprivate func reloadForm() {
+    private func reloadForm() {
         let client = WukongClient.sharedInstance
         form.removeAll()
         form

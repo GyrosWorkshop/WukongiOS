@@ -15,12 +15,12 @@ protocol AppComponent: class {
 
 class AppController: UIViewController {
 
-    fileprivate lazy var components: [AppComponent] = [
+    private lazy var components: [AppComponent] = [
         ListenViewController(),
         SearchViewController(),
         ConfigViewController()
     ]
-    fileprivate lazy var mainViewController: UIViewController = {
+    private lazy var mainViewController: UIViewController = {
         let tabController = UITabBarController()
         tabController.viewControllers = self.components
             .flatMap { $0 as? UIViewController }
