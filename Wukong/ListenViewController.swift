@@ -82,31 +82,26 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             switch indexPath.item {
             case 0:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlayingSongCell.self), for: indexPath)
-                if let cell = cell as? PlayingSongCell {
-                    cell.setData(id: data.playingId, song: data.playing, artworkFile: data.files[.playingArtwork], running: data.running, elapsed: data.elapsed, duration: data.duration)
-                }
+                let cell = cells[indexPath] ?? collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlayingSongCell.self), for: indexPath)
+                cells[indexPath] = cell
+                (cell as? PlayingSongCell)?.setData(id: data.playingId, song: data.playing, artworkFile: data.files[.playingArtwork], running: data.running, elapsed: data.elapsed, duration: data.duration)
                 return cell
             case 1:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CurrentLyricsCell.self), for: indexPath)
-                if let cell = cell as? CurrentLyricsCell {
-                    cell.setData(lyrics: data.lyrics)
-                }
+                let cell = cells[indexPath] ?? collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CurrentLyricsCell.self), for: indexPath)
+                cells[indexPath] = cell
+                (cell as? CurrentLyricsCell)?.setData(lyrics: data.lyrics)
                 return cell
             case 2:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ChannelMembersCell.self), for: indexPath)
-                if let cell = cell as? ChannelMembersCell {
-                    cell.setData(members: data.members, highlightedIndex: data.playerIndex)
-                }
+                let cell = cells[indexPath] ?? collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ChannelMembersCell.self), for: indexPath)
+                cells[indexPath] = cell
+                (cell as? ChannelMembersCell)?.setData(members: data.members, highlightedIndex: data.playerIndex)
                 return cell
             default:
                 return UICollectionViewCell()
             }
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlaylistSongCell.self), for: indexPath)
-            if let cell = cell as? PlaylistSongCell {
-                cell.setData(song: data.playlist[indexPath.item], showIcon: false)
-            }
+            (cell as? PlaylistSongCell)?.setData(song: data.playlist[indexPath.item], showIcon: false)
             return cell
         default:
             return UICollectionViewCell()

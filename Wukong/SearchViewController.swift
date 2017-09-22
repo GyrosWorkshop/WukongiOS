@@ -17,12 +17,12 @@ class SearchViewController: UICollectionViewController {
         var results: [[String: Any]] = []
     }
 
+    private var cells: [IndexPath: UICollectionViewCell] = [:]
     private lazy var searchBar: UISearchBar = {
         let view = UISearchBar()
         view.delegate = self
         return view
     }()
-    fileprivate var searchBarCell: UICollectionViewCell?
 
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -69,22 +69,20 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
-            if let searchBarCell = searchBarCell {
-                return searchBarCell
+            if let cell = cells[indexPath] {
+                return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: UISearchBar.self), for: indexPath)
+                cells[indexPath] = cell
                 cell.contentView.addSubview(searchBar)
                 constrain(cell.contentView, searchBar) { (view, searchBar) in
                     searchBar.edges == view.edges
                 }
-                searchBarCell = cell
                 return cell
             }
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PlaylistSongCell.self), for: indexPath)
-            if let cell = cell as? PlaylistSongCell {
-                cell.setData(song: data.results[indexPath.item], showIcon: true)
-            }
+            (cell as? PlaylistSongCell)?.setData(song: data.results[indexPath.item], showIcon: true)
             return cell
         default:
             return UICollectionViewCell()
