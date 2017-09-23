@@ -25,7 +25,7 @@ class WukongClient: NSObject {
     private var context: JSContext!
     private var values: [String: JSValue] = [:]
     private var cleanups: [() -> Void] = []
-    private weak var delegate: WukongDelegate!
+    private weak var delegate: WukongDelegate?
 
     private var client: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.main) }
     private var action: JSValue { return context.globalObject.forProperty(Constant.Script.client).forProperty(Constant.Script.action) }
@@ -51,11 +51,11 @@ class WukongClient: NSObject {
     private func setupContext(_ version: String?, _ script: String?) {
         guard let script = script else {
             print("Client:", "failed", version ?? "n/a")
-            delegate.wukongDidFailLoadScript()
+            delegate?.wukongDidFailLoadScript()
             return
         }
         print("Client:", "loaded", version ?? "n/a")
-        delegate.wukongDidLoadScript()
+        delegate?.wukongDidLoadScript()
         cleanups.forEach { $0() }
         cleanups.removeAll()
         values.removeAll()
@@ -64,7 +64,7 @@ class WukongClient: NSObject {
             context?.exception = exception
             if let exception = exception?.toString() {
                 print("Client:", "exception", exception)
-                self.delegate.wukongDidThrowException(exception)
+                self.delegate?.wukongDidThrowException(exception)
             }
         }
         context.evaluateScript(script)
@@ -78,7 +78,7 @@ class WukongClient: NSObject {
                     } as @convention(block) () -> String, to: AnyObject.self),
                     "webview": unsafeBitCast({ [unowned self] (url) in
                         print("Client:", "open", url)
-                        self.delegate.wukongRequestOpenURL(url)
+                        self.delegate?.wukongRequestOpenURL(url)
                     } as @convention(block) (String) -> Void, to: AnyObject.self),
                     "reload": unsafeBitCast({ [unowned self] () in
                         DispatchQueue.main.async {
@@ -213,7 +213,7 @@ class WukongClient: NSObject {
             return client.call(withArguments: [platform])
         }(), forProperty: Constant.Script.store)
         print("Client:", "launched")
-        delegate.wukongDidLaunch()
+        delegate?.wukongDidLaunch()
     }
 
     private func jsPromise(_ executor: ((@escaping (JSValue?) -> Void, @escaping (JSValue?) -> Void) -> Void)? = nil) -> JSValue {
