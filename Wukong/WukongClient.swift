@@ -237,24 +237,28 @@ class WukongClient: NSObject {
     }
 
     func getState<T>(_ property: [Constant.State]) -> T? {
+        guard context != nil else { return nil }
         guard let state = store.invokeMethod("getState", withArguments: []) else { return nil }
         let object = property.reduce(state) { $0.forProperty($1.rawValue) }
         return object.toObject() as? T
     }
 
     func querySelector<T>(_ name: Constant.Selector) -> T? {
+        guard context != nil else { return nil }
         guard let state = store.invokeMethod("getState", withArguments: []) else { return nil }
         guard let object = selector.invokeMethod(name.rawValue, withArguments: [state]) else { return nil }
         return object.toObject() as? T
     }
 
     func dispatchAction(_ name: [Constant.Action], _ data: [Any]) {
+        guard context != nil else { return }
         let helper = name.reduce(action) { $0.forProperty($1.rawValue) }
         guard let object = helper.invokeMethod("create", withArguments: data) else { return }
         store.invokeMethod("dispatch", withArguments: [object])
     }
 
     func subscribeChange(_ handler: (() -> Void)? = nil) {
+        guard context != nil else { return }
         guard let handler = handler else { return }
         store.invokeMethod("subscribe", withArguments: [unsafeBitCast({
             DispatchQueue.main.async(execute: handler)
