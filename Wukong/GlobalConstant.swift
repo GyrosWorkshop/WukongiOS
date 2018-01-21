@@ -40,7 +40,7 @@ struct Constant {
         static let web = "https://wukongmusic.us"
         static let registry = "https://registry.npmjs.org"
         static let package = "https://unpkg.com"
-        static let bundle = "build/wukong.js"
+        static let bundle = "wukong.js"
     }
 
     enum State: String {
