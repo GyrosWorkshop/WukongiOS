@@ -93,13 +93,13 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         center.likeCommand.isEnabled = false
         center.dislikeCommand.isEnabled = false
         center.bookmarkCommand.isEnabled = false
-        center.pauseCommand.addTarget { [unowned self] _ in
+        center.pauseCommand.addTarget { [unowned self] (event) in
             guard let player = self.player else { return .noActionableNowPlayingItem }
             player.pause()
             self.update()
             return .success
         }
-        center.playCommand.addTarget { [unowned self] _ in
+        center.playCommand.addTarget { [unowned self] (event) in
             guard let player = self.player else { return .noActionableNowPlayingItem }
             player.play()
             self.update()

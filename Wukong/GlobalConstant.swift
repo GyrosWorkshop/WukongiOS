@@ -30,8 +30,6 @@ struct Constant {
         static let selector = "Selector"
         static let platform = "Platform"
         static let store = "Store"
-        static let httpHook = "httpHook"
-        static let websocketEmit = "websocketEmit"
     }
 
     struct URL {
