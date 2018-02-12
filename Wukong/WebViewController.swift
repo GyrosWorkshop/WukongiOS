@@ -14,6 +14,7 @@ class WebViewController: UIViewController {
     var url: URL?
 
     private lazy var webView: UIWebView = {
+        UserDefaults.standard.register(defaults: ["UserAgent": "Safari"])
         let view = UIWebView()
         view.delegate = self
         return view
