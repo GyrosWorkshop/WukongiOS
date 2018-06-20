@@ -23,7 +23,7 @@ class AppController: UIViewController {
     private lazy var mainViewController: UIViewController = {
         let tabController = UITabBarController()
         tabController.viewControllers = self.components
-            .flatMap { $0 as? UIViewController }
+            .compactMap { $0 as? UIViewController }
             .map { UINavigationController(rootViewController: $0) }
         return tabController
     }()
@@ -32,7 +32,7 @@ class AppController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        addChildViewController(mainViewController)
+        addChild(mainViewController)
         view.addSubview(mainViewController.view)
         constrain(view, mainViewController.view) { (view, mainView) in
             mainView.edges == view.edges

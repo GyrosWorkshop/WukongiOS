@@ -264,10 +264,10 @@ class WukongClient: NSObject {
             if let executor = executor {
                 executor({
                     guard resolve.context == self.context else { return }
-                    resolve.call(withArguments: [$0].flatMap({$0}))
+                    resolve.call(withArguments: [$0].compactMap({$0}))
                 }, {
                     guard resolve.context == self.context else { return }
-                    reject.call(withArguments: [$0].flatMap({$0}))
+                    reject.call(withArguments: [$0].compactMap({$0}))
                 })
             } else {
                 resolve.call(withArguments: [])
@@ -276,7 +276,7 @@ class WukongClient: NSObject {
     }
 
     private func jsError(_ message: String? = nil) -> JSValue {
-        return context.globalObject.forProperty("Error").construct(withArguments: [message].flatMap({$0}))
+        return context.globalObject.forProperty("Error").construct(withArguments: [message].compactMap({$0}))
     }
 
     func getState<T>(_ property: [Constant.State]) -> T? {

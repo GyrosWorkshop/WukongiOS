@@ -1,3 +1,3 @@
 github "robb/Cartography"
 github "tidwall/SwiftWebSocket"
-github "xmartlabs/Eureka"
+github "xmartlabs/Eureka" "Swift-4.2"

@@ -45,19 +45,19 @@ class ConfigViewController: FormViewController {
         dispatchValues()
     }
 
-    override func insertAnimation(forSections sections: [Section]) -> UITableViewRowAnimation {
+    override func insertAnimation(forSections sections: [Section]) -> UITableView.RowAnimation {
         return .fade
     }
 
-    override func insertAnimation(forRows rows: [BaseRow]) -> UITableViewRowAnimation {
+    override func insertAnimation(forRows rows: [BaseRow]) -> UITableView.RowAnimation {
         return .fade
     }
 
-    override func deleteAnimation(forSections sections: [Section]) -> UITableViewRowAnimation {
+    override func deleteAnimation(forSections sections: [Section]) -> UITableView.RowAnimation {
         return .fade
     }
 
-    override func deleteAnimation(forRows rows: [BaseRow]) -> UITableViewRowAnimation {
+    override func deleteAnimation(forRows rows: [BaseRow]) -> UITableView.RowAnimation {
         return .fade
     }
 
@@ -169,7 +169,7 @@ class ConfigViewController: FormViewController {
                 defer { data.sync = result }
                 guard let section = form.sectionBy(tag: Constant.State.sync.rawValue) as? MultivaluedSection else { return result }
                 let values = section
-                    .flatMap { ($0 as? TextRow)?.value }
+                    .compactMap { ($0 as? TextRow)?.value }
                     .filter { !$0.isEmpty }
                 result = values.joined(separator: "\n")
                 return result
@@ -179,7 +179,7 @@ class ConfigViewController: FormViewController {
                 defer { data.cookie = result }
                 guard let section = form.sectionBy(tag: Constant.State.cookie.rawValue) as? MultivaluedSection else { return result }
                 let values = section
-                    .flatMap { ($0 as? TextRow)?.value }
+                    .compactMap { ($0 as? TextRow)?.value }
                     .filter { !$0.isEmpty }
                 result = values.joined(separator: "\n")
                 return result

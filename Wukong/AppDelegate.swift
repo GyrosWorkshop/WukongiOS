@@ -12,20 +12,20 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var backgroundTask = UIBackgroundTaskInvalid
+    var backgroundTask = UIBackgroundTaskIdentifier.invalid
 
     private func beginBackgroundTask() {
-        guard backgroundTask == UIBackgroundTaskInvalid else { return }
+        guard backgroundTask == .invalid else { return }
         backgroundTask = UIApplication.shared.beginBackgroundTask(expirationHandler: endBackgroundTask)
     }
 
     private func endBackgroundTask() {
-        guard backgroundTask != UIBackgroundTaskInvalid else { return }
+        guard backgroundTask != .invalid else { return }
         UIApplication.shared.endBackgroundTask(backgroundTask)
-        backgroundTask = UIBackgroundTaskInvalid
+        backgroundTask = .invalid
     }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         window = UIWindow()
         window?.rootViewController = AppController()
         window?.makeKeyAndVisible()
