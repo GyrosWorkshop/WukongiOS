@@ -34,8 +34,8 @@ struct Constant {
 
     struct URL {
         static let scheme = "wukong"
-        static let api = "api5.wukongmusic.us"
-        static let web = "https://wukongmusic.us"
+        static let api = "wukong.leeleo.me"
+        static let web = "https://wukong.hlyue.com"
         static let registry = "https://registry.npmjs.org"
         static let package = "https://unpkg.com"
         static let bundle = "wukong.js"
