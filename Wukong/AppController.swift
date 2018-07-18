@@ -67,10 +67,3 @@ extension AppController: WukongDelegate {
     }
 
 }
-
-#warning("Temporary workaround for Xcode 10 beta")
-#if swift(>=4.2)
-extension UIEdgeInsets {
-    static let zero = UIEdgeInsets()
-}
-#endif
