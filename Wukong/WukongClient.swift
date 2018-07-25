@@ -160,10 +160,10 @@ class WukongClient: NSObject {
                         guard let url = URL(string: apiURL("http", endpoint)) else { return self.jsPromise() }
                         var request = URLRequest(url: url)
                         request.httpMethod = method
-                        if method != "GET", let data = try? JSONSerialization.data(withJSONObject: body, options: []) {
-                            request.httpBody = data
-                            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                        }
+                        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+                        request.setValue("application/json", forHTTPHeaderField: "Accept")
+                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                        request.setValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
                         return self.jsPromise { [unowned self] (resolve, reject) in
                             URLSession.apiSession.dataTask(with: request) { [unowned self] (data, response, error) in
                                 guard error == nil else {
