@@ -3,10 +3,14 @@ targets:
   Wukong:
     type: application
     platform: iOS
-    deploymentTarget: "11.0"
     sources:
-    - Wukong
+    - Client
+    - UI
+    - Resource
     dependencies:
     - carthage: Cartography
     - carthage: SwiftWebSocket
     - carthage: Eureka
+    settings:
+      SWIFT_VERSION: '4.2'
+      IPHONEOS_DEPLOYMENT_TARGET: '11.0'
