@@ -1,0 +1,12 @@
+name: Wukong
+targets:
+  Wukong:
+    type: application
+    platform: iOS
+    deploymentTarget: "11.0"
+    sources:
+    - Wukong
+    dependencies:
+    - carthage: Cartography
+    - carthage: SwiftWebSocket
+    - carthage: Eureka

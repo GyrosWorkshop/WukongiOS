@@ -7,184 +7,202 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3072A8211F596A9300D145D5 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3072A8201F596A9300D145D5 /* ImageView.swift */; };
-		FE0CAE031F2CB89B00394ABB /* ListenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE021F2CB89B00394ABB /* ListenViewController.swift */; };
-		FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */; };
-		FE0E0ABD1F3F1C87000E3D4A /* CurrentLyricsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */; };
-		FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130331EA8E5CD0070F690 /* AppDelegate.swift */; };
-		FE4130361EA8E5CD0070F690 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4130351EA8E5CD0070F690 /* AppController.swift */; };
-		FE4130391EA8E5CD0070F690 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */; };
-		FE41303B1EA8E5CD0070F690 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE41303A1EA8E5CD0070F690 /* Assets.xcassets */; };
-		FE77584B1F3EAD4A0052C07D /* Eureka.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE77584A1F3EAD4A0052C07D /* Eureka.framework */; };
-		FE77584F1F3EB2100052C07D /* PlayingSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE77584E1F3EB2100052C07D /* PlayingSongCell.swift */; };
-		FE7758511F3EB2210052C07D /* PlaylistSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7758501F3EB2210052C07D /* PlaylistSongCell.swift */; };
-		FE7758531F3EB2F10052C07D /* ChannelMembersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7758521F3EB2F10052C07D /* ChannelMembersCell.swift */; };
-		FE7758551F3EB30B0052C07D /* ChannelMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7758541F3EB30B0052C07D /* ChannelMemberCell.swift */; };
-		FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB21EAC89360090833C /* AudioPlayer.swift */; };
-		FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A7EB41EAC895A0090833C /* DataLoader.swift */; };
-		FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */; };
-		FEBD3CAA1F2C48F100C73767 /* SwiftWebSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEBD3CA91F2C48F100C73767 /* SwiftWebSocket.framework */; };
-		FEC6DAD31F2C78D800A3B4C0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */; };
-		FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAD1F233B7A001C052B /* WukongClient.swift */; };
-		FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */; };
-		FED977A61F34A632000DC1B8 /* Cartography.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED977A51F34A632000DC1B8 /* Cartography.framework */; };
-		FEF16C501F435D5D00B1F97B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF16C4F1F435D5D00B1F97B /* SearchViewController.swift */; };
+		BF_110824834803 /* PlaylistSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_381604957270 /* PlaylistSongCell.swift */; };
+		BF_151328093143 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_716830698989 /* AppDelegate.swift */; };
+		BF_157048279139 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_660220834522 /* DataLoader.swift */; };
+		BF_322315311894 /* GlobalConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_721538265150 /* GlobalConstant.swift */; };
+		BF_370045719292 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_639588594939 /* AudioPlayer.swift */; };
+		BF_371386510029 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_397519964857 /* ConfigViewController.swift */; };
+		BF_392208620212 /* Eureka.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FR_901056093791 /* Eureka.framework */; };
+		BF_456861894380 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_676655548880 /* ImageView.swift */; };
+		BF_467521583253 /* ChannelMembersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_675894263376 /* ChannelMembersCell.swift */; };
+		BF_492426738835 /* WukongClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_813017000685 /* WukongClient.swift */; };
+		BF_509400474474 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FR_178622342370 /* Assets.xcassets */; };
+		BF_526532996216 /* ScriptLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_912376226517 /* ScriptLoader.swift */; };
+		BF_580833976803 /* ListenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_290685957493 /* ListenViewController.swift */; };
+		BF_680812063471 /* SwiftWebSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FR_175304009907 /* SwiftWebSocket.framework */; };
+		BF_724950490452 = {isa = PBXBuildFile; fileRef = FR_479401190694 /* Wukong.app */; };
+		BF_797155314205 /* CurrentLyricsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_859356150018 /* CurrentLyricsCell.swift */; };
+		BF_814166748977 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_656972232205 /* WebViewController.swift */; };
+		BF_837785425864 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_750131657384 /* SearchViewController.swift */; };
+		BF_847177991816 /* PlayingSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_352085819625 /* PlayingSongCell.swift */; };
+		BF_866699968004 /* ChannelMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_753908432169 /* ChannelMemberCell.swift */; };
+		BF_876218719837 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_198956807887 /* AppController.swift */; };
+		BF_991923679468 /* Cartography.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FR_744426252156 /* Cartography.framework */; };
+		BF_996582970139 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = VG_742148074595 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3072A8201F596A9300D145D5 /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
-		FE0CAE021F2CB89B00394ABB /* ListenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListenViewController.swift; sourceTree = "<group>"; };
-		FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
-		FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentLyricsCell.swift; sourceTree = "<group>"; };
-		FE4130301EA8E5CD0070F690 /* Wukong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wukong.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FE4130331EA8E5CD0070F690 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FE4130351EA8E5CD0070F690 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
-		FE4130381EA8E5CD0070F690 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		FE41303A1EA8E5CD0070F690 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FE41303F1EA8E5CD0070F690 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FE77584A1F3EAD4A0052C07D /* Eureka.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eureka.framework; path = Carthage/Build/iOS/Eureka.framework; sourceTree = "<group>"; };
-		FE77584E1F3EB2100052C07D /* PlayingSongCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayingSongCell.swift; sourceTree = "<group>"; };
-		FE7758501F3EB2210052C07D /* PlaylistSongCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistSongCell.swift; sourceTree = "<group>"; };
-		FE7758521F3EB2F10052C07D /* ChannelMembersCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelMembersCell.swift; sourceTree = "<group>"; };
-		FE7758541F3EB30B0052C07D /* ChannelMemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelMemberCell.swift; sourceTree = "<group>"; };
-		FE7A7EB21EAC89360090833C /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
-		FE7A7EB41EAC895A0090833C /* DataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
-		FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstant.swift; sourceTree = "<group>"; };
-		FEBD3CA91F2C48F100C73767 /* SwiftWebSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftWebSocket.framework; path = Carthage/Build/iOS/SwiftWebSocket.framework; sourceTree = "<group>"; };
-		FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
-		FECAEAAD1F233B7A001C052B /* WukongClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WukongClient.swift; sourceTree = "<group>"; };
-		FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptLoader.swift; sourceTree = "<group>"; };
-		FED977A51F34A632000DC1B8 /* Cartography.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cartography.framework; path = Carthage/Build/iOS/Cartography.framework; sourceTree = "<group>"; };
-		FEF16C4F1F435D5D00B1F97B /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		FR_175304009907 /* SwiftWebSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SwiftWebSocket.framework; sourceTree = "<group>"; };
+		FR_178622342370 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FR_198956807887 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
+		FR_290685957493 /* ListenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenViewController.swift; sourceTree = "<group>"; };
+		FR_352085819625 /* PlayingSongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingSongCell.swift; sourceTree = "<group>"; };
+		FR_381604957270 /* PlaylistSongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSongCell.swift; sourceTree = "<group>"; };
+		FR_397519964857 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
+		FR_415727378638 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FR_479401190694 /* Wukong.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Wukong.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FR_639588594939 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		FR_656972232205 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		FR_660220834522 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
+		FR_675894263376 /* ChannelMembersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelMembersCell.swift; sourceTree = "<group>"; };
+		FR_676655548880 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
+		FR_716830698989 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FR_721538265150 /* GlobalConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstant.swift; sourceTree = "<group>"; };
+		FR_742148074595 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FR_744426252156 /* Cartography.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Cartography.framework; sourceTree = "<group>"; };
+		FR_750131657384 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		FR_753908432169 /* ChannelMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelMemberCell.swift; sourceTree = "<group>"; };
+		FR_813017000685 /* WukongClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WukongClient.swift; sourceTree = "<group>"; };
+		FR_859356150018 /* CurrentLyricsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLyricsCell.swift; sourceTree = "<group>"; };
+		FR_901056093791 /* Eureka.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Eureka.framework; sourceTree = "<group>"; };
+		FR_912376226517 /* ScriptLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		FE41302D1EA8E5CD0070F690 /* Frameworks */ = {
+		FBP_47940119069 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FED977A61F34A632000DC1B8 /* Cartography.framework in Frameworks */,
-				FEBD3CAA1F2C48F100C73767 /* SwiftWebSocket.framework in Frameworks */,
-				FE77584B1F3EAD4A0052C07D /* Eureka.framework in Frameworks */,
+				BF_991923679468 /* Cartography.framework in Frameworks */,
+				BF_680812063471 /* SwiftWebSocket.framework in Frameworks */,
+				BF_392208620212 /* Eureka.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3072A81F1F596A3900D145D5 /* Views */ = {
+		G_1295892141826 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				3072A8201F596A9300D145D5 /* ImageView.swift */,
+				G_3022965978810 /* Cells */,
+				G_3023129697532 /* Pages */,
+				G_3020015795755 /* Views */,
+				FR_198956807887 /* AppController.swift */,
+				FR_716830698989 /* AppDelegate.swift */,
 			);
-			name = Views;
+			path = UI;
 			sourceTree = "<group>";
 		};
-		FE0CAE061F2CC63300394ABB /* Client */ = {
+		G_1952740716080 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FEBCF66C1F28C88E009D5773 /* GlobalConstant.swift */,
-				FECAEAAD1F233B7A001C052B /* WukongClient.swift */,
-				FECAEAAF1F234CD2001C052B /* ScriptLoader.swift */,
-				FE7A7EB41EAC895A0090833C /* DataLoader.swift */,
-				FE7A7EB21EAC89360090833C /* AudioPlayer.swift */,
-			);
-			name = Client;
-			sourceTree = "<group>";
-		};
-		FE0CAE071F2CC63A00394ABB /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				FE4130331EA8E5CD0070F690 /* AppDelegate.swift */,
-				FE4130351EA8E5CD0070F690 /* AppController.swift */,
-				FE77584D1F3EB1E60052C07D /* Pages */,
-				3072A81F1F596A3900D145D5 /* Views */,
-				FE77584C1F3EB1DE0052C07D /* Cells */,
-			);
-			name = UI;
-			sourceTree = "<group>";
-		};
-		FE4130271EA8E5CD0070F690 = {
-			isa = PBXGroup;
-			children = (
-				FE4130321EA8E5CD0070F690 /* Wukong */,
-				FEBD3CA81F2C48F100C73767 /* Frameworks */,
-				FE4130311EA8E5CD0070F690 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		FE4130311EA8E5CD0070F690 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				FE4130301EA8E5CD0070F690 /* Wukong.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		FE4130321EA8E5CD0070F690 /* Wukong */ = {
-			isa = PBXGroup;
-			children = (
-				FE0CAE061F2CC63300394ABB /* Client */,
-				FE0CAE071F2CC63A00394ABB /* UI */,
-				FEF16C3A1F435B4700B1F97B /* Resources */,
-			);
-			path = Wukong;
-			sourceTree = "<group>";
-		};
-		FE77584C1F3EB1DE0052C07D /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				FE77584E1F3EB2100052C07D /* PlayingSongCell.swift */,
-				FE7758501F3EB2210052C07D /* PlaylistSongCell.swift */,
-				FE7758521F3EB2F10052C07D /* ChannelMembersCell.swift */,
-				FE7758541F3EB30B0052C07D /* ChannelMemberCell.swift */,
-				FE0E0ABC1F3F1C87000E3D4A /* CurrentLyricsCell.swift */,
-			);
-			name = Cells;
-			sourceTree = "<group>";
-		};
-		FE77584D1F3EB1E60052C07D /* Pages */ = {
-			isa = PBXGroup;
-			children = (
-				FE0CAE021F2CB89B00394ABB /* ListenViewController.swift */,
-				FEF16C4F1F435D5D00B1F97B /* SearchViewController.swift */,
-				FE0CAE041F2CB8C100394ABB /* ConfigViewController.swift */,
-				FEC6DAD21F2C78D800A3B4C0 /* WebViewController.swift */,
-			);
-			name = Pages;
-			sourceTree = "<group>";
-		};
-		FEBD3CA81F2C48F100C73767 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				FE77584A1F3EAD4A0052C07D /* Eureka.framework */,
-				FED977A51F34A632000DC1B8 /* Cartography.framework */,
-				FEBD3CA91F2C48F100C73767 /* SwiftWebSocket.framework */,
+				G_2883690153011 /* Carthage */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		FEF16C3A1F435B4700B1F97B /* Resources */ = {
+		G_2020746097938 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				FE41303F1EA8E5CD0070F690 /* Info.plist */,
-				FE41303A1EA8E5CD0070F690 /* Assets.xcassets */,
-				FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */,
+				FR_178622342370 /* Assets.xcassets */,
+				FR_415727378638 /* Info.plist */,
+				VG_742148074595 /* LaunchScreen.storyboard */,
 			);
-			name = Resources;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		G_2262017438925 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				FR_744426252156 /* Cartography.framework */,
+				FR_901056093791 /* Eureka.framework */,
+				FR_175304009907 /* SwiftWebSocket.framework */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		G_2883690153011 /* Carthage */ = {
+			isa = PBXGroup;
+			children = (
+				G_2262017438925 /* iOS */,
+			);
+			name = Carthage;
+			path = Carthage/Build;
+			sourceTree = "<group>";
+		};
+		G_3020015795755 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FR_676655548880 /* ImageView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		G_3022965978810 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FR_753908432169 /* ChannelMemberCell.swift */,
+				FR_675894263376 /* ChannelMembersCell.swift */,
+				FR_859356150018 /* CurrentLyricsCell.swift */,
+				FR_352085819625 /* PlayingSongCell.swift */,
+				FR_381604957270 /* PlaylistSongCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		G_3023129697532 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				FR_397519964857 /* ConfigViewController.swift */,
+				FR_290685957493 /* ListenViewController.swift */,
+				FR_750131657384 /* SearchViewController.swift */,
+				FR_656972232205 /* WebViewController.swift */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
+		G_4794011906947 /* Wukong */ = {
+			isa = PBXGroup;
+			children = (
+				G_4967053265781 /* Client */,
+				G_2020746097938 /* Resources */,
+				G_1295892141826 /* UI */,
+			);
+			path = Wukong;
+			sourceTree = "<group>";
+		};
+		G_4967053265781 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				FR_639588594939 /* AudioPlayer.swift */,
+				FR_660220834522 /* DataLoader.swift */,
+				FR_721538265150 /* GlobalConstant.swift */,
+				FR_912376226517 /* ScriptLoader.swift */,
+				FR_813017000685 /* WukongClient.swift */,
+			);
+			path = Client;
+			sourceTree = "<group>";
+		};
+		G_8448771205358 = {
+			isa = PBXGroup;
+			children = (
+				G_1952740716080 /* Frameworks */,
+				G_8620238527590 /* Products */,
+				G_4794011906947 /* Wukong */,
+			);
+			sourceTree = "<group>";
+		};
+		G_8620238527590 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FR_479401190694 /* Wukong.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FE41302F1EA8E5CD0070F690 /* Wukong */ = {
+		NT_479401190694 /* Wukong */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FE4130421EA8E5CD0070F690 /* Build configuration list for PBXNativeTarget "Wukong" */;
+			buildConfigurationList = "CL_479401190694-1" /* Build configuration list for PBXNativeTarget "Wukong" */;
 			buildPhases = (
-				FE41302C1EA8E5CD0070F690 /* Sources */,
-				FE41302D1EA8E5CD0070F690 /* Frameworks */,
-				FE41302E1EA8E5CD0070F690 /* Resources */,
-				FEBD3CAB1F2C492A00C73767 /* ShellScript */,
+				SBP_47940119069 /* Sources */,
+				RBP_47940119069 /* Resources */,
+				FBP_47940119069 /* Frameworks */,
+				SSBP_4942965811 /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -192,114 +210,100 @@
 			);
 			name = Wukong;
 			productName = Wukong;
-			productReference = FE4130301EA8E5CD0070F690 /* Wukong.app */;
+			productReference = FR_479401190694 /* Wukong.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		FE4130281EA8E5CD0070F690 /* Project object */ = {
+		P_4794011906947 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 1000;
-				ORGANIZATIONNAME = Qusic;
-				TargetAttributes = {
-					FE41302F1EA8E5CD0070F690 = {
-						CreatedOnToolsVersion = 8.3.1;
-						LastSwiftMigration = "";
-						SystemCapabilities = {
-							com.apple.BackgroundModes = {
-								enabled = 1;
-							};
-						};
-					};
-				};
+				LastUpgradeCheck = 0930;
 			};
-			buildConfigurationList = FE41302B1EA8E5CD0070F690 /* Build configuration list for PBXProject "Wukong" */;
+			buildConfigurationList = CL_479401190694 /* Build configuration list for PBXProject "Wukong" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 			);
-			mainGroup = FE4130271EA8E5CD0070F690;
-			productRefGroup = FE4130311EA8E5CD0070F690 /* Products */;
+			mainGroup = G_8448771205358;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FE41302F1EA8E5CD0070F690 /* Wukong */,
+				NT_479401190694 /* Wukong */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		FE41302E1EA8E5CD0070F690 /* Resources */ = {
+		RBP_47940119069 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE41303B1EA8E5CD0070F690 /* Assets.xcassets in Resources */,
-				FE4130391EA8E5CD0070F690 /* LaunchScreen.storyboard in Resources */,
+				BF_509400474474 /* Assets.xcassets in Resources */,
+				BF_996582970139 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		FEBD3CAB1F2C492A00C73767 /* ShellScript */ = {
+		SSBP_4942965811 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"$(PROJECT_DIR)/Carthage/Build/iOS/Cartography.framework",
-				"$(PROJECT_DIR)/Carthage/Build/iOS/SwiftWebSocket.framework",
-				"$(PROJECT_DIR)/Carthage/Build/iOS/Eureka.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Cartography.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Eureka.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftWebSocket.framework",
 			);
+			name = Carthage;
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Cartography.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftWebSocket.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Eureka.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftWebSocket.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+			shellScript = "carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		FE41302C1EA8E5CD0070F690 /* Sources */ = {
+		SBP_47940119069 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE7758511F3EB2210052C07D /* PlaylistSongCell.swift in Sources */,
-				FECAEAAE1F233B7A001C052B /* WukongClient.swift in Sources */,
-				FE77584F1F3EB2100052C07D /* PlayingSongCell.swift in Sources */,
-				3072A8211F596A9300D145D5 /* ImageView.swift in Sources */,
-				FEBCF66D1F28C88E009D5773 /* GlobalConstant.swift in Sources */,
-				FE0E0ABD1F3F1C87000E3D4A /* CurrentLyricsCell.swift in Sources */,
-				FECAEAB01F234CD2001C052B /* ScriptLoader.swift in Sources */,
-				FE7758551F3EB30B0052C07D /* ChannelMemberCell.swift in Sources */,
-				FE7A7EB51EAC895A0090833C /* DataLoader.swift in Sources */,
-				FE4130361EA8E5CD0070F690 /* AppController.swift in Sources */,
-				FE4130341EA8E5CD0070F690 /* AppDelegate.swift in Sources */,
-				FEF16C501F435D5D00B1F97B /* SearchViewController.swift in Sources */,
-				FE0CAE031F2CB89B00394ABB /* ListenViewController.swift in Sources */,
-				FE7A7EB31EAC89360090833C /* AudioPlayer.swift in Sources */,
-				FE0CAE051F2CB8C100394ABB /* ConfigViewController.swift in Sources */,
-				FE7758531F3EB2F10052C07D /* ChannelMembersCell.swift in Sources */,
-				FEC6DAD31F2C78D800A3B4C0 /* WebViewController.swift in Sources */,
+				BF_876218719837 /* AppController.swift in Sources */,
+				BF_151328093143 /* AppDelegate.swift in Sources */,
+				BF_370045719292 /* AudioPlayer.swift in Sources */,
+				BF_866699968004 /* ChannelMemberCell.swift in Sources */,
+				BF_467521583253 /* ChannelMembersCell.swift in Sources */,
+				BF_371386510029 /* ConfigViewController.swift in Sources */,
+				BF_797155314205 /* CurrentLyricsCell.swift in Sources */,
+				BF_157048279139 /* DataLoader.swift in Sources */,
+				BF_322315311894 /* GlobalConstant.swift in Sources */,
+				BF_456861894380 /* ImageView.swift in Sources */,
+				BF_580833976803 /* ListenViewController.swift in Sources */,
+				BF_847177991816 /* PlayingSongCell.swift in Sources */,
+				BF_110824834803 /* PlaylistSongCell.swift in Sources */,
+				BF_526532996216 /* ScriptLoader.swift in Sources */,
+				BF_837785425864 /* SearchViewController.swift in Sources */,
+				BF_814166748977 /* WebViewController.swift in Sources */,
+				BF_492426738835 /* WukongClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		FE4130371EA8E5CD0070F690 /* LaunchScreen.storyboard */ = {
+		VG_742148074595 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				FE4130381EA8E5CD0070F690 /* Base */,
+				FR_742148074595 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -307,12 +311,31 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		FE4130401EA8E5CD0070F690 /* Debug */ = {
+		BC_273977270680 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = Wukong/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BC_479945831424 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -334,18 +357,20 @@
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -353,22 +378,40 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
-		FE4130411EA8E5CD0070F690 /* Release */ = {
+		BC_506467439390 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = Wukong/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BC_881114754245 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -390,13 +433,14 @@
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -404,69 +448,35 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_VERSION = 4.0;
 				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		FE4130431EA8E5CD0070F690 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = Wukong/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "-";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-			};
-			name = Debug;
-		};
-		FE4130441EA8E5CD0070F690 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = Wukong/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "-";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FE41302B1EA8E5CD0070F690 /* Build configuration list for PBXProject "Wukong" */ = {
+		CL_479401190694 /* Build configuration list for PBXProject "Wukong" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FE4130401EA8E5CD0070F690 /* Debug */,
-				FE4130411EA8E5CD0070F690 /* Release */,
+				BC_479945831424 /* Debug */,
+				BC_881114754245 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		FE4130421EA8E5CD0070F690 /* Build configuration list for PBXNativeTarget "Wukong" */ = {
+		"CL_479401190694-1" /* Build configuration list for PBXNativeTarget "Wukong" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FE4130431EA8E5CD0070F690 /* Debug */,
-				FE4130441EA8E5CD0070F690 /* Release */,
+				BC_273977270680 /* Debug */,
+				BC_506467439390 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "";
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = FE4130281EA8E5CD0070F690 /* Project object */;
+	rootObject = P_4794011906947 /* Project object */;
 }
