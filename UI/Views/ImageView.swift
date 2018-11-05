@@ -1,11 +1,3 @@
-//
-//  ImageView.swift
-//  Wukong
-//
-//  Created by Bang Li on 9/1/17.
-//  Copyright © 2017 Qusic. All rights reserved.
-//
-
 import UIKit
 
 class ImageView: UIImageView {

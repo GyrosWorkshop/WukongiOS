@@ -1,11 +1,3 @@
-//
-//  CurrentLyricsCell.swift
-//  Wukong
-//
-//  Created by Qusic on 8/12/17.
-//  Copyright © 2017 Qusic. All rights reserved.
-//
-
 import UIKit
 import Cartography
 

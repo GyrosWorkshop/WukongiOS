@@ -1,11 +1,3 @@
-//
-//  AudioPlayer.swift
-//  Wukong
-//
-//  Created by Qusic on 4/23/17.
-//  Copyright © 2017 Qusic. All rights reserved.
-//
-
 import UIKit
 import AVFoundation
 import MediaPlayer

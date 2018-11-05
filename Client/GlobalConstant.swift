@@ -1,11 +1,3 @@
-//
-//  GlobalConstant.swift
-//  Wukong
-//
-//  Created by Qusic on 7/26/17.
-//  Copyright © 2017 Qusic. All rights reserved.
-//
-
 import UIKit
 import SwiftWebSocket
 
@@ -73,10 +65,10 @@ struct Constant {
         case notification
 
         case id
+
         case nickname
         case avatar
 
-        // case id
         case siteId
         case songId
         case title
