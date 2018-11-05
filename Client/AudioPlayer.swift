@@ -16,6 +16,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     private var player: AVAudioPlayer?
     private var info: [String: Any] = [:]
+    private var running: Bool = true
     private var timer: Timer?
     private var callback: ((_ player: AVAudioPlayer?) -> Void)?
 
@@ -33,7 +34,9 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         guard let player = player else { return }
         player.delegate = self
         player.currentTime = -time.timeIntervalSinceNow;
-        player.play()
+        if running {
+            player.play()
+        }
         #if targetEnvironment(simulator)
             player.volume = 0.1
         #endif
@@ -95,12 +98,14 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         center.bookmarkCommand.isEnabled = false
         center.pauseCommand.addTarget { [unowned self] (event) in
             guard let player = self.player else { return .noActionableNowPlayingItem }
+            self.running = false
             player.pause()
             self.update()
             return .success
         }
         center.playCommand.addTarget { [unowned self] (event) in
             guard let player = self.player else { return .noActionableNowPlayingItem }
+            self.running = true
             player.play()
             self.update()
             return .success
@@ -116,6 +121,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
             self.invalidateTimer()
         }
         center.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: nil) { [unowned self] (notification) in
+            guard self.running else { return }
             guard let userInfo = notification.userInfo else { return }
             guard let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt else { return }
             guard let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
@@ -128,16 +134,15 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
             }
         }
         center.addObserver(forName: AVAudioSession.silenceSecondaryAudioHintNotification, object: nil, queue: nil) { [unowned self] (notification) in
+            guard self.running else { return }
             guard let userInfo = notification.userInfo else { return }
             guard let typeValue = userInfo[AVAudioSessionSilenceSecondaryAudioHintTypeKey] as? UInt else { return }
             guard let type = AVAudioSession.SilenceSecondaryAudioHintType(rawValue: typeValue) else { return }
             switch type {
             case .begin:
                 self.player?.pause()
-                break
             case .end:
                 self.player?.play()
-                break
             }
         }
     }

@@ -203,7 +203,6 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
                 sheet.addAction(UIAlertAction(title: "Downvote", style: .default) { (action) in
                     WukongClient.sharedInstance.dispatchAction([.Player, .downvote], [])
                 })
-                break
             default:
                 break
             }
@@ -232,7 +231,6 @@ extension ListenViewController: UICollectionViewDelegateFlowLayout {
                     WukongClient.sharedInstance.dispatchAction([.Song, .remove], [id])
                 })
             }
-            break
         default:
             break
         }
