@@ -295,11 +295,9 @@ extension ListenViewController: AppComponent {
                                 var running = false
                                 var elapsed = 0.0
                                 var duration = 0.0
-                                audioPlayer.play(data: data, time: Date(timeIntervalSince1970: self.data.time), { (player) in
-                                    let nextRunning = player?.isPlaying ?? false
-                                    let nextElapsed = player?.currentTime ?? 0.0
-                                    let nextDuration = player?.duration ?? 0.0
+                                audioPlayer.play(data: data, time: Date(timeIntervalSince1970: self.data.time), { (nextRunning, nextElapsed, nextDuration, ended) in
                                     if running != nextRunning {
+                                        audioPlayer.update()
                                         client.dispatchAction([.Player, .running], [nextRunning])
                                     }
                                     if elapsed != nextElapsed {
@@ -308,11 +306,8 @@ extension ListenViewController: AppComponent {
                                     if duration != nextDuration {
                                         client.dispatchAction([.Player, .duration], [nextDuration])
                                     }
-                                    if running && !nextRunning && duration - elapsed < 1 {
+                                    if ended {
                                         client.dispatchAction([.Player, .ended], [])
-                                    }
-                                    if running != nextRunning {
-                                        audioPlayer.update()
                                     }
                                     running = nextRunning
                                     elapsed = nextElapsed

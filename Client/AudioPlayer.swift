@@ -10,7 +10,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
     private var info: [String: Any] = [:]
     private var running: Bool = true
     private var timer: Timer?
-    private var callback: ((_ player: AVAudioPlayer?) -> Void)?
+    private var callback: ((_ playing: Bool, _ elapsed: TimeInterval, _ duration: TimeInterval, _ done: Bool) -> Void)?
 
     override init() {
         super.init()
@@ -21,7 +21,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         handleNotifications()
     }
 
-    func play(data: Data, time: Date, _ eventCallback: ((_ player: AVAudioPlayer?) -> Void)? = nil) {
+    func play(data: Data, time: Date, _ eventCallback: ((_ playing: Bool, _ elapsed: TimeInterval, _ duration: TimeInterval, _ done: Bool) -> Void)? = nil) {
         player = try? AVAudioPlayer(data: data)
         guard let player = player else { return }
         player.delegate = self
@@ -141,8 +141,9 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     private func scheduleTimer() {
         guard timer == nil else { return }
+        if .background ~= UIApplication.shared.applicationState { return }
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [unowned self] (timer) in
-            self.callback?(self.player)
+            self.timerDidFire(done: false)
         }
         timer?.tolerance = 0.5;
     }
@@ -153,14 +154,18 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         timer = nil
     }
 
+    private func timerDidFire(done: Bool) {
+        callback?(player?.isPlaying ?? false, player?.currentTime ?? 0, player?.duration ?? 0, done)
+    }
+
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        timer?.fire()
         invalidateTimer()
+        timerDidFire(done: true)
     }
 
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        timer?.fire()
         invalidateTimer()
+        timerDidFire(done: false)
     }
 
 }
